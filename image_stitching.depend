@@ -1,0 +1,1058 @@
+# depslib dependency file v1.0
+1453781420 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
+	<iostream>
+	<fstream>
+	<opencv2/imgcodecs.hpp>
+	<opencv2/highgui.hpp>
+	<opencv2/stitching.hpp>
+
+1453765538 source:/home/eon-alone/projects/sandbox/image_stitching/main.cpp
+	<iostream>
+	<fstream>
+	<opencv2/imgcodecs.hpp>
+	<opencv2/highgui.hpp>
+	<opencv2/stitching.hpp>
+
+1453781922 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.h
+	<iostream>
+	<cstring>
+	<vector>
+	<list>
+	"AprilTags/TagDetector.h"
+	"AprilTags/Tag16h5.h"
+	"AprilTags/Tag25h7.h"
+	"AprilTags/Tag25h9.h"
+	"AprilTags/Tag36h9.h"
+	"AprilTags/Tag36h11.h"
+	<cmath>
+
+1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/TagDetector.h
+	<vector>
+	"opencv2/opencv.hpp"
+	"AprilTags/TagDetection.h"
+	"AprilTags/TagFamily.h"
+	"AprilTags/FloatImage.h"
+
+1390885782 /usr/include/opencv2/opencv.hpp
+	"opencv2/core/core_c.h"
+	"opencv2/core/core.hpp"
+	"opencv2/flann/miniflann.hpp"
+	"opencv2/imgproc/imgproc_c.h"
+	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/photo/photo.hpp"
+	"opencv2/video/video.hpp"
+	"opencv2/features2d/features2d.hpp"
+	"opencv2/objdetect/objdetect.hpp"
+	"opencv2/calib3d/calib3d.hpp"
+	"opencv2/ml/ml.hpp"
+	"opencv2/highgui/highgui_c.h"
+	"opencv2/highgui/highgui.hpp"
+	"opencv2/contrib/contrib.hpp"
+
+1390885782 /usr/include/opencv2/core/core_c.h
+	"opencv2/core/types_c.h"
+
+1390885782 /usr/include/opencv2/core/types_c.h
+	<assert.h>
+	<stdlib.h>
+	<string.h>
+	<float.h>
+	<stdint.h>
+	<intrin.h>
+	<emmintrin.h>
+	<fastmath.h>
+	<math.h>
+	<ipl.h>
+	<ipl/ipl.h>
+	"tegra_round.hpp"
+	"emmintrin.h"
+
+1424883213 /usr/include/assert.h
+	<features.h>
+
+1424883199 /usr/include/features.h
+	<stdc-predef.h>
+	<sys/cdefs.h>
+	<gnu/stubs.h>
+
+1424883199 /usr/include/stdc-predef.h
+
+1424883217 /usr/include/stdlib.h
+	<features.h>
+	<stddef.h>
+	<bits/waitflags.h>
+	<bits/waitstatus.h>
+	<xlocale.h>
+	<sys/types.h>
+	<alloca.h>
+	<bits/stdlib-bsearch.h>
+	<bits/stdlib-float.h>
+	<bits/stdlib.h>
+	<bits/stdlib-ldbl.h>
+
+1424883201 /usr/include/xlocale.h
+
+1424883217 /usr/include/alloca.h
+	<features.h>
+	<stddef.h>
+
+1424883219 /usr/include/string.h
+	<features.h>
+	<stddef.h>
+	<xlocale.h>
+	<bits/string.h>
+	<bits/string2.h>
+	<bits/string3.h>
+
+1424883217 /usr/include/stdint.h
+	<features.h>
+	<bits/wchar.h>
+	<bits/wordsize.h>
+
+1424883215 /usr/include/math.h
+	<features.h>
+	<bits/huge_val.h>
+	<bits/huge_valf.h>
+	<bits/huge_vall.h>
+	<bits/inf.h>
+	<bits/nan.h>
+	<bits/mathdef.h>
+	<bits/mathcalls.h>
+	<bits/mathcalls.h>
+	<bits/mathcalls.h>
+	<bits/mathinline.h>
+	<bits/math-finite.h>
+
+1393332115 /usr/include/opencv2/core/core.hpp
+	"opencv2/core/types_c.h"
+	"opencv2/core/version.hpp"
+	<limits.h>
+	<algorithm>
+	<cmath>
+	<cstddef>
+	<complex>
+	<map>
+	<new>
+	<string>
+	<vector>
+	<sstream>
+	"opencv2/core/operations.hpp"
+	"opencv2/core/mat.hpp"
+
+1390885782 /usr/include/opencv2/core/version.hpp
+
+1424883199 /usr/include/limits.h
+	<features.h>
+	<bits/wordsize.h>
+	<bits/posix1_lim.h>
+	<bits/posix2_lim.h>
+	<bits/xopen_lim.h>
+
+1393332115 /usr/include/opencv2/core/operations.hpp
+	<string.h>
+	<limits.h>
+	<ext/atomicity.h>
+	<bits/atomicity.h>
+	<limits>
+
+1390885782 /usr/include/opencv2/core/mat.hpp
+	<limits.h>
+	<string.h>
+
+1390885782 /usr/include/opencv2/flann/miniflann.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/flann/defines.h"
+
+1390885782 /usr/include/opencv2/flann/defines.h
+	"config.h"
+
+1390885782 /usr/include/opencv2/flann/config.h
+
+1390885782 /usr/include/opencv2/imgproc/imgproc_c.h
+	"opencv2/core/core_c.h"
+	"opencv2/imgproc/types_c.h"
+
+1390885782 /usr/include/opencv2/imgproc/types_c.h
+	"opencv2/core/core_c.h"
+
+1390885782 /usr/include/opencv2/imgproc/imgproc.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/imgproc/types_c.h"
+
+1390885782 /usr/include/opencv2/photo/photo.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/photo/photo_c.h"
+
+1390885782 /usr/include/opencv2/photo/photo_c.h
+	"opencv2/core/core_c.h"
+
+1390885782 /usr/include/opencv2/video/video.hpp
+	"opencv2/video/tracking.hpp"
+	"opencv2/video/background_segm.hpp"
+
+1390885782 /usr/include/opencv2/video/tracking.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/imgproc/imgproc.hpp"
+
+1390885782 /usr/include/opencv2/video/background_segm.hpp
+	"opencv2/core/core.hpp"
+	<list>
+
+1390885782 /usr/include/opencv2/features2d/features2d.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/flann/miniflann.hpp"
+	<limits>
+
+1390885782 /usr/include/opencv2/objdetect/objdetect.hpp
+	"opencv2/core/core.hpp"
+	<map>
+	<deque>
+
+1390885782 /usr/include/opencv2/calib3d/calib3d.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/features2d/features2d.hpp"
+
+1390885782 /usr/include/opencv2/ml/ml.hpp
+	"opencv2/core/core.hpp"
+	<limits.h>
+	<map>
+	<string>
+	<iostream>
+
+1390885782 /usr/include/opencv2/highgui/highgui_c.h
+	"opencv2/core/core_c.h"
+
+1390885782 /usr/include/opencv2/highgui/highgui.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/highgui/highgui_c.h"
+
+1390885782 /usr/include/opencv2/contrib/contrib.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/features2d/features2d.hpp"
+	"opencv2/objdetect/objdetect.hpp"
+	"opencv2/contrib/retina.hpp"
+	"opencv2/contrib/openfabmap.hpp"
+
+1390885782 /usr/include/opencv2/contrib/retina.hpp
+	"opencv2/core/core.hpp"
+	<valarray>
+
+1390885782 /usr/include/opencv2/contrib/openfabmap.hpp
+	"opencv2/core/core.hpp"
+	"opencv2/features2d/features2d.hpp"
+	<vector>
+	<list>
+	<map>
+	<set>
+	<valarray>
+
+1453779127 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/TagDetection.h
+	<Eigen/Dense>
+	"opencv2/opencv.hpp"
+	<utility>
+	<vector>
+
+1374630515 /usr/include/eigen3/Eigen/Dense
+	"Core"
+	"LU"
+	"Cholesky"
+	"QR"
+	"SVD"
+	"Geometry"
+	"Eigenvalues"
+
+1374630515 /usr/include/eigen3/Eigen/Core
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/Core/util/Macros.h"
+	<complex>
+	"src/Core/util/MKL_support.h"
+	<malloc.h>
+	<immintrin.h>
+	<emmintrin.h>
+	<xmmintrin.h>
+	<pmmintrin.h>
+	<tmmintrin.h>
+	<smmintrin.h>
+	<nmmintrin.h>
+	<altivec.h>
+	<arm_neon.h>
+	<omp.h>
+	<cerrno>
+	<cstddef>
+	<cstdlib>
+	<cmath>
+	<cassert>
+	<functional>
+	<iosfwd>
+	<cstring>
+	<string>
+	<limits>
+	<climits>
+	<algorithm>
+	<iostream>
+	<intrin.h>
+	<new>
+	"src/Core/util/Constants.h"
+	"src/Core/util/ForwardDeclarations.h"
+	"src/Core/util/Meta.h"
+	"src/Core/util/StaticAssert.h"
+	"src/Core/util/XprHelper.h"
+	"src/Core/util/Memory.h"
+	"src/Core/NumTraits.h"
+	"src/Core/MathFunctions.h"
+	"src/Core/GenericPacketMath.h"
+	"src/Core/arch/SSE/PacketMath.h"
+	"src/Core/arch/SSE/MathFunctions.h"
+	"src/Core/arch/SSE/Complex.h"
+	"src/Core/arch/AltiVec/PacketMath.h"
+	"src/Core/arch/AltiVec/Complex.h"
+	"src/Core/arch/NEON/PacketMath.h"
+	"src/Core/arch/NEON/Complex.h"
+	"src/Core/arch/Default/Settings.h"
+	"src/Core/Functors.h"
+	"src/Core/DenseCoeffsBase.h"
+	"src/Core/DenseBase.h"
+	"src/Core/MatrixBase.h"
+	"src/Core/EigenBase.h"
+	"src/Core/Assign.h"
+	"src/Core/util/BlasUtil.h"
+	"src/Core/DenseStorage.h"
+	"src/Core/NestByValue.h"
+	"src/Core/ForceAlignedAccess.h"
+	"src/Core/ReturnByValue.h"
+	"src/Core/NoAlias.h"
+	"src/Core/PlainObjectBase.h"
+	"src/Core/Matrix.h"
+	"src/Core/Array.h"
+	"src/Core/CwiseBinaryOp.h"
+	"src/Core/CwiseUnaryOp.h"
+	"src/Core/CwiseNullaryOp.h"
+	"src/Core/CwiseUnaryView.h"
+	"src/Core/SelfCwiseBinaryOp.h"
+	"src/Core/Dot.h"
+	"src/Core/StableNorm.h"
+	"src/Core/MapBase.h"
+	"src/Core/Stride.h"
+	"src/Core/Map.h"
+	"src/Core/Block.h"
+	"src/Core/VectorBlock.h"
+	"src/Core/Ref.h"
+	"src/Core/Transpose.h"
+	"src/Core/DiagonalMatrix.h"
+	"src/Core/Diagonal.h"
+	"src/Core/DiagonalProduct.h"
+	"src/Core/PermutationMatrix.h"
+	"src/Core/Transpositions.h"
+	"src/Core/Redux.h"
+	"src/Core/Visitor.h"
+	"src/Core/Fuzzy.h"
+	"src/Core/IO.h"
+	"src/Core/Swap.h"
+	"src/Core/CommaInitializer.h"
+	"src/Core/Flagged.h"
+	"src/Core/ProductBase.h"
+	"src/Core/GeneralProduct.h"
+	"src/Core/TriangularMatrix.h"
+	"src/Core/SelfAdjointView.h"
+	"src/Core/products/GeneralBlockPanelKernel.h"
+	"src/Core/products/Parallelizer.h"
+	"src/Core/products/CoeffBasedProduct.h"
+	"src/Core/products/GeneralMatrixVector.h"
+	"src/Core/products/GeneralMatrixMatrix.h"
+	"src/Core/SolveTriangular.h"
+	"src/Core/products/GeneralMatrixMatrixTriangular.h"
+	"src/Core/products/SelfadjointMatrixVector.h"
+	"src/Core/products/SelfadjointMatrixMatrix.h"
+	"src/Core/products/SelfadjointProduct.h"
+	"src/Core/products/SelfadjointRank2Update.h"
+	"src/Core/products/TriangularMatrixVector.h"
+	"src/Core/products/TriangularMatrixMatrix.h"
+	"src/Core/products/TriangularSolverMatrix.h"
+	"src/Core/products/TriangularSolverVector.h"
+	"src/Core/BandMatrix.h"
+	"src/Core/CoreIterators.h"
+	"src/Core/BooleanRedux.h"
+	"src/Core/Select.h"
+	"src/Core/VectorwiseOp.h"
+	"src/Core/Random.h"
+	"src/Core/Replicate.h"
+	"src/Core/Reverse.h"
+	"src/Core/ArrayBase.h"
+	"src/Core/ArrayWrapper.h"
+	"src/Core/products/GeneralMatrixMatrix_MKL.h"
+	"src/Core/products/GeneralMatrixVector_MKL.h"
+	"src/Core/products/GeneralMatrixMatrixTriangular_MKL.h"
+	"src/Core/products/SelfadjointMatrixMatrix_MKL.h"
+	"src/Core/products/SelfadjointMatrixVector_MKL.h"
+	"src/Core/products/TriangularMatrixMatrix_MKL.h"
+	"src/Core/products/TriangularMatrixVector_MKL.h"
+	"src/Core/products/TriangularSolverMatrix_MKL.h"
+	"src/Core/Assign_MKL.h"
+	"src/Core/GlobalFunctions.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+	"Eigen2Support"
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/Macros.h
+	<cstdlib>
+	<iostream>
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/MKL_support.h
+	<mkl.h>
+	<mkl_lapacke.h>
+
+1424883219 /usr/include/malloc.h
+	<features.h>
+	<stddef.h>
+	<stdio.h>
+
+1424883218 /usr/include/stdio.h
+	<features.h>
+	<stddef.h>
+	<bits/types.h>
+	<libio.h>
+	<stdarg.h>
+	<bits/stdio_lim.h>
+	<bits/sys_errlist.h>
+	<getopt.h>
+	<bits/stdio.h>
+	<bits/stdio2.h>
+	<bits/stdio-ldbl.h>
+
+1424883218 /usr/include/libio.h
+	<_G_config.h>
+	<stdarg.h>
+	<sys/cdefs.h>
+	<bits/stdio-lock.h>
+	<shlib-compat.h>
+	<bits/libio-ldbl.h>
+
+1424883218 /usr/include/_G_config.h
+	<bits/types.h>
+	<stddef.h>
+	<wchar.h>
+	<gconv.h>
+
+1424883220 /usr/include/wchar.h
+	<features.h>
+	<stdio.h>
+	<stdarg.h>
+	<bits/wchar.h>
+	<stddef.h>
+	<wctype.h>
+	<xlocale.h>
+	<xlocale.h>
+	<xlocale.h>
+	<wctype.h>
+	<bits/wchar2.h>
+	<bits/wchar-ldbl.h>
+
+1424883225 /usr/include/wctype.h
+	<features.h>
+	<bits/types.h>
+	<wchar.h>
+	<endian.h>
+	<xlocale.h>
+
+1424883219 /usr/include/endian.h
+	<features.h>
+	<bits/endian.h>
+	<bits/byteswap.h>
+
+1424883200 /usr/include/gconv.h
+	<features.h>
+	<wchar.h>
+	<stddef.h>
+
+1424883222 /usr/include/getopt.h
+	<ctype.h>
+
+1424883213 /usr/include/ctype.h
+	<features.h>
+	<bits/types.h>
+	<endian.h>
+	<xlocale.h>
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/Constants.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/ForwardDeclarations.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/Meta.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/StaticAssert.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/XprHelper.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/Memory.h
+	<unistd.h>
+
+1424883222 /usr/include/unistd.h
+	<features.h>
+	<bits/posix_opt.h>
+	<bits/environments.h>
+	<bits/types.h>
+	<stddef.h>
+	<bits/confname.h>
+	<getopt.h>
+	<bits/unistd.h>
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/NumTraits.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/MathFunctions.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/GenericPacketMath.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/arch/SSE/PacketMath.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/arch/SSE/MathFunctions.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/arch/SSE/Complex.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/arch/AltiVec/PacketMath.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/arch/AltiVec/Complex.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/arch/NEON/PacketMath.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/arch/NEON/Complex.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/arch/Default/Settings.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Functors.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/DenseCoeffsBase.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/DenseBase.h
+	"../plugins/BlockMethods.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/plugins/BlockMethods.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/MatrixBase.h
+	"../plugins/CommonCwiseUnaryOps.h"
+	"../plugins/CommonCwiseBinaryOps.h"
+	"../plugins/MatrixCwiseUnaryOps.h"
+	"../plugins/MatrixCwiseBinaryOps.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/plugins/CommonCwiseUnaryOps.h
+
+1374630515 /usr/include/eigen3/Eigen/src/plugins/CommonCwiseBinaryOps.h
+
+1374630515 /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseUnaryOps.h
+
+1374630515 /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseBinaryOps.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/EigenBase.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Assign.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/BlasUtil.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/DenseStorage.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/NestByValue.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/ForceAlignedAccess.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/ReturnByValue.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/NoAlias.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/PlainObjectBase.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Matrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Array.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/CwiseBinaryOp.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/CwiseUnaryOp.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/CwiseNullaryOp.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/CwiseUnaryView.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/SelfCwiseBinaryOp.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Dot.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/StableNorm.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/MapBase.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Stride.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Map.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Block.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/VectorBlock.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Ref.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Transpose.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/DiagonalMatrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Diagonal.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/DiagonalProduct.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/PermutationMatrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Transpositions.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Redux.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Visitor.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Fuzzy.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/IO.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Swap.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/CommaInitializer.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Flagged.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/ProductBase.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/GeneralProduct.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/TriangularMatrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/SelfAdjointView.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/GeneralBlockPanelKernel.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/Parallelizer.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/CoeffBasedProduct.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixVector.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/SolveTriangular.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrixTriangular.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixVector.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixMatrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointProduct.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointRank2Update.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixVector.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixMatrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/TriangularSolverMatrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/TriangularSolverVector.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/BandMatrix.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/CoreIterators.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/BooleanRedux.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Select.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/VectorwiseOp.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Random.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Replicate.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Reverse.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/ArrayBase.h
+	"../plugins/CommonCwiseUnaryOps.h"
+	"../plugins/MatrixCwiseUnaryOps.h"
+	"../plugins/ArrayCwiseUnaryOps.h"
+	"../plugins/CommonCwiseBinaryOps.h"
+	"../plugins/MatrixCwiseBinaryOps.h"
+	"../plugins/ArrayCwiseBinaryOps.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/plugins/ArrayCwiseUnaryOps.h
+
+1374630515 /usr/include/eigen3/Eigen/src/plugins/ArrayCwiseBinaryOps.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/ArrayWrapper.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrix_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixVector_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrixTriangular_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixMatrix_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixVector_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixMatrix_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixVector_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/products/TriangularSolverMatrix_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/Assign_MKL.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/GlobalFunctions.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h
+
+1374630515 /usr/include/eigen3/Eigen/Eigen2Support
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/Eigen2Support/Macros.h"
+	"src/Eigen2Support/Memory.h"
+	"src/Eigen2Support/Meta.h"
+	"src/Eigen2Support/Lazy.h"
+	"src/Eigen2Support/Cwise.h"
+	"src/Eigen2Support/CwiseOperators.h"
+	"src/Eigen2Support/TriangularSolver.h"
+	"src/Eigen2Support/Block.h"
+	"src/Eigen2Support/VectorBlock.h"
+	"src/Eigen2Support/Minor.h"
+	"src/Eigen2Support/MathFunctions.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+	<iostream>
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Macros.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Memory.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Meta.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Lazy.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Cwise.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/CwiseOperators.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/TriangularSolver.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Block.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/VectorBlock.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Minor.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/MathFunctions.h
+
+1374630515 /usr/include/eigen3/Eigen/LU
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/misc/Solve.h"
+	"src/misc/Kernel.h"
+	"src/misc/Image.h"
+	"src/LU/FullPivLU.h"
+	"src/LU/PartialPivLU.h"
+	"src/LU/PartialPivLU_MKL.h"
+	"src/LU/Determinant.h"
+	"src/LU/Inverse.h"
+	"src/LU/arch/Inverse_SSE.h"
+	"src/Eigen2Support/LU.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/misc/Solve.h
+
+1374630515 /usr/include/eigen3/Eigen/src/misc/Kernel.h
+
+1374630515 /usr/include/eigen3/Eigen/src/misc/Image.h
+
+1374630515 /usr/include/eigen3/Eigen/src/LU/FullPivLU.h
+
+1374630515 /usr/include/eigen3/Eigen/src/LU/PartialPivLU.h
+
+1374630515 /usr/include/eigen3/Eigen/src/LU/PartialPivLU_MKL.h
+	"Eigen/src/Core/util/MKL_support.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/LU/Determinant.h
+
+1374630515 /usr/include/eigen3/Eigen/src/LU/Inverse.h
+
+1374630515 /usr/include/eigen3/Eigen/src/LU/arch/Inverse_SSE.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/LU.h
+
+1374630515 /usr/include/eigen3/Eigen/Cholesky
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/misc/Solve.h"
+	"src/Cholesky/LLT.h"
+	"src/Cholesky/LDLT.h"
+	"src/Cholesky/LLT_MKL.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Cholesky/LLT.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Cholesky/LDLT.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Cholesky/LLT_MKL.h
+	"Eigen/src/Core/util/MKL_support.h"
+	<iostream>
+
+1374630515 /usr/include/eigen3/Eigen/QR
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	"Cholesky"
+	"Jacobi"
+	"Householder"
+	"src/misc/Solve.h"
+	"src/QR/HouseholderQR.h"
+	"src/QR/FullPivHouseholderQR.h"
+	"src/QR/ColPivHouseholderQR.h"
+	"src/QR/HouseholderQR_MKL.h"
+	"src/QR/ColPivHouseholderQR_MKL.h"
+	"src/Eigen2Support/QR.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+	"Eigenvalues"
+
+1374630515 /usr/include/eigen3/Eigen/Jacobi
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/Jacobi/Jacobi.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Jacobi/Jacobi.h
+
+1374630515 /usr/include/eigen3/Eigen/Householder
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/Householder/Householder.h"
+	"src/Householder/HouseholderSequence.h"
+	"src/Householder/BlockHouseholder.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Householder/Householder.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Householder/HouseholderSequence.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Householder/BlockHouseholder.h
+
+1374630515 /usr/include/eigen3/Eigen/src/QR/HouseholderQR.h
+
+1374630515 /usr/include/eigen3/Eigen/src/QR/FullPivHouseholderQR.h
+
+1374630515 /usr/include/eigen3/Eigen/src/QR/ColPivHouseholderQR.h
+
+1374630515 /usr/include/eigen3/Eigen/src/QR/HouseholderQR_MKL.h
+	"Eigen/src/Core/util/MKL_support.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/QR/ColPivHouseholderQR_MKL.h
+	"Eigen/src/Core/util/MKL_support.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/QR.h
+
+1374630515 /usr/include/eigen3/Eigen/Eigenvalues
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	"Cholesky"
+	"Jacobi"
+	"Householder"
+	"LU"
+	"Geometry"
+	"src/Eigenvalues/Tridiagonalization.h"
+	"src/Eigenvalues/RealSchur.h"
+	"src/Eigenvalues/EigenSolver.h"
+	"src/Eigenvalues/SelfAdjointEigenSolver.h"
+	"src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h"
+	"src/Eigenvalues/HessenbergDecomposition.h"
+	"src/Eigenvalues/ComplexSchur.h"
+	"src/Eigenvalues/ComplexEigenSolver.h"
+	"src/Eigenvalues/RealQZ.h"
+	"src/Eigenvalues/GeneralizedEigenSolver.h"
+	"src/Eigenvalues/MatrixBaseEigenvalues.h"
+	"src/Eigenvalues/RealSchur_MKL.h"
+	"src/Eigenvalues/ComplexSchur_MKL.h"
+	"src/Eigenvalues/SelfAdjointEigenSolver_MKL.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1374630515 /usr/include/eigen3/Eigen/Geometry
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	"SVD"
+	"LU"
+	<limits>
+	"src/Geometry/OrthoMethods.h"
+	"src/Geometry/EulerAngles.h"
+	"src/Geometry/Homogeneous.h"
+	"src/Geometry/RotationBase.h"
+	"src/Geometry/Rotation2D.h"
+	"src/Geometry/Quaternion.h"
+	"src/Geometry/AngleAxis.h"
+	"src/Geometry/Transform.h"
+	"src/Geometry/Translation.h"
+	"src/Geometry/Scaling.h"
+	"src/Geometry/Hyperplane.h"
+	"src/Geometry/ParametrizedLine.h"
+	"src/Geometry/AlignedBox.h"
+	"src/Geometry/Umeyama.h"
+	"src/Geometry/arch/Geometry_SSE.h"
+	"src/Eigen2Support/Geometry/All.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1374630515 /usr/include/eigen3/Eigen/SVD
+	"QR"
+	"Householder"
+	"Jacobi"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/misc/Solve.h"
+	"src/SVD/JacobiSVD.h"
+	"src/SVD/JacobiSVD_MKL.h"
+	"src/SVD/UpperBidiagonalization.h"
+	"src/Eigen2Support/SVD.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/SVD/JacobiSVD.h
+
+1374630515 /usr/include/eigen3/Eigen/src/SVD/JacobiSVD_MKL.h
+	"Eigen/src/Core/util/MKL_support.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/SVD/UpperBidiagonalization.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/SVD.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/OrthoMethods.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/EulerAngles.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/Homogeneous.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/RotationBase.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/Rotation2D.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/Quaternion.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/AngleAxis.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/Transform.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/Translation.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/Scaling.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/Hyperplane.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/ParametrizedLine.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/AlignedBox.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/Umeyama.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Geometry/arch/Geometry_SSE.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/All.h
+	<limits>
+	"RotationBase.h"
+	"Rotation2D.h"
+	"Quaternion.h"
+	"AngleAxis.h"
+	"Transform.h"
+	"Translation.h"
+	"Scaling.h"
+	"AlignedBox.h"
+	"Hyperplane.h"
+	"ParametrizedLine.h"
+	"RotationBase.h"
+	"Rotation2D.h"
+	"Quaternion.h"
+	"AngleAxis.h"
+	"Transform.h"
+	"Translation.h"
+	"Scaling.h"
+	"AlignedBox.h"
+	"Hyperplane.h"
+	"ParametrizedLine.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/RotationBase.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Rotation2D.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Quaternion.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/AngleAxis.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Transform.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Translation.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Scaling.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/AlignedBox.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Hyperplane.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/ParametrizedLine.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/Tridiagonalization.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/RealSchur.h
+	"./HessenbergDecomposition.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/HessenbergDecomposition.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/EigenSolver.h
+	"./RealSchur.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h
+	"./Tridiagonalization.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h
+	"./Tridiagonalization.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/ComplexSchur.h
+	"./HessenbergDecomposition.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/ComplexEigenSolver.h
+	"./ComplexSchur.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h
+	"./RealQZ.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/RealSchur_MKL.h
+	"Eigen/src/Core/util/MKL_support.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/ComplexSchur_MKL.h
+	"Eigen/src/Core/util/MKL_support.h"
+
+1374630515 /usr/include/eigen3/Eigen/src/Eigenvalues/SelfAdjointEigenSolver_MKL.h
+	"Eigen/src/Core/util/MKL_support.h"
+
+1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/TagFamily.h
+	<climits>
+	<cmath>
+	<stdio.h>
+	<vector>
+	<map>
+	"AprilTags/TagDetection.h"
+
+1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/FloatImage.h
+	<algorithm>
+	<vector>
+
+1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/Tag16h5.h
+
+1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/Tag25h7.h
+
+1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/Tag25h9.h
+
+1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/Tag36h9.h
+
+1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/Tag36h11.h
+
+1453782429 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.cpp
+	"april_analysis.h"
+

@@ -1,0 +1,30 @@
+How I got the OpenCV stitcher sample code to compile
+
+I was #include-ing the following headers
+	#include <opencv2/imgcodecs.hpp>
+	#include <opencv2/highgui.hpp>
+	#include <opencv2/stitching.hpp>
+
+So I right-clicked on the Code::Blocks project and went
+	rghtclk > Build Options > Search directories > Compiler > Add > /usr/local/lib/opencv2
+	rghtclk > Build Options > Search directories > Linker > Add > /usr/local/lib
+	rghtclk > Build Options > Linker settings > Add >
+		/usr/local/lib/libopencv_stitching.so
+		/usr/local/lib/libopencv_core.so.3.0
+		/usr/local/lib/libopencv_highgui.so
+		/usr/local/lib/libopencv_imgcodecs.so
+
+I chose these locations because I went and checked and found the opencv code there
+
+I had trouble with cv::cvtColor until I added to Linker settings
+		/usr/local/lib/libopencv_calib3d.so
+
+I had trouble with
+	vector<AprilTags::TagDetection> detections = m_tagDetector->extractTags(image_gray);
+	and
+	detections[i].draw(image);
+	and
+	detection.getRelativeTranslationRotation(m_tagSize, m_fx, m_fy, m_px, m_py,
+                                            translation, rotation);
+until I added to Linker settings
+		/usr/local/lib/libopencv_imgproc.so
