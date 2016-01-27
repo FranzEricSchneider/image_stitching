@@ -1,10 +1,11 @@
 # depslib dependency file v1.0
-1453781420 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
+1453869566 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
 	<iostream>
 	<fstream>
 	<opencv2/imgcodecs.hpp>
 	<opencv2/highgui.hpp>
 	<opencv2/stitching.hpp>
+	"april_analysis.h"
 
 1453765538 source:/home/eon-alone/projects/sandbox/image_stitching/main.cpp
 	<iostream>
@@ -13,7 +14,7 @@
 	<opencv2/highgui.hpp>
 	<opencv2/stitching.hpp>
 
-1453781922 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.h
+1453785661 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.h
 	<iostream>
 	<cstring>
 	<vector>
@@ -248,7 +249,7 @@
 	<set>
 	<valarray>
 
-1453779127 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/TagDetection.h
+1453866495 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/TagDetection.h
 	<Eigen/Dense>
 	"opencv2/opencv.hpp"
 	<utility>
@@ -1053,6 +1054,6 @@
 
 1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/Tag36h11.h
 
-1453782429 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.cpp
+1453786500 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.cpp
 	"april_analysis.h"
 

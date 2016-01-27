@@ -16,6 +16,9 @@ So I right-clicked on the Code::Blocks project and went
 
 I chose these locations because I went and checked and found the opencv code there
 
+I had trouble with including Eigen/Dense until I added to Search directories > Compiler
+		/usr/include/eigen3
+
 I had trouble with cv::cvtColor until I added to Linker settings
 		/usr/local/lib/libopencv_calib3d.so
 

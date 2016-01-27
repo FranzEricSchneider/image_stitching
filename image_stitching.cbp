@@ -11,17 +11,23 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="001.jpg 002.jpg 003.jpg" />
+				<Option parameters="imgs/d1.jpg imgs/d2.jpg imgs/d3.jpg imgs/d4.jpg imgs/d5.jpg imgs/d6.jpg imgs/d7.jpg imgs/d8.jpg imgs/d9.jpg imgs/d10.jpg imgs/d11.jpg" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="/usr/local/include/opencv2" />
+					<Add directory="../apriltags/build/include" />
+					<Add directory="/usr/include/eigen3" />
 				</Compiler>
 				<Linker>
 					<Add library="/usr/local/lib/libopencv_stitching.so" />
 					<Add library="/usr/local/lib/libopencv_core.so.3.0" />
 					<Add library="/usr/local/lib/libopencv_highgui.so" />
 					<Add library="/usr/local/lib/libopencv_imgcodecs.so" />
+					<Add library="../apriltags/build/lib/libapriltags.a" />
+					<Add library="/usr/local/lib/libopencv_calib3d.so" />
+					<Add library="/usr/local/lib/libopencv_imgproc.so" />
 					<Add directory="/usr/local/lib" />
+					<Add directory="../apriltags/build/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -29,11 +35,24 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="imgs/d1.jpg imgs/d2.jpg imgs/d3.jpg imgs/d4.jpg imgs/d5.jpg imgs/d6.jpg imgs/d7.jpg imgs/d8.jpg imgs/d9.jpg imgs/d10.jpg imgs/d11.jpg" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="/usr/local/include/opencv2" />
+					<Add directory="../apriltags/build/include" />
+					<Add directory="/usr/include/eigen3" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="/usr/local/lib/libopencv_stitching.so" />
+					<Add library="/usr/local/lib/libopencv_core.so.3.0" />
+					<Add library="/usr/local/lib/libopencv_highgui.so" />
+					<Add library="/usr/local/lib/libopencv_imgcodecs.so" />
+					<Add library="../apriltags/build/lib/libapriltags.a" />
+					<Add library="/usr/local/lib/libopencv_calib3d.so" />
+					<Add library="/usr/local/lib/libopencv_imgproc.so" />
+					<Add directory="/usr/local/lib" />
+					<Add directory="../apriltags/build/lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -41,6 +60,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="april_analysis.cpp" />
+		<Unit filename="april_analysis.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

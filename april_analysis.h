@@ -49,22 +49,18 @@ class AprilAnalysis {
     double m_py;
     int m_deviceId;   // camera id (in case of multiple cameras)
 
-    std::list<string> m_imgNames;
+    std::list<std::string> m_imgNames;
 
 public:
-    const string usage = "\n"
-      "Usage:\n"
-      "  apriltags_demo [OPTION...] [IMG1 [IMG2...]]\n"
-      "\n"
+    const std::string usage = "\n"
       "Options:\n"
-      "  -h  -?          Show help options\n"
-      "  -d              Disable graphics\n"
-      "  -C <bbxhh>      Tag family (default 36h11)\n"
-      "  -D <id>         Video device ID (if multiple cameras present)\n"
-      "  -F <fx>         Focal length in pixels\n"
-      "  -W <width>      Image width (default 640, availability depends on camera)\n"
-      "  -H <height>     Image height (default 480, availability depends on camera)\n"
-      "  -S <size>       Tag size (square black frame) in meters\n"
+      "                Disable graphics\n"
+      "   <bbxhh>      Tag family (default 36h11)\n"
+      "   <id>         Video device ID (if multiple cameras present)\n"
+      "   <fx>         Focal length in pixels\n"
+      "   <width>      Image width (default 640, availability depends on camera)\n"
+      "   <height>     Image height (default 480, availability depends on camera)\n"
+      "   <size>       Tag size (square black frame) in meters\n"
       "\n";
     const char* windowName = "AprilAnalysis";
 
@@ -73,7 +69,6 @@ public:
         // default settings, most can be modified through command line options (see below)
         m_tagDetector(NULL),
         m_tagCodes(AprilTags::tagCodes36h11),
-
         m_draw(true),
         m_width(640),
         m_height(480),
@@ -82,16 +77,15 @@ public:
         m_fy(600),
         m_px(m_width/2),
         m_py(m_height/2),
-
         m_deviceId(0)
         {}
 
-    void setTagCodes(string s);
-    void parseOptions(int argc, char* argv[]);
+    void setTagCodes(std::string s);
+    void setParameters(double height, double width);
     void setup();
     void print_detection(AprilTags::TagDetection& detection) const;
     void processImage(cv::Mat& image, cv::Mat& image_gray);
-    void loadImages();
+    void processAndShowImage(cv::Mat& image);
 }; // AprilAnalysis
 
 #endif // APRIL_ANALYSIS_H_INCLUDED

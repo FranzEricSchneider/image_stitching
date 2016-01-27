@@ -47,12 +47,10 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/stitching.hpp>
 
-// #include "april_analysis.h"
-
-using namespace cv;
+#include "april_analysis.h"
 
 bool try_use_gpu = false;
-std::vector<Mat> imgs;
+std::vector<cv::Mat> imgs;
 std::string result_name = "result.jpg";
 
 void printUsage();
@@ -63,19 +61,25 @@ int main(int argc, char* argv[])
     int retval = parseCmdArgs(argc, argv);
     if (retval) return -1;
 
-    Mat pano;
-    Stitcher stitcher = Stitcher::createDefault(try_use_gpu);
+    cv::Mat pano;
+    cv::Stitcher stitcher = cv::Stitcher::createDefault(try_use_gpu);
 
-    Stitcher::Status status = stitcher.stitch(imgs, pano);
+    cv::Stitcher::Status status = stitcher.stitch(imgs, pano);
 
-    if (status != Stitcher::OK)
+    if (status != cv::Stitcher::OK)
     {
         std::cout << "Can't stitch images, error code = " << status << std::endl;
         return -1;
     }
     std::cout << "Finished processing image!" << std::endl;
 
-    imwrite(result_name, pano);
+//    cv::Mat pano = cv::imread("imgs/a7.jpg"); // a2, a5
+    AprilAnalysis april;
+    april.setParameters(pano.rows, pano.cols);
+    april.setup();
+    april.processAndShowImage(pano);
+
+    cv::imwrite(result_name, pano);
     std::cout << "Finished writing image!\n" << std::endl;
     return 0;
 }
@@ -129,17 +133,20 @@ int parseCmdArgs(int argc, char** argv)
         }
         else
         {
-            Mat img = imread(argv[i]);
+            cv::Mat img = cv::imread(argv[i]);
+            cv::Mat resizedImg;
             if (img.empty())
             {
                 std::cout << "Can't read image '" << argv[i] << "'\n";
                 return -1;
             }
-            else
-            {
-                std::cout << "Got image '" << argv[i] << "'\n";
-            }
+            std::cout << "Got image '" << argv[i] << "'\n";
             imgs.push_back(img);
+////             cv::Size Dsize{408, 230};
+//            cv::Size Dsize{816, 459};
+//            cv::resize(img, resizedImg, Dsize);
+//            imgs.push_back(resizedImg);
+////            cv::imwrite("resized" + std::to_string(i) + ".jpg", resizedImg);
         }
     }
     return 0;
