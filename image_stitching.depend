@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1453950487 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
+1453952948 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
 	"april_analysis.h"
 	"simple_stitcher.h"
 
@@ -10,7 +10,7 @@
 	<opencv2/highgui.hpp>
 	<opencv2/stitching.hpp>
 
-1453785661 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.h
+1453953333 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.h
 	<iostream>
 	<cstring>
 	<vector>
@@ -1050,7 +1050,7 @@
 
 1428416828 /home/eon-alone/projects/sandbox/image_stitching/apriltags/build/include/AprilTags/Tag36h11.h
 
-1453786500 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.cpp
+1453952903 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.cpp
 	"april_analysis.h"
 
 1453951125 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/simple_stitcher.h
@@ -1059,4 +1059,7 @@
 	<opencv2/imgcodecs.hpp>
 	<opencv2/highgui.hpp>
 	<opencv2/stitching.hpp>
+
+1453951184 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/simple_stitcher.cpp
+	"simple_stitcher.h"
 
