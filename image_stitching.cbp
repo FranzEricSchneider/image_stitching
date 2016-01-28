@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="imgs/d1.jpg imgs/d2.jpg imgs/d3.jpg imgs/d4.jpg imgs/d5.jpg imgs/d6.jpg imgs/d7.jpg imgs/d8.jpg imgs/d9.jpg imgs/d10.jpg imgs/d11.jpg" />
+				<Option parameters="imgs/e19.jpg imgs/e20.jpg imgs/e21.jpg imgs/e22.jpg imgs/e23.jpg imgs/e24.jpg" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="/usr/local/include/opencv2" />
