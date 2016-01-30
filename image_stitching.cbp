@@ -71,6 +71,8 @@
 		<Unit filename="april_analysis.cpp" />
 		<Unit filename="april_analysis.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="plot_tools.cpp" />
+		<Unit filename="plot_tools.h" />
 		<Unit filename="point_sets.cpp" />
 		<Unit filename="point_sets.h" />
 		<Unit filename="simple_stitcher.cpp" />

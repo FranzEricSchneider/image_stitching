@@ -1,26 +1,27 @@
 #ifndef POINT_SETS_H_INCLUDED
 #define POINT_SETS_H_INCLUDED
 
+#include <set>
 #include <vector>
 
 #include "AprilTags/TagDetector.h"
-#include "gnuplot-iostream.h"
+#include <Eigen/Geometry>
 
-#include "vector2d.h"
+#include "plot_tools.h"
 
 
 class PointSets
 {
 private:
-    std::vector<Point2D> m_baseSet;
-    std::vector< std::pair<Point2D, Point2D> > m_completeSet;
+    std::vector<Eigen::Vector3d> m_baseSet;
+    std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > m_completeSet;
     std::pair<double, int> m_minPointX; // Contains value and index in baseSet vector
     std::pair<double, int> m_minPointY; // Contains value and index in baseSet vector
     std::pair<double, int> m_maxPointX; // Contains value and index in baseSet vector
     std::pair<double, int> m_maxPointY; // Contains value and index in baseSet vector
     cv::Mat m_baseImg;
     std::string m_windowName{"Point Sets Image"};
-    Gnuplot m_gp;
+    PlotTools m_plotTools;
 
 public:
     PointSets(vector<AprilTags::TagDetection> aprilDetections, cv::Mat baseImg):
@@ -28,7 +29,7 @@ public:
     {
         for (auto point : aprilDetections)
         {
-            m_baseSet.push_back(Point2D(point.cxy.first, point.cxy.second));
+            m_baseSet.push_back(Eigen::Vector3d(point.cxy.first, point.cxy.second, 0));
         }
         generateMinMax(); // Generates the minmax values from the loaded baseSet
         cv::namedWindow(m_windowName, cv::WINDOW_NORMAL);
@@ -41,7 +42,18 @@ public:
     void generateCompleteSet();
     void graphCompleteSet();
     void drawCompleteSet();
+    void generateConvexHull();
     void showSetImage();
 };
+
+
+// Taken from here: http://www.cplusplus.com/reference/set/set/set/
+// Sorts the elements in DESCENDING order
+struct pairComparison
+{
+    bool operator() (std::pair<double, int> lhs, std::pair<double, int> rhs) const
+        { return lhs.first > rhs.first; }
+};
+
 
 #endif // POINT_SETS_H_INCLUDED

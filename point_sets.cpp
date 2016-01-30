@@ -16,31 +16,31 @@ void PointSets::generateMinMax()
     // Sets the minmax value (first) to the first element, and sets the
     //     corresponding index (second) to 0. Now each value will be compared
     //     to the first element
-    m_minPointX.first = m_maxPointX.first = m_baseSet[0].x;
-    m_minPointY.first = m_maxPointY.first = m_baseSet[0].y;
+    m_minPointX.first = m_maxPointX.first = m_baseSet[0](0);
+    m_minPointY.first = m_maxPointY.first = m_baseSet[0](1);
     m_minPointX.second = m_maxPointX.second = 0;
     m_minPointY.second = m_maxPointY.second = 0;
 
     for (int i{}; i < static_cast<int>(m_baseSet.size()); ++i)
     {
-        if (m_baseSet[i].x < m_minPointX.first)
+        if (m_baseSet[i](0) < m_minPointX.first)
         {
-            m_minPointX.first = m_baseSet[i].x;
+            m_minPointX.first = m_baseSet[i](0);
             m_minPointX.second = i;
         }
-        else if (m_baseSet[i].x > m_maxPointX.first)
+        else if (m_baseSet[i](0) > m_maxPointX.first)
         {
-            m_maxPointX.first = m_baseSet[i].x;
+            m_maxPointX.first = m_baseSet[i](0);
             m_maxPointX.second = i;
         }
-        if (m_baseSet[i].y < m_minPointY.first)
+        if (m_baseSet[i](1) < m_minPointY.first)
         {
-            m_minPointY.first = m_baseSet[i].y;
+            m_minPointY.first = m_baseSet[i](1);
             m_minPointY.second = i;
         }
-        else if (m_baseSet[i].y > m_maxPointY.first)
+        else if (m_baseSet[i](1) > m_maxPointY.first)
         {
-            m_maxPointY.first = m_baseSet[i].y;
+            m_maxPointY.first = m_baseSet[i](1);
             m_maxPointY.second = i;
         }
     }
@@ -51,7 +51,7 @@ void PointSets::drawBaseSet()
 {
     for (auto point: m_baseSet)
     {
-        cv::circle(m_baseImg, cv::Point2f(point.x, point.y),
+        cv::circle(m_baseImg, cv::Point2f(point(0), point(1)),
                    15, cv::Scalar(0, 0, 255, 0), 4);
     }
 }
@@ -64,7 +64,7 @@ void PointSets::generateCompleteSet()
     {
         for (int j{i + 1}; j < numPts; ++j)
         {
-            std::pair<Point2D, Point2D> line{m_baseSet[i], m_baseSet[j]};
+            std::pair<Eigen::Vector3d, Eigen::Vector3d> line{m_baseSet[i], m_baseSet[j]};
             m_completeSet.push_back(line);
         }
     }
@@ -83,8 +83,8 @@ void PointSets::drawCompleteSet()
         for (auto line: m_completeSet)
         {
             cv::line(m_baseImg,
-                     cv::Point2f(line.first.x, line.first.y),
-                     cv::Point2f(line.second.x, line.second.y),
+                     cv::Point2f(line.first(0), line.first(1)),
+                     cv::Point2f(line.second(0), line.second(1)),
                      cv::Scalar(255, 0, 0, 0), 2 );
         }
     }
@@ -100,24 +100,39 @@ void PointSets::graphCompleteSet()
     else
     {
         int numLines{static_cast<int>(m_completeSet.size())};
-        m_gp << "set xrange [" << (m_minPointX.first - 20) << ":" << (m_maxPointX.first + 20) << "]\n";
-        m_gp << "set yrange [" << (m_minPointY.first - 20) << ":" << (m_maxPointY.first + 20) << "]\n";
-        std::string plotString{"plot"};
-        for (int i{}; i < numLines; ++i)
+        m_plotTools.plotLines(numLines,
+                              m_minPointX.first - 100, m_maxPointX.first + 100,
+                              m_minPointY.first - 100, m_maxPointY.first + 100,
+                              m_completeSet);
+    }
+}
+
+
+void PointSets::generateConvexHull()
+{
+    // Done using Graham scan: https://en.wikipedia.org/wiki/Graham_scan
+    // Eigen examples: http://www.cc.gatech.edu/classes/AY2015/cs4496_spring/Eigen.html
+
+    int numPoints = m_baseSet.size();
+    int startingPointIndex = m_minPointY.second;
+    Eigen::Vector3d startingPoint = m_baseSet[startingPointIndex];
+    std::set< std::pair<double, int>, pairComparison > anglesFromPSet; // Uses pairComparison to sort pairs
+    for (int i{}; i < numPoints; ++i)
+    {
+        if (i != startingPointIndex)
         {
-            plotString += " '-' with lines";
-            if (i != numLines - 1) { plotString += ","; }
-        }
-        plotString += " \n";
-        m_gp << plotString;
-        for (int i{}; i < numLines; ++i)
-        {
-            std::vector< std::pair<double, double> > line;
-            line.push_back(std::make_pair(m_completeSet[i].first.x, m_completeSet[i].first.y));
-            line.push_back(std::make_pair(m_completeSet[i].second.x, m_completeSet[i].second.y));
-            m_gp.send1d(line);
+            Eigen::Vector3d vec = m_baseSet[i] - startingPoint;
+            vec.normalize();
+            std::pair<double, int> xValue{vec(0), i};  // Sorts based on x value
+            anglesFromPSet.insert(xValue);
         }
     }
+
+//    std::set< std::pair<double, int> >::iterator it;
+//    std::cout << "myset contains:";
+//    for (it=anglesFromPSet.begin(); it!=anglesFromPSet.end(); ++it)
+//        std::cout << ' ' << (*it).first;
+//    std::cout << '\n';
 }
 
 
