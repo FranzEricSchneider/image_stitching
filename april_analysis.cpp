@@ -54,19 +54,26 @@ void AprilAnalysis::printDetection(AprilTags::TagDetection& detection) const {
 }
 
 
-void AprilAnalysis::processAndShowImage() {
+void AprilAnalysis::processImage()
+{
     cv::Mat image_gray;
-    cv::cvtColor(img, image_gray, CV_BGR2GRAY);
-    vector<AprilTags::TagDetection> detections = m_tagDetector->extractTags(image_gray);
+    cv::cvtColor(m_img, image_gray, CV_BGR2GRAY);
+    m_detections = m_tagDetector->extractTags(image_gray);
+}
 
-    std::cout << detections.size() << " tags detected:" << std::endl;
-    for (int i = 0; i < static_cast<int>(detections.size()); i++) {
-        printDetection(detections[i]);
+
+void AprilAnalysis::processAndShowImage()
+{
+    processImage();
+    std::cout << m_detections.size() << " tags detected:" << std::endl;
+    for (int i = 0; i < static_cast<int>(m_detections.size()); i++) {
+        printDetection(m_detections[i]);
     }
 
-    for (int i = 0; i < static_cast<int>(detections.size()); i++) {
-        detections[i].draw(img);
+    for (int i = 0; i < static_cast<int>(m_detections.size()); i++) {
+        m_detections[i].draw(m_img);
     }
-    imshow(windowName, img);
+    cv::namedWindow(m_windowName, cv::WINDOW_NORMAL);
+    cv::imshow(m_windowName, m_img);
     while (cv::waitKey(100) == -1) {}
 }

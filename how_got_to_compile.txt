@@ -31,3 +31,15 @@ I had trouble with
                                             translation, rotation);
 until I added to Linker settings
 		/usr/local/lib/libopencv_imgproc.so
+
+I downloaded the C++ gnuplot library from here: http://www.stahlke.org/dan/gnuplot-iostream/
+Then installed gnuplot from here: sudo apt-get install gnuplot
+								  sudo apt-get install gnuplot-x11
+	I put gnuplot-iostream in /usr/local/include
+		Then in Search directories > Compiler I added /usr/local/include/gnuplot-iostream
+
+I installed boost with sudo apt-get install libboost-all-dev
+		In Linker settings I added 'boost_system' (with no file path, it's weird)
+		In Linker settings I added 'boost_iostreams'
+		In Linker settings I added 'boost_filesystem'
+		In Search directories > Compiler I added /usr/include/boost

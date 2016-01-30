@@ -14,9 +14,12 @@
 				<Option parameters="imgs/e19.jpg imgs/e20.jpg imgs/e21.jpg imgs/e22.jpg imgs/e23.jpg imgs/e24.jpg" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-fPIC" />
 					<Add directory="/usr/local/include/opencv2" />
 					<Add directory="../apriltags/build/include" />
 					<Add directory="/usr/include/eigen3" />
+					<Add directory="/usr/local/include/gnuplot-iostream" />
+					<Add directory="/usr/include/boost" />
 				</Compiler>
 				<Linker>
 					<Add library="/usr/local/lib/libopencv_stitching.so" />
@@ -26,8 +29,12 @@
 					<Add library="../apriltags/build/lib/libapriltags.a" />
 					<Add library="/usr/local/lib/libopencv_calib3d.so" />
 					<Add library="/usr/local/lib/libopencv_imgproc.so" />
+					<Add library="boost_system" />
+					<Add library="boost_iostreams" />
+					<Add library="boost_filesystem" />
 					<Add directory="/usr/local/lib" />
 					<Add directory="../apriltags/build/lib" />
+					<Add directory="/usr/local/include/gnuplot-iostream" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -38,6 +45,7 @@
 				<Option parameters="imgs/d1.jpg imgs/d2.jpg imgs/d3.jpg imgs/d4.jpg imgs/d5.jpg imgs/d6.jpg imgs/d7.jpg imgs/d8.jpg imgs/d9.jpg imgs/d10.jpg imgs/d11.jpg" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-fPIC" />
 					<Add directory="/usr/local/include/opencv2" />
 					<Add directory="../apriltags/build/include" />
 					<Add directory="/usr/include/eigen3" />
@@ -63,6 +71,11 @@
 		<Unit filename="april_analysis.cpp" />
 		<Unit filename="april_analysis.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="point_sets.cpp" />
+		<Unit filename="point_sets.h" />
+		<Unit filename="simple_stitcher.cpp" />
+		<Unit filename="simple_stitcher.h" />
+		<Unit filename="vector2d.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -41,47 +41,49 @@ inline double standardRad(double t);
 void wRo_to_euler(const Eigen::Matrix3d& wRo, double& yaw, double& pitch, double& roll);
 
 
-class AprilAnalysis {
+class AprilAnalysis
+{
 
     AprilTags::TagDetector* m_tagDetector;
     const AprilTags::TagCodes m_tagCodes{AprilTags::tagCodes36h11}; // Default
 
-    cv::Mat img;             // Load the image of interest
     const double m_tagSize{0.166}; // April tag side length in meters of square black frame
     const int m_deviceId{0};       // camera id (in case of multiple cameras)
     const double m_fx{600};        // camera focal length in pixels
     const double m_fy{600};
-    const char* windowName{"AprilAnalysis"};
+    const char* m_windowName{"AprilAnalysis"};
     int m_width;             // image size in pixels
     int m_height;
     double m_px;             // camera principal point
     double m_py;
 
     std::list<std::string> m_imgNames;
+    void printDetection(AprilTags::TagDetection& detection) const;
 
 public:
     AprilAnalysis()
         {
-            std::cout << "What image would you like to load? ('string'.jpg): ";
-            std::string name;
-            std::getline(std::cin, name);
-            name += ".jpg";
-            img = cv::imread(name);
-            if (img.empty())
+            std::string name{"result.jpg"};
+//            std::cout << "What image would you like to load? ('string'.jpg): ";
+//            std::getline(std::cin, name);
+//            name += ".jpg";
+            m_img = cv::imread(name);
+            if (m_img.empty())
             {
                 std::cout << "Couldn't read image '" << name << "'\n";
                 exit(1);
             }
-            m_height = img.rows;
+            m_height = m_img.rows;
             m_py = m_height/2;
-            m_width = img.cols;
+            m_width = m_img.cols;
             m_px = m_width/2;
 
             m_tagDetector = new AprilTags::TagDetector(m_tagCodes);
-            cv::namedWindow(windowName, cv::WINDOW_NORMAL);
         }
 
-    void printDetection(AprilTags::TagDetection& detection) const;
+    vector<AprilTags::TagDetection> m_detections;
+    cv::Mat m_img;                 // Load the image of interest
+    void processImage();
     void processAndShowImage();
 }; // AprilAnalysis
 
