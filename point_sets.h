@@ -15,6 +15,7 @@ class PointSets
 private:
     std::vector<Eigen::Vector3d> m_baseSet;
     std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > m_completeSet;
+    std::vector<int> m_hullIndices;
     std::pair<double, int> m_minPointX; // Contains value and index in baseSet vector
     std::pair<double, int> m_minPointY; // Contains value and index in baseSet vector
     std::pair<double, int> m_maxPointX; // Contains value and index in baseSet vector
@@ -42,9 +43,12 @@ public:
     void generateCompleteSet();
     void graphCompleteSet();
     void drawCompleteSet();
-    void generateConvexHull();
+    void generateConvexHullIndices();
     void showSetImage();
 };
+
+
+bool isRightTurn(Eigen::Vector3d a, Eigen::Vector3d b, Eigen::Vector3d c);
 
 
 // Taken from here: http://www.cplusplus.com/reference/set/set/set/
