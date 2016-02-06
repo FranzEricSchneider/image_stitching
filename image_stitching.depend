@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1454559926 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
+1454735054 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
 	"april_analysis.h"
 	"point_sets.h"
+	"random_points.h"
 
 1453765538 source:/home/eon-alone/projects/sandbox/image_stitching/main.cpp
 	<iostream>
@@ -10,7 +11,7 @@
 	<opencv2/highgui.hpp>
 	<opencv2/stitching.hpp>
 
-1453957958 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.h
+1454725274 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/april_analysis.h
 	<iostream>
 	<cstring>
 	<vector>
@@ -1063,7 +1064,7 @@
 1453951184 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/simple_stitcher.cpp
 	"simple_stitcher.h"
 
-1454561627 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.h
+1454724630 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.h
 	<set>
 	<vector>
 	"AprilTags/TagDetector.h"
@@ -1074,7 +1075,7 @@
 	<math.h>
 	<ostream>
 
-1454559615 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.cpp
+1454726252 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.cpp
 	"point_sets.h"
 
 1450742570 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/qcustomplot.h
@@ -3757,4 +3758,16 @@
 
 1454192002 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/plot_tools.cpp
 	"plot_tools.h"
+
+1454735185 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/random_points.h
+	<ctime>
+	<cstdint>
+	<random>
+	<vector>
+	"AprilTags/TagDetector.h"
+
+1422855797 /usr/include/boost/random
+
+1454735015 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/random_points.cpp
+	"random_points.h"
 

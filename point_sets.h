@@ -16,6 +16,7 @@ private:
     std::vector<Eigen::Vector3d> m_baseSet;
     std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > m_completeSet;
     std::vector<int> m_hullIndices;
+    std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > m_convexHull;
     std::pair<double, int> m_minPointX; // Contains value and index in baseSet vector
     std::pair<double, int> m_minPointY; // Contains value and index in baseSet vector
     std::pair<double, int> m_maxPointX; // Contains value and index in baseSet vector
@@ -39,11 +40,15 @@ public:
     void print();
     void generateMinMax();
     void drawBaseSet();
-    void graphBaseSet();
+    void drawSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
+    void graphSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
     void generateCompleteSet();
     void graphCompleteSet();
     void drawCompleteSet();
     void generateConvexHullIndices();
+    void generateConvexHull();
+    void drawConvexHull();
+    void graphConvexHull();
     void showSetImage();
 };
 

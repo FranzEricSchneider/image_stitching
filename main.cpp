@@ -1,43 +1,35 @@
 #include "april_analysis.h"
 #include "point_sets.h"
+#include "random_points.h"
 
 
 // We want to find the
-//    Convex hull
 //    Delaunay triangulation
+//    Shortest path between points
 //    Voronoi diagram
 
 int main()
 {
-    AprilAnalysis april;
-    april.processImage();
-    PointSets ps{april.m_detections, april.m_img};
-//    ps.generateCompleteSet();
-//    ps.drawCompleteSet();
-//    ps.graphCompleteSet();
-//    ps.showSetImage();
-    ps.generateConvexHullIndices();
 
-//    std::vector<int> a{1, 2, 3, 4, 5, 6, 7, 8};
-//    for (auto integer: a)
-//    {
-//        std::cout << integer;
-//    }
-//    std::cout << " ";
-//    for (auto integer: a)
-//    {
-//        std::cout << integer;
-//    }
-//    std::cout << "\n";
-//
-//    std::vector<int>::iterator it;
-//    for (it = a.begin(); it != a.end(); ++it)
-//    {
-//        if (it == --a.end())
-//            std::cout << "Hey!";
-//        std::cout << *it;
-//        std::cout << *(--a.end());
-//        std::cout << *(a.end() - 1);
-//    }
+/*
+MAKE A RANDOM POINT GENERATOR
+MAKE A THING THAT WRITES OUT THOSE RANDOM POINTS
+MAKE A THING THAT READS THOSE WRITTEN POINTS
+DEBUG WHY SOME RIGHT TURNS ARE GETTING INTO THE CONVEX HULL
+*/
+
+//    AprilAnalysis april;
+//    april.processImage();
+//    PointSets ps{april.m_detections, april.m_img};
+    RandomPoints random(20);
+    PointSets ps{random.m_randomDetections, random.m_img};
+
+    ps.generateCompleteSet();
+    ps.drawCompleteSet();
+//    ps.graphCompleteSet();
+    ps.generateConvexHull();
+//    ps.drawConvexHull();
+    ps.graphConvexHull();
+    ps.showSetImage();
     return 0;
 }

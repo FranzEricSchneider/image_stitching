@@ -6,7 +6,7 @@ void PointSets::print()
     std::cout << "The base set:\n";
     for (auto point: m_baseSet)
     {
-        std::cout << point << "\n";
+        std::cout << "point:\n" << point << "\n";
     }
 }
 
@@ -57,6 +57,42 @@ void PointSets::drawBaseSet()
 }
 
 
+void PointSets::drawSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet)
+{
+    if (givenSet.empty())
+    {
+        std::cout << "Your given set was empty, generate it first\n";
+    }
+    else
+    {
+        for (auto line: givenSet)
+        {
+            cv::line(m_baseImg,
+                     cv::Point2f(line.first(0), line.first(1)),
+                     cv::Point2f(line.second(0), line.second(1)),
+                     cv::Scalar(255, 0, 0, 0), 2 );
+        }
+    }
+}
+
+
+void PointSets::graphSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet)
+{
+    if (givenSet.empty())
+    {
+        std::cout << "The given set was empty, generate it first\n";
+    }
+    else
+    {
+        int numLines{static_cast<int>(givenSet.size())};
+        m_plotTools.plotLines(numLines,
+                              m_minPointX.first - 100, m_maxPointX.first + 100,
+                              m_minPointY.first - 100, m_maxPointY.first + 100,
+                              givenSet);
+    }
+}
+
+
 void PointSets::generateCompleteSet()
 {
     int numPts = m_baseSet.size();
@@ -73,38 +109,13 @@ void PointSets::generateCompleteSet()
 
 void PointSets::drawCompleteSet()
 {
-    drawBaseSet();
-    if (m_completeSet.empty())
-    {
-        std::cout << "Your complete set was empty, generate it first\n";
-    }
-    else
-    {
-        for (auto line: m_completeSet)
-        {
-            cv::line(m_baseImg,
-                     cv::Point2f(line.first(0), line.first(1)),
-                     cv::Point2f(line.second(0), line.second(1)),
-                     cv::Scalar(255, 0, 0, 0), 2 );
-        }
-    }
+    drawSet(m_completeSet);
 }
 
 
 void PointSets::graphCompleteSet()
 {
-    if (m_completeSet.empty())
-    {
-        std::cout << "Your complete set was empty, generate it first\n";
-    }
-    else
-    {
-        int numLines{static_cast<int>(m_completeSet.size())};
-        m_plotTools.plotLines(numLines,
-                              m_minPointX.first - 100, m_maxPointX.first + 100,
-                              m_minPointY.first - 100, m_maxPointY.first + 100,
-                              m_completeSet);
-    }
+    graphSet(m_completeSet);
 }
 
 
@@ -160,9 +171,29 @@ void PointSets::generateConvexHullIndices()
 }
 
 
-/*
-MAKE A DRAW CONVEX HULL FUNCTION
-*/
+void PointSets::generateConvexHull()
+{
+    generateConvexHullIndices();
+    int numLines{static_cast<int>(m_hullIndices.size() - 1)};  // One less line than points
+    for (int i{}; i < numLines; ++i)
+    {
+        std::pair<Eigen::Vector3d, Eigen::Vector3d> line{m_baseSet[m_hullIndices[i]],
+                                                         m_baseSet[m_hullIndices[i + 1]]};
+        m_convexHull.push_back(line);
+    }
+}
+
+
+void PointSets::drawConvexHull()
+{
+    drawSet(m_convexHull);
+}
+
+
+void PointSets::graphConvexHull()
+{
+    graphSet(m_convexHull);
+}
 
 
 void PointSets::showSetImage()
