@@ -12,16 +12,15 @@ int main()
 {
 
 /*
-MAKE A RANDOM POINT GENERATOR
-MAKE A THING THAT WRITES OUT THOSE RANDOM POINTS
-MAKE A THING THAT READS THOSE WRITTEN POINTS
+LOOK UP HOW TO DO OVERLOADED CONSTRUCTORS so you don't need a placeholder
 DEBUG WHY SOME RIGHT TURNS ARE GETTING INTO THE CONVEX HULL
 */
 
 //    AprilAnalysis april;
 //    april.processImage();
 //    PointSets ps{april.m_detections, april.m_img};
-    RandomPoints random(20);
+//    RandomPoints random(20);
+    RandomPoints random("placeholder");
     PointSets ps{random.m_randomDetections, random.m_img};
 
     ps.generateCompleteSet();

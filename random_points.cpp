@@ -5,8 +5,14 @@ void RandomPoints::generateRandomImage(int maxSize, int minSize)
 {
     m_maxX = randomNumber(maxSize, minSize);
     m_maxY = randomNumber(maxSize, minSize);
+    generateBlankImage(m_maxX, m_maxY);
+}
+
+
+void RandomPoints::generateBlankImage(int x, int y)
+{
     // From here: http://stackoverflow.com/questions/31337397/how-to-create-empty-mat-in-opencvs
-    m_img = cv::Mat1d(m_maxY, m_maxX, 0.0);
+    m_img = cv::Mat1d(y, x, 0.0);
 }
 
 
@@ -16,10 +22,42 @@ void RandomPoints::generateRandomDetections(int number)
     {
         int x = randomNumber(m_maxX);
         int y = randomNumber(m_maxY);
-        AprilTags::TagDetection detection{};
-        detection.cxy.first = x;
-        detection.cxy.second = y;
-        m_randomDetections.push_back(detection);
+        generateDetection(x, y);
+    }
+}
+
+
+void RandomPoints::generateDetection(int x, int y)
+{
+    AprilTags::TagDetection detection{};
+    detection.cxy.first = x;
+    detection.cxy.second = y;
+    m_randomDetections.push_back(detection);
+}
+
+
+void RandomPoints::writeRandomDetectionsToFile()
+{
+    m_outFile << m_numberOfPoints << "\n";
+    m_outFile << m_maxX << " "  << m_maxY << "\n";
+    for (auto point: m_randomDetections)
+    {
+        m_outFile << point.cxy.first << " " << point.cxy.second << "\n";
+    }
+}
+
+
+void RandomPoints::pullRandomDetectionsFromFile()
+{
+    m_inFile >> m_numberOfPoints;
+    m_inFile >> m_maxX;
+    m_inFile >> m_maxY;
+    while (m_inFile)
+    {
+        int x, y;
+        m_inFile >> x;
+        m_inFile >> y;
+        generateDetection(x, y);
     }
 }
 
