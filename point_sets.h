@@ -24,6 +24,8 @@ private:
     cv::Mat m_baseImg;
     std::string m_windowName{"Point Sets Image"};
     PlotTools m_plotTools;
+    void drawSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
+    void graphSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
 
 public:
     PointSets(vector<AprilTags::TagDetection> aprilDetections, cv::Mat baseImg):
@@ -40,8 +42,6 @@ public:
     void print();
     void generateMinMax();
     void drawBaseSet();
-    void drawSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
-    void graphSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
     void generateCompleteSet();
     void graphCompleteSet();
     void drawCompleteSet();

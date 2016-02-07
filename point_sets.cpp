@@ -65,11 +65,12 @@ void PointSets::drawSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d>
     }
     else
     {
+        int maxY = m_baseImg.size().height;
         for (auto line: givenSet)
         {
             cv::line(m_baseImg,
-                     cv::Point2f(line.first(0), line.first(1)),
-                     cv::Point2f(line.second(0), line.second(1)),
+                     cv::Point2f(line.first(0), maxY - line.first(1)),
+                     cv::Point2f(line.second(0), maxY - line.second(1)),
                      cv::Scalar(255, 0, 0, 0), 2 );
         }
     }
@@ -158,15 +159,14 @@ void PointSets::generateConvexHullIndices()
         }
 
         // If the added point has created a right turn, remove 2nd to last point from m_hullIndices
-        if ( isRightTurn(m_baseSet[m_hullIndices[checkIndex]],
-                         m_baseSet[m_hullIndices[checkIndex + 1]],
-                         m_baseSet[m_hullIndices[checkIndex + 2]]) )
+        while ( isRightTurn(m_baseSet[m_hullIndices[checkIndex]],
+                            m_baseSet[m_hullIndices[checkIndex + 1]],
+                            m_baseSet[m_hullIndices[checkIndex + 2]]) )
         {
             m_hullIndices.erase(m_hullIndices.begin() + checkIndex + 1);
-        } else
-        {
-            ++checkIndex;
+            --checkIndex;
         }
+        ++checkIndex;
     }
 }
 
