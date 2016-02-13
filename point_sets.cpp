@@ -196,6 +196,12 @@ void PointSets::graphConvexHull()
 }
 
 
+void PointSets::generateDelaunay()
+{
+
+}
+
+
 void PointSets::showSetImage()
 {
     cv::imshow(m_windowName, m_baseImg);

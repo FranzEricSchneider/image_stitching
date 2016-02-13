@@ -49,6 +49,7 @@ public:
     void generateConvexHull();
     void drawConvexHull();
     void graphConvexHull();
+    void generateDelaunay();
     void showSetImage();
 };
 
