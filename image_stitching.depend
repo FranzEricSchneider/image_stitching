@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1454884589 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
+1455580588 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
 	"april_analysis.h"
 	"point_sets.h"
 	"random_points.h"
@@ -1064,12 +1064,13 @@
 1453951184 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/simple_stitcher.cpp
 	"simple_stitcher.h"
 
-1455337101 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.h
+1455490817 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.h
 	<set>
 	<vector>
 	"AprilTags/TagDetector.h"
 	<Eigen/Geometry>
 	"plot_tools.h"
+	"delaunay_triangulation.h"
 
 1453957316 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/vector2d.h
 	<math.h>
@@ -3759,7 +3760,7 @@
 1454876816 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/plot_tools.cpp
 	"plot_tools.h"
 
-1454816899 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/random_points.h
+1455577721 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/random_points.h
 	<ctime>
 	<cstdint>
 	<cstdlib>
@@ -3775,17 +3776,27 @@
 1454817451 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/random_points.cpp
 	"random_points.h"
 
-1455337710 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_point.cpp
+1455581759 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_point.cpp
 	"delaunay_point.h"
 
-1455338223 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_point.h
+1455583545 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_point.h
+	<algorithm>
+	<iostream>
 	<vector>
 
-1455337762 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_triangulation.cpp
-	"delauney_triangulation.h"
+1455581924 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_triangulation.cpp
+	"delaunay_triangulation.h"
 
-1455338363 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/delauney_triangulation.h
+1455490499 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/delauney_triangulation.h
 	<set>
+	<vector>
+	<Eigen/Geometry>
+	"delaunay_point.h"
+
+1455582966 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_triangulation.h
+	<algorithm>
+	<iostream>
+	<map>
 	<vector>
 	<Eigen/Geometry>
 	"delaunay_point.h"

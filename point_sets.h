@@ -1,6 +1,7 @@
 #ifndef POINT_SETS_H_INCLUDED
 #define POINT_SETS_H_INCLUDED
 
+
 #include <set>
 #include <vector>
 
@@ -8,6 +9,7 @@
 #include <Eigen/Geometry>
 
 #include "plot_tools.h"
+#include "delaunay_triangulation.h"
 
 
 class PointSets
@@ -37,6 +39,9 @@ public:
         }
         generateMinMax(); // Generates the minmax values from the loaded baseSet
         cv::namedWindow(m_windowName, cv::WINDOW_NORMAL);
+
+        std::cout << "Trying triangulation:\n";
+        DelaunayTriangulation dt{m_baseSet};
     }
 
     void print();

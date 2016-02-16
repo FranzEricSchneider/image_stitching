@@ -73,7 +73,7 @@
 		<Unit filename="delaunay_point.cpp" />
 		<Unit filename="delaunay_point.h" />
 		<Unit filename="delaunay_triangulation.cpp" />
-		<Unit filename="delauney_triangulation.h" />
+		<Unit filename="delaunay_triangulation.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="plot_tools.cpp" />
 		<Unit filename="plot_tools.h" />

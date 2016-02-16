@@ -35,7 +35,7 @@ class RandomPoints
         vector<AprilTags::TagDetection> m_randomDetections;
         cv::Mat1d m_img;
 
-        RandomPoints(std::string placeholder): m_inFile(fileName)
+        RandomPoints(): m_inFile(fileName)
         {
             pullRandomDetectionsFromFile();
             generateBlankImage(m_maxX, m_maxY);
