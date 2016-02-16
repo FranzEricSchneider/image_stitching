@@ -1,12 +1,6 @@
 #include "simple_stitcher.h"
 
 
-bool almostEqual(double n1, double n2)
-{
-    return fabs(n1 - n2) < 0.001;
-}
-
-
 int SimpleStitcher::stitchImagesAndOutput()
 {
     cv::Stitcher::Status status = stitcher.stitch(imgs, pano);
@@ -63,4 +57,10 @@ int SimpleStitcher::loadImages()
         }
     }
     return 0;
+}
+
+
+bool almostEqual(double n1, double n2)
+{
+    return fabs(n1 - n2) < 0.0001;
 }

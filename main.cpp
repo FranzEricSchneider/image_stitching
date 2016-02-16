@@ -3,6 +3,11 @@
 #include "random_points.h"
 
 
+
+#include "delaunay_line.h"
+
+
+
 // We want to find the
 //    Delaunay triangulation
 //    Shortest path between points
@@ -12,8 +17,11 @@ int main()
 {
 
 /*
+Look up copy constructor and make one for DelaunayLine
 MAKE DELAUNAY WORK
 FIX BUG WHERE READING POINTS FROM FILE ADDES DUPLICATE AT END
+CHECK FOR VARIOUS TODOs
+GET RID OF RANDOM WARNINGS, THEY MAY COVER USEFUL WARNINGS
 */
 
 //    AprilAnalysis april;
@@ -22,6 +30,9 @@ FIX BUG WHERE READING POINTS FROM FILE ADDES DUPLICATE AT END
     RandomPoints random(5);
 //    RandomPoints random;
     PointSets ps{random.m_randomDetections, random.m_img};
+
+
+
 
 //std::map<int, DelaunayPoint> map1;
 //map1.insert( std::pair<int, DelaunayPoint> (0, DelaunayPoint{1, 2}) );

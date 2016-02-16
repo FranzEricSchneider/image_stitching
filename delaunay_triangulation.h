@@ -8,7 +8,9 @@
 #include <vector>
 
 #include <Eigen/Geometry>
+#include <vector>
 
+#include "delaunay_line.h"
 #include "delaunay_point.h"
 
 
@@ -20,12 +22,12 @@ class DelaunayTriangulation
 {
     private:
         const int m_numPoints;
-        int pointWithLowestY();
 
         void triangulate();
         void completelyConnectSet();
-        void mergeGroups(DelaunayTriangulation leftSide, DelaunayTriangulation rightSide );
+        void mergeGroups(DelaunayTriangulation leftSide, DelaunayTriangulation rightSide);
         void copyConnectionsToThisMap(DelaunayTriangulation subDT);
+        DelaunayLine findFirstLine(DelaunayTriangulation &leftSide, DelaunayTriangulation &rightSide);
 
     public:
 
@@ -53,12 +55,15 @@ class DelaunayTriangulation
             triangulate();
 
             /*FOR DEBUGGING*/
-            for (auto pt: baseSet)
-            {
-                std::cout << "baseSet point (x: " << pt[0] << ", y: " << pt[1] << ")\n";
-            }
+//            for (auto pt: baseSet)
+//            {
+//                std::cout << "baseSet point (x: " << pt[0] << ", y: " << pt[1] << ")\n";
+//            }
         }
 
+        int pointWithLowestY();
+        int pointWithLowestYAboveGivenIdx(int idx);
+        std::vector<DelaunayLine> getLines();
 };
 
 

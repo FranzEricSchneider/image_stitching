@@ -70,6 +70,8 @@
 		</Compiler>
 		<Unit filename="april_analysis.cpp" />
 		<Unit filename="april_analysis.h" />
+		<Unit filename="delaunay_line.cpp" />
+		<Unit filename="delaunay_line.h" />
 		<Unit filename="delaunay_point.cpp" />
 		<Unit filename="delaunay_point.h" />
 		<Unit filename="delaunay_triangulation.cpp" />

@@ -3,7 +3,7 @@
 //double DelaunayPoint::angleToConnection(const int idxOfPt)
 //{
 //}
-//
+
 //void DelaunayPoint::deleteEdge(const int idxToDelete)
 //{
 //}

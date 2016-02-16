@@ -32,4 +32,6 @@ public:
     int stitchImagesAndOutput();
 };
 
+bool almostEqual(double n1, double n2);
+
 #endif // SIMPLE_STITCHER_H_INCLUDED
