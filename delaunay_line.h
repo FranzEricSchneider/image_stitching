@@ -14,6 +14,8 @@ class DelaunayLine
     private:
 
     public:
+// TODO: CONSIDER MAKING IT LEFT AND RIGHT INSTEAD OF 1 AND 2
+// TODO: CONSIDER MAKING SOME STUFF PRIVATE
         int m_idx1{}, m_idx2{};
         DelaunayPoint m_dp1{}, m_dp2{};
 
@@ -56,6 +58,10 @@ class DelaunayLine
         }
 
         bool doesCrossLine(const DelaunayLine &otherLine);
+        int getLeftIdx();
+        int getRightIdx();
+        DelaunayPoint getLeftPoint();
+        DelaunayPoint getRightPoint();
         friend std::ostream& operator<< (std::ostream &out, DelaunayLine &dl);
 };
 

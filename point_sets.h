@@ -8,8 +8,9 @@
 #include "AprilTags/TagDetector.h"
 #include <Eigen/Geometry>
 
-#include "plot_tools.h"
 #include "delaunay_triangulation.h"
+#include "pair_comparison.h"
+#include "plot_tools.h"
 
 
 class PointSets
@@ -67,15 +68,6 @@ public:
 
 
 bool isRightTurn(Eigen::Vector3d a, Eigen::Vector3d b, Eigen::Vector3d c);
-
-
-// Taken from here: http://www.cplusplus.com/reference/set/set/set/
-// Sorts the elements in DESCENDING order
-struct pairComparison
-{
-    bool operator() (std::pair<double, int> lhs, std::pair<double, int> rhs) const
-        { return lhs.first > rhs.first; }
-};
 
 
 #endif // POINT_SETS_H_INCLUDED

@@ -77,6 +77,7 @@
 		<Unit filename="delaunay_triangulation.cpp" />
 		<Unit filename="delaunay_triangulation.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="pair_comparison.h" />
 		<Unit filename="plot_tools.cpp" />
 		<Unit filename="plot_tools.h" />
 		<Unit filename="point_sets.cpp" />

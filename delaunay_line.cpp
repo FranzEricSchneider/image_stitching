@@ -57,6 +57,32 @@ bool DelaunayLine::doesCrossLine(const DelaunayLine &otherLine)
 }
 
 
+int DelaunayLine::getLeftIdx()
+{
+    if (m_dp1.m_xy.first == m_dp2.m_xy.first)
+        return (m_dp1.m_xy.second < m_dp2.m_xy.second)?m_idx1:m_idx2;
+    return (m_dp1.m_xy.first < m_dp2.m_xy.first)?m_idx1:m_idx2;
+}
+
+
+int DelaunayLine::getRightIdx()
+{
+    return (getLeftIdx() == m_idx1)?m_idx2:m_idx1;
+}
+
+
+DelaunayPoint DelaunayLine::getLeftPoint()
+{
+    return (getLeftIdx() == m_idx1)?m_dp1:m_dp2;
+}
+
+
+DelaunayPoint DelaunayLine::getRightPoint()
+{
+    return (getLeftIdx() == m_idx1)?m_dp2:m_dp1;
+}
+
+
 std::ostream& operator<< (std::ostream &out, DelaunayLine &dl)
 {
     out << "Line from (" << dl.m_x1   << ", " << dl.m_y1   << ") to " <<

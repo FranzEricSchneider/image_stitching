@@ -22,7 +22,7 @@ class DelaunayPoint
         DelaunayPoint& operator= (const DelaunayPoint &dpSource);
 
         DelaunayPoint(int idx, int x, int y): m_idx{idx}, m_xy{x, y} { /*Empty constructor*/ }
-        DelaunayPoint() { /*Empty constructor*/ }
+        DelaunayPoint(): m_idx{-1} { /*Empty constructor*/ }
 
         friend std::ostream& operator<< (std::ostream &out, DelaunayPoint &dp);
 };

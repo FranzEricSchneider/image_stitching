@@ -118,6 +118,41 @@ void DelaunayTriangulation::mergeGroups( DelaunayTriangulation leftSide,
     copyConnectionsToThisMap(leftSide);
     copyConnectionsToThisMap(rightSide);
     DelaunayLine firstLine = findFirstLine(leftSide, rightSide);
+    m_pointMap[firstLine.m_idx1].createEdge(firstLine.m_idx2);
+    m_pointMap[firstLine.m_idx2].createEdge(firstLine.m_idx1);
+
+    bool hasLeftCandidate{true};
+    bool hasRightCandidate{true};
+    DelaunayLine baseLREdge = firstLine;
+
+    while (hasLeftCandidate || hasRightCandidate)
+    {
+        DelaunayPoint leftCandidate  = getLeftCandidate(baseLREdge, leftSide);
+        DelaunayPoint rightCandidate = getRightCandidate(baseLREdge, rightSide);
+
+        hasLeftCandidate  = leftCandidate.m_idx  != -1;
+        hasRightCandidate = rightCandidate.m_idx != -1;
+
+        if (hasLeftCandidate && hasRightCandidate)
+        {
+            if ( circleContainsPoint(leftCandidate, baseLREdge, rightCandidate) )
+                hasLeftCandidate = false;
+            else
+                hasRightCandidate = false;
+        }
+
+        if (hasLeftCandidate)
+        {
+            m_pointMap[leftCandidate.m_idx].createEdge(baseLREdge.getRightIdx());
+            m_pointMap[baseLREdge.getRightIdx()].createEdge(leftCandidate.m_idx);
+            baseLREdge = DelaunayLine{leftCandidate, baseLREdge.getRightPoint()};
+        } else if (hasRightCandidate)
+        {
+            m_pointMap[rightCandidate.m_idx].createEdge(baseLREdge.getLeftIdx());
+            m_pointMap[baseLREdge.getLeftIdx()].createEdge(rightCandidate.m_idx);
+            baseLREdge = DelaunayLine{rightCandidate, baseLREdge.getLeftPoint()};
+        }
+    }
 }
 
 
@@ -170,8 +205,13 @@ DelaunayLine DelaunayTriangulation::findFirstLine(DelaunayTriangulation &leftSid
                 exit(-1);
             }
         }
-        firstLine  = DelaunayLine{leftSide.m_pointMap[leftPoint],
-                                  rightSide.m_pointMap[rightPoint]};
+
+        bool leftSideLower = leftSide.m_pointMap[leftPoint].m_xy.second <
+                             rightSide.m_pointMap[rightPoint].m_xy.second;
+        if (leftSideLower)
+            firstLine = getBaseEdge(leftSide.m_pointMap[leftPoint], rightSide, leftSideLower);
+        else
+            firstLine = getBaseEdge(rightSide.m_pointMap[rightPoint], leftSide, leftSideLower);
 
         // Checks that the line is legit
         found = true;
@@ -188,6 +228,60 @@ DelaunayLine DelaunayTriangulation::findFirstLine(DelaunayTriangulation &leftSid
     }
 
     return firstLine;
+}
+
+
+// TODO: TRY TO MAKE dt CONST
+DelaunayLine DelaunayTriangulation::getBaseEdge(const DelaunayPoint &point,
+                                                DelaunayTriangulation &dt,
+                                                bool pointIsOnLeft)
+{
+    std::set< std::pair<double, int>, pairComparison > anglesFromPointSet;
+    std::map<int, DelaunayPoint>::iterator mapIt = dt.m_pointMap.begin();
+    for (mapIt = dt.m_pointMap.begin(); mapIt!=dt.m_pointMap.end(); ++mapIt)
+    {
+        Eigen::Vector2d vec{mapIt->second.m_xy.first - point.m_xy.first,
+                            mapIt->second.m_xy.second - point.m_xy.second};
+        vec.normalize();
+
+        // If point is on the right side, flip the x values so that largest X will
+        //   correspond with the most "outer" edge
+        if (!pointIsOnLeft)
+            vec[0] *= -1;
+
+        std::pair<double, int> xValue{vec[0], mapIt->first};
+        anglesFromPointSet.insert(xValue);
+    }
+
+    std::set< std::pair<double, int> >::iterator setIt = anglesFromPointSet.begin();
+    return DelaunayLine{ point, dt.m_pointMap[(*setIt).second] };
+}
+
+
+DelaunayPoint DelaunayTriangulation::getLeftCandidate(const DelaunayLine &line,
+                                                      DelaunayTriangulation &dt)
+{
+    DelaunayPoint candidate{};
+    /* IMPLEMENT ME! */
+    return candidate;
+}
+
+
+DelaunayPoint DelaunayTriangulation::getRightCandidate(const DelaunayLine &line,
+                                                       DelaunayTriangulation &dt)
+{
+    DelaunayPoint candidate{};
+    /* IMPLEMENT ME! */
+    return candidate;
+}
+
+
+bool DelaunayTriangulation::circleContainsPoint(const DelaunayPoint &edgePoint,
+                                                const DelaunayLine &edgeLine,
+                                                const DelaunayPoint &innerPoint)
+{
+    /* IMPLEMENT ME! */
+    return false;
 }
 
 

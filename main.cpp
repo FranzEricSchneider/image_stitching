@@ -17,16 +17,18 @@ int main()
 {
 
 /*
-PLUG THE FIRST LINE INTO THE TRIANGULATION AND KEEP GOING FROM THERE
+MAKE A DELAUNAYTRIANGULATION FUNCTION THAT MAKES EDGES BETWEEN POINTS
+IMPLEMENT LOGIC THAT STEPS PAST FIRST LINE
 MAKE DELAUNAY WORK
-CHECK FOR VARIOUS TODOs
+REFACTOR findFirstLine
+CLEAN EVERYTHING AFTER DELAUNAY, MAKE NAMES AWESOME, COMMENT EVERYTHING
 */
 
 //    AprilAnalysis april;
 //    april.processImage();
 //    PointSets ps{april.m_detections, april.m_img};
-//    RandomPoints random(6);
-    RandomPoints random;
+    RandomPoints random(8);
+//    RandomPoints random;
     PointSets ps{random.m_randomDetections, random.m_img};
 
 
