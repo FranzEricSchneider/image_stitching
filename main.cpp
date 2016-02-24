@@ -17,18 +17,16 @@ int main()
 {
 
 /*
-Look up copy constructor and make one for DelaunayLine
+PLUG THE FIRST LINE INTO THE TRIANGULATION AND KEEP GOING FROM THERE
 MAKE DELAUNAY WORK
-FIX BUG WHERE READING POINTS FROM FILE ADDES DUPLICATE AT END
 CHECK FOR VARIOUS TODOs
-GET RID OF RANDOM WARNINGS, THEY MAY COVER USEFUL WARNINGS
 */
 
 //    AprilAnalysis april;
 //    april.processImage();
 //    PointSets ps{april.m_detections, april.m_img};
-    RandomPoints random(5);
-//    RandomPoints random;
+//    RandomPoints random(6);
+    RandomPoints random;
     PointSets ps{random.m_randomDetections, random.m_img};
 
 
@@ -61,12 +59,13 @@ GET RID OF RANDOM WARNINGS, THEY MAY COVER USEFUL WARNINGS
 
 
 
+    ps.drawBaseSet();
 //    ps.generateCompleteSet();
 //    ps.drawCompleteSet();
 //    ps.graphCompleteSet();
 //    ps.generateConvexHull();
 //    ps.drawConvexHull();
 //    ps.graphConvexHull();
-//    ps.showSetImage();
+    ps.showSetImage();
     return 0;
 }

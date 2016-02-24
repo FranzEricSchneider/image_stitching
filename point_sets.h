@@ -33,15 +33,22 @@ public:
     PointSets(vector<AprilTags::TagDetection> aprilDetections, cv::Mat baseImg):
     m_baseImg{baseImg}
     {
+        if (aprilDetections.size() == 0)
+        {
+            std::cout << "Failed to make PointSets instance, aprilDetections vector was of size 0\n";
+            std::cout << "Terminating execution\n";
+            exit(-1);
+        }
+
         for (auto point : aprilDetections)
         {
-            m_baseSet.push_back(Eigen::Vector3d(point.cxy.first, point.cxy.second, 0));
+            m_baseSet.push_back( Eigen::Vector3d{point.cxy.first, point.cxy.second, 0} );
         }
         generateMinMax(); // Generates the minmax values from the loaded baseSet
         cv::namedWindow(m_windowName, cv::WINDOW_NORMAL);
 
-        std::cout << "Trying triangulation:\n";
         DelaunayTriangulation dt{m_baseSet};
+        drawSet(dt.getLinesForDrawingOrGraphing());
     }
 
     void print();

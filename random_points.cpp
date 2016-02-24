@@ -44,6 +44,7 @@ void RandomPoints::writeRandomDetectionsToFile()
     {
         m_outFile << point.cxy.first << " " << point.cxy.second << "\n";
     }
+    m_outFile.close();
 }
 
 
@@ -52,7 +53,7 @@ void RandomPoints::pullRandomDetectionsFromFile()
     m_inFile >> m_numberOfPoints;
     m_inFile >> m_maxX;
     m_inFile >> m_maxY;
-    while (m_inFile)
+    for (int i{}; i < m_numberOfPoints; ++i)
     {
         int x, y;
         m_inFile >> x;

@@ -13,6 +13,12 @@ void PointSets::print()
 
 void PointSets::generateMinMax()
 {
+    if (m_baseSet.size() == 0)
+    {
+        std::cout << "generateMinMax failed, m_baseSet size was 0\n";
+        return;
+    }
+
     // Sets the minmax value (first) to the first element, and sets the
     //     corresponding index (second) to 0. Now each value will be compared
     //     to the first element
@@ -49,10 +55,11 @@ void PointSets::generateMinMax()
 
 void PointSets::drawBaseSet()
 {
+    int maxY = m_baseImg.size().height;
     for (auto point: m_baseSet)
     {
-        cv::circle(m_baseImg, cv::Point2f(point(0), point(1)),
-                   15, cv::Scalar(0, 0, 255, 0), 4);
+        cv::circle(m_baseImg, cv::Point2f(point(0), maxY - point(1)),
+                   15, cv::Scalar(255, 255, 255, 0), 4);
     }
 }
 

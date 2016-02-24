@@ -25,11 +25,28 @@ void DelaunayPoint::createEdge(const int idxOfPoint)
 
 DelaunayPoint& DelaunayPoint::operator= (const DelaunayPoint &dpSource)
 {
-    // Do the copy
+    if (this == &dpSource)
+        return *this;
+
     m_idx = dpSource.m_idx;
     m_xy = dpSource.m_xy;
     m_connections = dpSource.m_connections;
-
-    // Return the existing object
     return *this;
+}
+
+
+std::ostream& operator<< (std::ostream &out, DelaunayPoint &dp)
+{
+    out << "DelaunayPoint [" << dp.m_idx << "], at " <<
+           "(" << dp.m_xy.first << ", " << dp.m_xy.second   << "), connected to DelaunayPoints [";
+    for (int i{}; i < static_cast<int>(dp.m_connections.size()); ++i)
+    {
+        std::cout << dp.m_connections[i];
+        if (i != (static_cast<int>(dp.m_connections.size()) - 1) )
+        {
+            std::cout << ", ";
+        }
+    }
+    std::cout << "]";
+    return out;
 }

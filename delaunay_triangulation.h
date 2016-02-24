@@ -30,7 +30,6 @@ class DelaunayTriangulation
         DelaunayLine findFirstLine(DelaunayTriangulation &leftSide, DelaunayTriangulation &rightSide);
 
     public:
-
         std::map<int, DelaunayPoint> m_pointMap;
 //        std::map<int, DelaunayLine> m_lineMap;
 
@@ -47,9 +46,9 @@ class DelaunayTriangulation
             int counter{};
             for (auto pt: baseSet)
             {
-                DelaunayPoint x{pt[0], pt[1]};
+                DelaunayPoint x{counter, pt[0], pt[1]};
 //                m_pointMap.insert( std::pair<int, DelaunayPoint> (counter, DelaunayPoint{pt[0], pt[1]}) );
-                m_pointMap.insert( std::pair<int, DelaunayPoint> (counter, x) );
+                m_pointMap.insert( std::pair<int, DelaunayPoint> (x.m_idx, x) );
                 ++counter;
             }
             triangulate();
@@ -64,6 +63,7 @@ class DelaunayTriangulation
         int pointWithLowestY();
         int pointWithLowestYAboveGivenIdx(int idx);
         std::vector<DelaunayLine> getLines();
+        std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > getLinesForDrawingOrGraphing();
 };
 
 

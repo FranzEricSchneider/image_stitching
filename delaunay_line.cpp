@@ -3,6 +3,13 @@
 
 DelaunayLine& DelaunayLine::operator= (const DelaunayLine &dlSource)
 {
+    copySourceLine(dlSource);
+    return *this;
+}
+
+
+void DelaunayLine::copySourceLine(const DelaunayLine &dlSource)
+{
     m_idx1 = dlSource.m_idx1;
     m_idx2 = dlSource.m_idx2;
     m_dp1 = dlSource.m_dp1;
@@ -25,20 +32,37 @@ bool DelaunayLine::doesCrossLine(const DelaunayLine &otherLine)
     Eigen::Vector3d DA{m_x1 - otherLine.m_x2, m_y1 - otherLine.m_y2, 0};
     Eigen::Vector3d DB{m_x2 - otherLine.m_x2, m_y2 - otherLine.m_y2, 0};
 
+    Eigen::Vector3d unitAB = AB / AB.norm();
+    Eigen::Vector3d unitBC = BC / BC.norm();
+    Eigen::Vector3d unitBD = BD / BD.norm();
+
+    Eigen::Vector3d unitCD = CD / CD.norm();
+    Eigen::Vector3d unitDA = DA / DA.norm();
+    Eigen::Vector3d unitDB = DB / DB.norm();
+
     // Only taking the Z components of the cross product
-    if ( (AB.cross(BC)[2] * AB.cross(BD)[2] < 0) &&
-         (CD.cross(DA)[2] * AB.cross(DB)[2] < 0) )
+    if ( (unitAB.cross(unitBC)[2] * unitAB.cross(unitBD)[2] < 0) &&
+         (unitCD.cross(unitDA)[2] * unitCD.cross(unitDB)[2] < 0) )
         return true;
 
-    Eigen::Vector3d A{m_x1, m_y1, 0};
-    Eigen::Vector3d B{m_x2, m_y2, 0};
-    Eigen::Vector3d C{otherLine.m_x1, otherLine.m_y1, 0};
-    Eigen::Vector3d D{otherLine.m_x2, otherLine.m_y2, 0};
+    Eigen::Vector3i A{m_x1, m_y1, 0};
+    Eigen::Vector3i B{m_x2, m_y2, 0};
+    Eigen::Vector3i C{otherLine.m_x1, otherLine.m_y1, 0};
+    Eigen::Vector3i D{otherLine.m_x2, otherLine.m_y2, 0};
 
     if ( onSegment(C, A, B) || onSegment(D, A, B) || onSegment(A, C, D) || onSegment(B, C, D) )
         return true;
 
     return false;
+}
+
+
+std::ostream& operator<< (std::ostream &out, DelaunayLine &dl)
+{
+    out << "Line from (" << dl.m_x1   << ", " << dl.m_y1   << ") to " <<
+                     "(" << dl.m_x2   << ", " << dl.m_y2   << "), with DelaunayPoints " <<
+                     "[" << dl.m_idx1 << ", " << dl.m_idx2 << "]";
+    return out;
 }
 
 
@@ -51,10 +75,18 @@ bool valueIsBetween(int testValue, int side1, int side2)
 }
 
 
-bool onSegment(Eigen::Vector3d testPoint, Eigen::Vector3d side1, Eigen::Vector3d side2)
+bool onSegment(Eigen::Vector3i testPoint, Eigen::Vector3i side1, Eigen::Vector3i side2)
 {
     double lengthThroughTestPoint = (testPoint - side1).norm() +
                                     (side2 - testPoint).norm();
     double segmentLength = (side2 - side1).norm();
+
+    // Does count sharing an endpoint as being "on the segment"
+    if ( almostEqual( (testPoint - side1).norm(), 0.0 ) ||
+         almostEqual( (side2 - testPoint).norm(), 0.0 ) )
+    {
+        return false;
+    }
+
     return ( almostEqual(lengthThroughTestPoint, segmentLength) );
 }

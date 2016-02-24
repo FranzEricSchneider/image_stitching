@@ -11,8 +11,8 @@ class DelaunayPoint
 {
     public:
         int m_idx{};
-        std::pair<double, double> m_xy{};
-        std::vector<int> m_connections;
+        std::pair<int, int> m_xy{};
+        std::vector<int> m_connections{};
 
 //        double angleToConnection(const int idxOfPt);
         void createEdge(const int idxOfPoint);
@@ -21,15 +21,10 @@ class DelaunayPoint
 
         DelaunayPoint& operator= (const DelaunayPoint &dpSource);
 
-        DelaunayPoint(double x, double y): m_xy{x, y}
-        {
-        }
+        DelaunayPoint(int idx, int x, int y): m_idx{idx}, m_xy{x, y} { /*Empty constructor*/ }
+        DelaunayPoint() { /*Empty constructor*/ }
 
-        DelaunayPoint()
-        {
-        }
-
-// TODO: REREAD HOW TO OVERLOAD PRINT STATEMENT
+        friend std::ostream& operator<< (std::ostream &out, DelaunayPoint &dp);
 };
 
 

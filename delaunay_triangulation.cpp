@@ -117,7 +117,6 @@ void DelaunayTriangulation::mergeGroups( DelaunayTriangulation leftSide,
 {
     copyConnectionsToThisMap(leftSide);
     copyConnectionsToThisMap(rightSide);
-
     DelaunayLine firstLine = findFirstLine(leftSide, rightSide);
 }
 
@@ -142,20 +141,53 @@ DelaunayLine DelaunayTriangulation::findFirstLine(DelaunayTriangulation &leftSid
     DelaunayLine firstLine;
     bool found{false};
     int leftPoint{-1}, rightPoint{-1};
+
     while (!found)
     {
+        // Selects a line, starting with two lowest points and stepping up from there
         if (leftPoint == -1 && rightPoint == -1)
         {
-            leftPoint  = leftSide .pointWithLowestY();
+            leftPoint  = leftSide.pointWithLowestY();
             rightPoint = rightSide.pointWithLowestY();
-            // Look up copy constructor and make one for DelaunayLine
         }
         else
         {
+            int originalValue;
+            if ( leftSide.m_pointMap[leftPoint].m_xy.second <
+                 rightSide.m_pointMap[rightPoint].m_xy.second )
+            {
+                originalValue = leftPoint;
+                leftPoint = leftSide.pointWithLowestYAboveGivenIdx(leftPoint);
+            } else
+            {
+                originalValue = rightPoint;
+                rightPoint = rightSide.pointWithLowestYAboveGivenIdx(rightPoint);
+            }
+
+            if (originalValue == leftPoint || originalValue == rightPoint)
+            {
+                std::cout << "No first line was found!\nTerminating execution\n";
+                exit(-1);
+            }
+        }
+        firstLine  = DelaunayLine{leftSide.m_pointMap[leftPoint],
+                                  rightSide.m_pointMap[rightPoint]};
+
+        // Checks that the line is legit
+        found = true;
+        for (auto line: leftSide.getLines())
+        {
+            if (found && firstLine.doesCrossLine(line))
+                found = false;
+        }
+        for (auto line: rightSide.getLines())
+        {
+            if (found && firstLine.doesCrossLine(line))
+                found = false;
         }
     }
 
-    return leftLines[0];
+    return firstLine;
 }
 
 
@@ -169,8 +201,21 @@ std::vector<DelaunayLine> DelaunayTriangulation::getLines()
     {
         for (int idx: it->second.m_connections)
         {
-            lineVector.push_back( DelaunayLine{it->first, idx, it->second, m_pointMap[idx]} );
+            lineVector.push_back( DelaunayLine{it->second, m_pointMap[idx]} );
         }
+    }
+    return lineVector;
+}
+
+
+std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > DelaunayTriangulation::getLinesForDrawingOrGraphing()
+{
+    std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > lineVector;
+    for ( auto line: getLines() )
+    {
+        lineVector.push_back( std::pair<Eigen::Vector3d, Eigen::Vector3d>
+                              ( Eigen::Vector3d(line.m_x1, line.m_y1, 0),
+                                Eigen::Vector3d(line.m_x2, line.m_y2, 0) ) );
     }
     return lineVector;
 }
