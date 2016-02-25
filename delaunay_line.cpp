@@ -57,7 +57,7 @@ bool DelaunayLine::doesCrossLine(const DelaunayLine &otherLine)
 }
 
 
-int DelaunayLine::getLeftIdx()
+int DelaunayLine::getLeftIdx() const
 {
     if (m_dp1.m_xy.first == m_dp2.m_xy.first)
         return (m_dp1.m_xy.second < m_dp2.m_xy.second)?m_idx1:m_idx2;
@@ -65,19 +65,19 @@ int DelaunayLine::getLeftIdx()
 }
 
 
-int DelaunayLine::getRightIdx()
+int DelaunayLine::getRightIdx() const
 {
     return (getLeftIdx() == m_idx1)?m_idx2:m_idx1;
 }
 
 
-DelaunayPoint DelaunayLine::getLeftPoint()
+DelaunayPoint DelaunayLine::getLeftPoint() const
 {
     return (getLeftIdx() == m_idx1)?m_dp1:m_dp2;
 }
 
 
-DelaunayPoint DelaunayLine::getRightPoint()
+DelaunayPoint DelaunayLine::getRightPoint() const
 {
     return (getLeftIdx() == m_idx1)?m_dp2:m_dp1;
 }

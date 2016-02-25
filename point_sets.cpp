@@ -135,7 +135,7 @@ void PointSets::generateConvexHullIndices()
     int numPoints = m_baseSet.size();
     int startingPointIndex = m_minPointY.second;
     Eigen::Vector3d startingPoint = m_baseSet[startingPointIndex];
-    std::set< std::pair<double, int>, pairComparison > anglesFromStartSet;
+    std::set< std::pair<double, int>, sortFirstElementDescending > anglesFromStartSet;
     for (int i{}; i < numPoints; ++i)
     {
         if (i != startingPointIndex)
@@ -148,21 +148,21 @@ void PointSets::generateConvexHullIndices()
     }
 
     // Initialize the convex hull with the starting point and the point closest to 0 deg from that
-    std::set< std::pair<double, int> >::iterator setIterator = anglesFromStartSet.begin();
-    m_hullIndices = {startingPointIndex, (*setIterator).second};  // Defined as a class element
+    std::set< std::pair<double, int> >::iterator setIt = anglesFromStartSet.begin();
+    m_hullIndices = {startingPointIndex, (*setIt).second};  // Defined as a class element
     int checkIndex{};  // Check 0,1,2; then 1,2,3; etc.
 
-    for (setIterator = anglesFromStartSet.begin(); setIterator != anglesFromStartSet.end(); /*nothing*/)
+    for (setIt = anglesFromStartSet.begin(); setIt != anglesFromStartSet.end(); /*nothing*/)
     {
         // Adds the next point to m_hullIndices
-        if (setIterator == --anglesFromStartSet.end())
+        if (setIt == --anglesFromStartSet.end())
         {
             // Close the loop by re-including the starting point
             m_hullIndices.push_back(startingPointIndex);
-            ++setIterator;
+            ++setIt;
         } else
         {
-            m_hullIndices.push_back( (*(++setIterator)).second );
+            m_hullIndices.push_back( (*(++setIt)).second );
         }
 
         // If the added point has created a right turn, remove 2nd to last point from m_hullIndices
@@ -205,7 +205,23 @@ void PointSets::graphConvexHull()
 
 void PointSets::generateDelaunay()
 {
+    // TODO: MAKE THIS
+}
 
+void PointSets::drawDelaunayCircumcircles(DelaunayTriangulation &dt)
+{
+    std::map<int, DelaunayPoint>::iterator mapIt = dt.m_pointMap.begin();
+    for (auto mapIt = dt.m_pointMap.begin(); mapIt!=dt.m_pointMap.end(); ++mapIt)
+    {
+        for (auto vecIt = mapIt->second.m_connections.begin();
+             vecIt != mapIt->second.m_connections.end();
+             /*Nothing*/)
+        {
+            double x, y, radius;
+            // DRAW THE CIRCLES
+            ++vecIt;
+        }
+    }
 }
 
 

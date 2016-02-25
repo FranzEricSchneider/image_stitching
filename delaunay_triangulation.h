@@ -15,6 +15,10 @@
 #include "pair_comparison.h"
 
 
+// TODO: FIND THE RIGHT WAY TO DEFINE PI. Eigen? std?
+#define PI 3.141596
+
+
 // Sorts the vector so the leftmost point is first in the set
 bool vector3dComparison(Eigen::Vector3d lhs, Eigen::Vector3d rhs);
 
@@ -30,9 +34,15 @@ class DelaunayTriangulation
         void copyConnectionsToThisMap(DelaunayTriangulation subDT);
         DelaunayLine findFirstLine(DelaunayTriangulation &leftSide, DelaunayTriangulation &rightSide);
         DelaunayLine getBaseEdge(const DelaunayPoint &point, DelaunayTriangulation &dt, bool pointIsOnLeft);
-        DelaunayPoint getLeftCandidate(const DelaunayLine &line, DelaunayTriangulation &dt);
-        DelaunayPoint getRightCandidate(const DelaunayLine &line, DelaunayTriangulation &dt);
+        DelaunayPoint getCandidate(const DelaunayLine &line, DelaunayTriangulation &dt, bool isLeftCandidate);
+        void populateLeftCandidateSet(const DelaunayLine &line, DelaunayTriangulation &dt,
+                                      std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet);
+        void populateRightCandidateSet(const DelaunayLine &line, DelaunayTriangulation &dt,
+                                       std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet);
         bool circleContainsPoint(const DelaunayPoint &edgePoint, const DelaunayLine &edgeLine, const DelaunayPoint &innerPoint);
+        void calculateCircle(const DelaunayPoint &point, const DelaunayLine &line, double &xCenter, double &yCenter, double &radius);
+        double getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison);
+        double getCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison);
 
     public:
         std::map<int, DelaunayPoint> m_pointMap;

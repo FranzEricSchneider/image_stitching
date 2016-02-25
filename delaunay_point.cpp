@@ -4,9 +4,6 @@
 //{
 //}
 
-//void DelaunayPoint::deleteEdge(const int idxToDelete)
-//{
-//}
 
 void DelaunayPoint::createEdge(const int idxOfPoint)
 {
@@ -19,6 +16,22 @@ void DelaunayPoint::createEdge(const int idxOfPoint)
     {
         std::cout << "Tried to create edge from " << m_idx << " to " << idxOfPoint <<
                      ", but that edge already existed\n";
+    }
+}
+
+
+void DelaunayPoint::deleteEdge(const int idxToDelete)
+{
+    std::vector<int>::iterator it;
+    it = find(m_connections.begin(), m_connections.end(), idxToDelete);
+    if ( it == m_connections.end() )
+    {
+        std::cout << "Tried to delete edge from " << m_idx << " to " << idxToDelete <<
+                     ", but that edge doesn't exist\n";
+    } else
+    {
+        std::cout << "Deleting edge from " << m_idx << " to " << idxToDelete << "\n";
+        m_connections.erase(it);
     }
 }
 

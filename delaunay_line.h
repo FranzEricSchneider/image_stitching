@@ -58,10 +58,10 @@ class DelaunayLine
         }
 
         bool doesCrossLine(const DelaunayLine &otherLine);
-        int getLeftIdx();
-        int getRightIdx();
-        DelaunayPoint getLeftPoint();
-        DelaunayPoint getRightPoint();
+        int getLeftIdx() const;
+        int getRightIdx() const;
+        DelaunayPoint getLeftPoint() const;
+        DelaunayPoint getRightPoint() const;
         friend std::ostream& operator<< (std::ostream &out, DelaunayLine &dl);
 };
 

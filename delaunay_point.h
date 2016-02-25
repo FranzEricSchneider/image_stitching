@@ -16,7 +16,7 @@ class DelaunayPoint
 
 //        double angleToConnection(const int idxOfPt);
         void createEdge(const int idxOfPoint);
-//        void deleteEdge(const int idxToDelete);
+        void deleteEdge(const int idxToDelete);
 //        std::vector<DelaunayLine> getLines();
 
         DelaunayPoint& operator= (const DelaunayPoint &dpSource);

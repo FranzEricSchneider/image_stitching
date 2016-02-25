@@ -31,6 +31,7 @@ private:
     void graphSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
 
 public:
+// TODO: MAKE AN EQUALS OPERATOR FOR dt SO THAT IT DOESN'T HAVE TO RUN EVERY TIME
     PointSets(vector<AprilTags::TagDetection> aprilDetections, cv::Mat baseImg):
     m_baseImg{baseImg}
     {
@@ -50,6 +51,7 @@ public:
 
         DelaunayTriangulation dt{m_baseSet};
         drawSet(dt.getLinesForDrawingOrGraphing());
+        drawDelaunayCircumcircles(dt);
     }
 
     void print();
@@ -63,6 +65,8 @@ public:
     void drawConvexHull();
     void graphConvexHull();
     void generateDelaunay();
+// TODO: MAKE dt A MEMBER VARIABLE SO IT DOESN'T NEED TO BE PASSED
+    void drawDelaunayCircumcircles(DelaunayTriangulation &dt);
     void showSetImage();
 };
 

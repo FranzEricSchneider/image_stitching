@@ -77,19 +77,19 @@ void DelaunayTriangulation::triangulate()
     }
 
     /*FOR DEBUGGING*/
-    std::map<int, DelaunayPoint>::iterator mapIt = m_pointMap.begin();
-    for (mapIt = m_pointMap.begin(); mapIt!=m_pointMap.end(); ++mapIt)
-    {
-        std::cout << "Map point: " << mapIt->first << " => (" << mapIt->second.m_xy.first << ", " << mapIt->second.m_xy.second << ")\n";
-        std::cout << "\tconnections: ";
-        for (auto connection: mapIt->second.m_connections)
-        {
-            std::cout << connection << ", ";
-        }
-        std::cout << "\n";
-    }
-    std::cout << "Point with lowest Y (idx): " << pointWithLowestY() << "\n";
-    std::cout << "\n";
+//    std::map<int, DelaunayPoint>::iterator mapIt = m_pointMap.begin();
+//    for (mapIt = m_pointMap.begin(); mapIt!=m_pointMap.end(); ++mapIt)
+//    {
+//        std::cout << "Map point: " << mapIt->first << " => (" << mapIt->second.m_xy.first << ", " << mapIt->second.m_xy.second << ")\n";
+//        std::cout << "\tconnections: ";
+//        for (auto connection: mapIt->second.m_connections)
+//        {
+//            std::cout << connection << ", ";
+//        }
+//        std::cout << "\n";
+//    }
+//    std::cout << "Point with lowest Y (idx): " << pointWithLowestY() << "\n";
+//    std::cout << "\n";
 }
 
 
@@ -127,8 +127,8 @@ void DelaunayTriangulation::mergeGroups( DelaunayTriangulation leftSide,
 
     while (hasLeftCandidate || hasRightCandidate)
     {
-        DelaunayPoint leftCandidate  = getLeftCandidate(baseLREdge, leftSide);
-        DelaunayPoint rightCandidate = getRightCandidate(baseLREdge, rightSide);
+        DelaunayPoint leftCandidate  = getCandidate(baseLREdge, leftSide,  true);
+        DelaunayPoint rightCandidate = getCandidate(baseLREdge, rightSide, false);
 
         hasLeftCandidate  = leftCandidate.m_idx  != -1;
         hasRightCandidate = rightCandidate.m_idx != -1;
@@ -236,7 +236,7 @@ DelaunayLine DelaunayTriangulation::getBaseEdge(const DelaunayPoint &point,
                                                 DelaunayTriangulation &dt,
                                                 bool pointIsOnLeft)
 {
-    std::set< std::pair<double, int>, pairComparison > anglesFromPointSet;
+    std::set< std::pair<double, int>, sortFirstElementDescending > anglesFromPointSet;
     std::map<int, DelaunayPoint>::iterator mapIt = dt.m_pointMap.begin();
     for (mapIt = dt.m_pointMap.begin(); mapIt!=dt.m_pointMap.end(); ++mapIt)
     {
@@ -258,21 +258,75 @@ DelaunayLine DelaunayTriangulation::getBaseEdge(const DelaunayPoint &point,
 }
 
 
-DelaunayPoint DelaunayTriangulation::getLeftCandidate(const DelaunayLine &line,
-                                                      DelaunayTriangulation &dt)
+DelaunayPoint DelaunayTriangulation::getCandidate(const DelaunayLine &line,
+                                                  DelaunayTriangulation &dt,
+                                                  bool isLeftCandidate)
 {
-    DelaunayPoint candidate{};
-    /* IMPLEMENT ME! */
-    return candidate;
+    std::set< std::pair<double, int>, sortFirstElementAscending > anglesFromLineSet;
+    if (isLeftCandidate)
+        populateLeftCandidateSet(line, dt, anglesFromLineSet);
+    else
+        populateRightCandidateSet(line, dt, anglesFromLineSet);
+
+    int coreIdx = isLeftCandidate?line.getLeftIdx():line.getRightIdx();
+    std::cout << "coreIdx: " << coreIdx << "\n";
+    std::set< std::pair<double, int> >::iterator setIt = anglesFromLineSet.begin();
+    for (setIt = anglesFromLineSet.begin(); setIt != anglesFromLineSet.end(); /*Nothing*/ )
+    {
+        if ( (*setIt).first > PI )
+            return DelaunayPoint{};  // Indicates no candidate was found
+
+        int firstCandidateIdx = (*setIt).second;
+        ++setIt;
+        if (setIt == anglesFromLineSet.end())
+            return dt.m_pointMap[firstCandidateIdx];  // Last viable point's automatically valid
+
+        int secondCandidateIdx = (*setIt).second;
+        if ( circleContainsPoint(dt.m_pointMap[firstCandidateIdx], line, dt.m_pointMap[secondCandidateIdx]) )
+        {
+            m_pointMap[firstCandidateIdx].deleteEdge(coreIdx);
+            m_pointMap[coreIdx].deleteEdge(firstCandidateIdx);
+            dt.m_pointMap[firstCandidateIdx].deleteEdge(coreIdx);
+            dt.m_pointMap[coreIdx].deleteEdge(firstCandidateIdx);
+        } else
+        {
+            return dt.m_pointMap[firstCandidateIdx];
+        }
+    }
+
+    return DelaunayPoint{};  // Shouldn't ever get here, above cases should cover everything
 }
 
 
-DelaunayPoint DelaunayTriangulation::getRightCandidate(const DelaunayLine &line,
-                                                       DelaunayTriangulation &dt)
+void DelaunayTriangulation::populateLeftCandidateSet(const DelaunayLine &line,
+                                                     DelaunayTriangulation &dt,
+                                                     std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
 {
-    DelaunayPoint candidate{};
-    /* IMPLEMENT ME! */
-    return candidate;
+    Eigen::Vector2i baseVector{line.getRightPoint().m_xy.first  - line.getLeftPoint().m_xy.first,
+                               line.getRightPoint().m_xy.second - line.getLeftPoint().m_xy.second};
+    for (int connectionIdx: dt.m_pointMap[line.getLeftIdx()].m_connections)
+    {
+        Eigen::Vector2i compareVector{dt.m_pointMap[connectionIdx].m_xy.first  - line.getLeftPoint().m_xy.first,
+                                      dt.m_pointMap[connectionIdx].m_xy.second - line.getLeftPoint().m_xy.second};
+        double angle = getCCWAngle(baseVector, compareVector);
+        anglesFromLineSet.insert( std::pair<double, int>(angle, connectionIdx) );
+    }
+}
+
+
+void DelaunayTriangulation::populateRightCandidateSet(const DelaunayLine &line,
+                                                      DelaunayTriangulation &dt,
+                                                      std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
+{
+    Eigen::Vector2i baseVector{line.getLeftPoint().m_xy.first  - line.getRightPoint().m_xy.first,
+                               line.getLeftPoint().m_xy.second - line.getRightPoint().m_xy.second};
+    for (int connectionIdx: dt.m_pointMap[line.getRightIdx()].m_connections)
+    {
+        Eigen::Vector2i compareVector{dt.m_pointMap[connectionIdx].m_xy.first  - line.getRightPoint().m_xy.first,
+                                      dt.m_pointMap[connectionIdx].m_xy.second - line.getRightPoint().m_xy.second};
+        double angle = getCWAngle(baseVector, compareVector);
+        anglesFromLineSet.insert( std::pair<double, int>(angle, connectionIdx) );
+    }
 }
 
 
@@ -280,8 +334,65 @@ bool DelaunayTriangulation::circleContainsPoint(const DelaunayPoint &edgePoint,
                                                 const DelaunayLine &edgeLine,
                                                 const DelaunayPoint &innerPoint)
 {
-    /* IMPLEMENT ME! */
-    return false;
+    double xCenter, yCenter, radius;
+    calculateCircle(edgePoint, edgeLine, xCenter, yCenter, radius);
+    double distToInnerPoint = sqrt( pow(xCenter - innerPoint.m_xy.first,  2) +
+                                    pow(yCenter - innerPoint.m_xy.second, 2) );
+    return distToInnerPoint <= radius;
+}
+
+
+void DelaunayTriangulation::calculateCircle(const DelaunayPoint &point, const DelaunayLine &line,
+                                            double &xCenter, double &yCenter, double &radius)
+{
+    // From here: http://paulbourke.net/geometry/circlesphere/
+    //   variable names also taken from this paper
+    double x1 = line.getLeftPoint().m_xy.first;
+    double y1 = line.getLeftPoint().m_xy.second;
+    double x2 = point.m_xy.first;
+    double y2 = point.m_xy.second;
+    double x3 = line.getRightPoint().m_xy.first;
+    double y3 = line.getRightPoint().m_xy.second;
+    if (x1 == x2)
+    {
+        std::swap(x2, x3);
+        std::swap(y2, y3);
+    }
+    else if (x2 == x3)
+    {
+        std::swap(x1, x2);
+        std::swap(y1, y2);
+    }
+    double mA = (y2 - y1) / (x2 - x1);
+    double mB = (y3 - y2) / (x3 - x2);
+
+    xCenter = ( mA * mB * (y1 - y3) + mB * (x1 + x2) - mA * (x2 + x3) ) / ( 2 * (mB - mA) );
+    yCenter = (-1 / mA) * (xCenter - (x1 + x2) / 2) + (y1 + y2) / 2;
+    radius = sqrt( pow(xCenter - x1, 2) + pow(yCenter - y1, 2) );
+}
+
+
+double DelaunayTriangulation::getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
+{
+    double baseAngle = atan2(base[1], base[0]);
+    double comparisonAngle = atan2(comparison[1], comparison[0]);
+
+    if (comparisonAngle < baseAngle)
+        comparisonAngle += 2 * PI;
+
+    return comparisonAngle - baseAngle;
+}
+
+
+double DelaunayTriangulation::getCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
+{
+    double baseAngle = atan2(base[1], base[0]);
+    double comparisonAngle = atan2(comparison[1], comparison[0]);
+
+    if (comparisonAngle > baseAngle)
+        comparisonAngle -= 2 * PI;
+
+    return baseAngle - comparisonAngle;
 }
 
 

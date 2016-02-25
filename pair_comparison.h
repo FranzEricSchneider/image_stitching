@@ -3,8 +3,13 @@
 
 
 // Taken from here: http://www.cplusplus.com/reference/set/set/set/
-// Sorts the elements in DESCENDING order
-struct pairComparison
+struct sortFirstElementAscending
+{
+    bool operator() (std::pair<double, int> lhs, std::pair<double, int> rhs) const
+        { return lhs.first < rhs.first; }
+};
+
+struct sortFirstElementDescending
 {
     bool operator() (std::pair<double, int> lhs, std::pair<double, int> rhs) const
         { return lhs.first > rhs.first; }
