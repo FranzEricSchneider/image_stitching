@@ -53,6 +53,22 @@ int DelaunayTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx)
 
 void DelaunayTriangulation::triangulate()
 {
+
+    /*FOR DEBUGGING*/
+//    std::map<int, DelaunayPoint>::iterator mapIt = m_pointMap.begin();
+//    for (mapIt = m_pointMap.begin(); mapIt!=m_pointMap.end(); ++mapIt)
+//    {
+//        std::cout << "Map point: " << mapIt->first << " => (" << mapIt->second.m_xy.first << ", " << mapIt->second.m_xy.second << ")\n";
+//        std::cout << "\tconnections: ";
+//        for (auto connection: mapIt->second.m_connections)
+//        {
+//            std::cout << connection << ", ";
+//        }
+//        std::cout << "\n";
+//    }
+//    std::cout << "Point with lowest Y (idx): " << pointWithLowestY() << "\n";
+//    std::cout << "\n";
+
     if (m_numPoints <= 3)
     {
         completelyConnectSet();
@@ -75,21 +91,6 @@ void DelaunayTriangulation::triangulate()
         mergeGroups( DelaunayTriangulation{leftMap},
                      DelaunayTriangulation{rightMap} );
     }
-
-    /*FOR DEBUGGING*/
-//    std::map<int, DelaunayPoint>::iterator mapIt = m_pointMap.begin();
-//    for (mapIt = m_pointMap.begin(); mapIt!=m_pointMap.end(); ++mapIt)
-//    {
-//        std::cout << "Map point: " << mapIt->first << " => (" << mapIt->second.m_xy.first << ", " << mapIt->second.m_xy.second << ")\n";
-//        std::cout << "\tconnections: ";
-//        for (auto connection: mapIt->second.m_connections)
-//        {
-//            std::cout << connection << ", ";
-//        }
-//        std::cout << "\n";
-//    }
-//    std::cout << "Point with lowest Y (idx): " << pointWithLowestY() << "\n";
-//    std::cout << "\n";
 }
 
 
@@ -269,7 +270,6 @@ DelaunayPoint DelaunayTriangulation::getCandidate(const DelaunayLine &line,
         populateRightCandidateSet(line, dt, anglesFromLineSet);
 
     int coreIdx = isLeftCandidate?line.getLeftIdx():line.getRightIdx();
-    std::cout << "coreIdx: " << coreIdx << "\n";
     std::set< std::pair<double, int> >::iterator setIt = anglesFromLineSet.begin();
     for (setIt = anglesFromLineSet.begin(); setIt != anglesFromLineSet.end(); /*Nothing*/ )
     {
@@ -342,36 +342,6 @@ bool DelaunayTriangulation::circleContainsPoint(const DelaunayPoint &edgePoint,
 }
 
 
-void DelaunayTriangulation::calculateCircle(const DelaunayPoint &point, const DelaunayLine &line,
-                                            double &xCenter, double &yCenter, double &radius)
-{
-    // From here: http://paulbourke.net/geometry/circlesphere/
-    //   variable names also taken from this paper
-    double x1 = line.getLeftPoint().m_xy.first;
-    double y1 = line.getLeftPoint().m_xy.second;
-    double x2 = point.m_xy.first;
-    double y2 = point.m_xy.second;
-    double x3 = line.getRightPoint().m_xy.first;
-    double y3 = line.getRightPoint().m_xy.second;
-    if (x1 == x2)
-    {
-        std::swap(x2, x3);
-        std::swap(y2, y3);
-    }
-    else if (x2 == x3)
-    {
-        std::swap(x1, x2);
-        std::swap(y1, y2);
-    }
-    double mA = (y2 - y1) / (x2 - x1);
-    double mB = (y3 - y2) / (x3 - x2);
-
-    xCenter = ( mA * mB * (y1 - y3) + mB * (x1 + x2) - mA * (x2 + x3) ) / ( 2 * (mB - mA) );
-    yCenter = (-1 / mA) * (xCenter - (x1 + x2) / 2) + (y1 + y2) / 2;
-    radius = sqrt( pow(xCenter - x1, 2) + pow(yCenter - y1, 2) );
-}
-
-
 double DelaunayTriangulation::getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
 {
     double baseAngle = atan2(base[1], base[0]);
@@ -423,4 +393,34 @@ std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > DelaunayTriangulation
                                 Eigen::Vector3d(line.m_x2, line.m_y2, 0) ) );
     }
     return lineVector;
+}
+
+
+void calculateCircle(const DelaunayPoint &point, const DelaunayLine &line,
+                                            double &xCenter, double &yCenter, double &radius)
+{
+    // From here: http://paulbourke.net/geometry/circlesphere/
+    //   variable names also taken from this paper
+    double x1 = line.getLeftPoint().m_xy.first;
+    double y1 = line.getLeftPoint().m_xy.second;
+    double x2 = point.m_xy.first;
+    double y2 = point.m_xy.second;
+    double x3 = line.getRightPoint().m_xy.first;
+    double y3 = line.getRightPoint().m_xy.second;
+    if (x1 == x2)
+    {
+        std::swap(x2, x3);
+        std::swap(y2, y3);
+    }
+    else if (x2 == x3)
+    {
+        std::swap(x1, x2);
+        std::swap(y1, y2);
+    }
+    double mA = (y2 - y1) / (x2 - x1);
+    double mB = (y3 - y2) / (x3 - x2);
+
+    xCenter = ( mA * mB * (y1 - y3) + mB * (x1 + x2) - mA * (x2 + x3) ) / ( 2 * (mB - mA) );
+    yCenter = (-1 / mA) * (xCenter - (x1 + x2) / 2) + (y1 + y2) / 2;
+    radius = sqrt( pow(xCenter - x1, 2) + pow(yCenter - y1, 2) );
 }

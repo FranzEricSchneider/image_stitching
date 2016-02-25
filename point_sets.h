@@ -48,6 +48,7 @@ public:
         }
         generateMinMax(); // Generates the minmax values from the loaded baseSet
         cv::namedWindow(m_windowName, cv::WINDOW_NORMAL);
+//        cv::namedWindow(m_windowName, cv::WINDOW_FULLSCREEN);
 
         DelaunayTriangulation dt{m_baseSet};
         drawSet(dt.getLinesForDrawingOrGraphing());

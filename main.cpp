@@ -18,7 +18,6 @@ int main()
 
 /*
 MAKE A DELAUNAYTRIANGULATION FUNCTION THAT MAKES EDGES BETWEEN POINTS
-IMPLEMENT LOGIC THAT STEPS PAST FIRST LINE
 MAKE DELAUNAY WORK
 REFACTOR findFirstLine
 CLEAN EVERYTHING AFTER DELAUNAY, MAKE NAMES AWESOME, COMMENT EVERYTHING
@@ -27,7 +26,7 @@ CLEAN EVERYTHING AFTER DELAUNAY, MAKE NAMES AWESOME, COMMENT EVERYTHING
 //    AprilAnalysis april;
 //    april.processImage();
 //    PointSets ps{april.m_detections, april.m_img};
-    RandomPoints random(50);
+    RandomPoints random(9);
 //    RandomPoints random;
     PointSets ps{random.m_randomDetections, random.m_img};
 

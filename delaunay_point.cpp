@@ -30,9 +30,16 @@ void DelaunayPoint::deleteEdge(const int idxToDelete)
                      ", but that edge doesn't exist\n";
     } else
     {
-        std::cout << "Deleting edge from " << m_idx << " to " << idxToDelete << "\n";
         m_connections.erase(it);
     }
+}
+
+
+bool DelaunayPoint::isConnected(const int idx)
+{
+    std::vector<int>::iterator it;
+    it = find(m_connections.begin(), m_connections.end(), idx);
+    return it != m_connections.end();
 }
 
 

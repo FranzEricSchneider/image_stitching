@@ -78,7 +78,7 @@ void PointSets::drawSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d>
             cv::line(m_baseImg,
                      cv::Point2f(line.first(0), maxY - line.first(1)),
                      cv::Point2f(line.second(0), maxY - line.second(1)),
-                     cv::Scalar(255, 0, 0, 0), 2 );
+                     cv::Scalar(125, 125, 125, 0), 2);
         }
     }
 }
@@ -208,9 +208,11 @@ void PointSets::generateDelaunay()
     // TODO: MAKE THIS
 }
 
+// TODO: MAKE IT SO CIRCLES AREN'T DOUBLE PRINTED
 void PointSets::drawDelaunayCircumcircles(DelaunayTriangulation &dt)
 {
     std::map<int, DelaunayPoint>::iterator mapIt = dt.m_pointMap.begin();
+    int maxY = m_baseImg.size().height;
     for (auto mapIt = dt.m_pointMap.begin(); mapIt!=dt.m_pointMap.end(); ++mapIt)
     {
         for (auto vecIt = mapIt->second.m_connections.begin();
@@ -218,8 +220,20 @@ void PointSets::drawDelaunayCircumcircles(DelaunayTriangulation &dt)
              /*Nothing*/)
         {
             double x, y, radius;
-            // DRAW THE CIRCLES
+            int point1 = *vecIt;
+
             ++vecIt;
+            if (vecIt == mapIt->second.m_connections.end())
+                break;
+
+            int point2 = *vecIt;
+            if ( dt.m_pointMap[point1].isConnected(point2) )
+            {
+                DelaunayLine line{mapIt->second, dt.m_pointMap[point2]};
+                calculateCircle(dt.m_pointMap[point1], line, x, y, radius);
+                cv::circle(m_baseImg, cv::Point2f(x, maxY - y),
+                           radius, cv::Scalar(255, 255, 255, 0), 2);
+            }
         }
     }
 }

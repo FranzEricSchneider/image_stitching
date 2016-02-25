@@ -40,7 +40,6 @@ class DelaunayTriangulation
         void populateRightCandidateSet(const DelaunayLine &line, DelaunayTriangulation &dt,
                                        std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet);
         bool circleContainsPoint(const DelaunayPoint &edgePoint, const DelaunayLine &edgeLine, const DelaunayPoint &innerPoint);
-        void calculateCircle(const DelaunayPoint &point, const DelaunayLine &line, double &xCenter, double &yCenter, double &radius);
         double getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison);
         double getCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison);
 
@@ -79,6 +78,9 @@ class DelaunayTriangulation
         std::vector<DelaunayLine> getLines();
         std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > getLinesForDrawingOrGraphing();
 };
+
+
+void calculateCircle(const DelaunayPoint &point, const DelaunayLine &line, double &xCenter, double &yCenter, double &radius);
 
 
 #endif // DELAUNEY_TRIANGULATION_H_INCLUDED

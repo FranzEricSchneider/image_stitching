@@ -11,6 +11,7 @@ void RandomPoints::generateRandomImage(int maxSize, int minSize)
 
 void RandomPoints::generateBlankImage(int x, int y)
 {
+    // TODO: MAKE THIS GENERATE A COLOR IMAGE
     // From here: http://stackoverflow.com/questions/31337397/how-to-create-empty-mat-in-opencvs
     m_img = cv::Mat1d(y, x, 0.0);
 }
@@ -20,8 +21,8 @@ void RandomPoints::generateRandomDetections(int number)
 {
     for (int i{}; i < number; ++i)
     {
-        int x = randomNumber(m_maxX);
-        int y = randomNumber(m_maxY);
+        int x = randomNumber(m_maxX - 100, 100);
+        int y = randomNumber(m_maxY - 100, 100);
         generateDetection(x, y);
     }
 }

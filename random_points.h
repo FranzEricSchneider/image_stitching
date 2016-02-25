@@ -18,7 +18,7 @@ class RandomPoints
         int m_numberOfPoints;
         const int m_minX{}, m_minY{};  // set to 0
         int m_maxX, m_maxY;  // set randomly in generateRandomImage
-        void generateRandomImage(int maxSize = 1000, int minSize = 400);
+        void generateRandomImage(int maxSize = 2000, int minSize = 1800);
         void generateBlankImage(int x, int y);
         void generateRandomDetections(int number);
         void generateDetection(int x, int y);

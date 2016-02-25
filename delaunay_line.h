@@ -67,7 +67,7 @@ class DelaunayLine
 
 
 bool valueIsBetween(int testValue, int side1, int side2);
-bool onSegment(Eigen::Vector3i testPoint, Eigen::Vector3i side1, Eigen::Vector3i side2);
+bool onSegment(Eigen::Vector3d testPoint, Eigen::Vector3d side1, Eigen::Vector3d side2);
 
 
 #endif // DELAUNAY_LINE_H_INCLUDED
