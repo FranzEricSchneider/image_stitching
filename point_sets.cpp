@@ -1,31 +1,15 @@
 #include "point_sets.h"
 
 
-void PointSets::print()
+void PointSets::findMinimumsInBaseset()
 {
-    std::cout << "The base set:\n";
-    for (auto point: m_baseSet)
-    {
-        std::cout << "point:\n" << point << "\n";
-    }
-}
-
-
-void PointSets::generateMinMax()
-{
-    if (m_baseSet.size() == 0)
-    {
-        std::cout << "generateMinMax failed, m_baseSet size was 0\n";
-        return;
-    }
-
     // Sets the minmax value (first) to the first element, and sets the
     //     corresponding index (second) to 0. Now each value will be compared
     //     to the first element
-    m_minPointX.first = m_maxPointX.first = m_baseSet[0](0);
-    m_minPointY.first = m_maxPointY.first = m_baseSet[0](1);
-    m_minPointX.second = m_maxPointX.second = 0;
-    m_minPointY.second = m_maxPointY.second = 0;
+    m_minPointX.first = m_baseSet[0](0);
+    m_minPointY.first = m_baseSet[0](1);
+    m_minPointX.second = 0;
+    m_minPointY.second = 0;
 
     for (int i{}; i < static_cast<int>(m_baseSet.size()); ++i)
     {
@@ -34,21 +18,99 @@ void PointSets::generateMinMax()
             m_minPointX.first = m_baseSet[i](0);
             m_minPointX.second = i;
         }
-        else if (m_baseSet[i](0) > m_maxPointX.first)
-        {
-            m_maxPointX.first = m_baseSet[i](0);
-            m_maxPointX.second = i;
-        }
         if (m_baseSet[i](1) < m_minPointY.first)
         {
             m_minPointY.first = m_baseSet[i](1);
             m_minPointY.second = i;
         }
-        else if (m_baseSet[i](1) > m_maxPointY.first)
+    }
+}
+
+
+void PointSets::generateConvexHullIndices(std::vector<int> &hullIndices)
+{
+    // Done using Graham scan: https://en.wikipedia.org/wiki/Graham_scan
+    // Eigen examples: http://www.cc.gatech.edu/classes/AY2015/cs4496_spring/Eigen.html
+
+    int startingPointIndex = m_minPointY.second;
+    Eigen::Vector3i startingPoint = m_baseSet[startingPointIndex];
+    std::set< std::pair<double, int>, sortFirstElementDescending > anglesFromStartSet;
+    for (int i{}; i < static_cast<int>(m_baseSet.size()); ++i)
+    {
+        if (i != startingPointIndex)
         {
-            m_maxPointY.first = m_baseSet[i](1);
-            m_maxPointY.second = i;
+            Eigen::Vector2d vec{ (m_baseSet[i] - startingPoint)[0],
+                                 (m_baseSet[i] - startingPoint)[1] };
+            vec.normalize();
+            std::pair<double, int> xValue{vec[0], i};
+            anglesFromStartSet.insert(xValue);
         }
+    }
+
+    // Initialize the convex hull with the starting point and the point closest to 0 deg from that
+    std::set< std::pair<double, int> >::iterator setIt = anglesFromStartSet.begin();
+    hullIndices = {startingPointIndex, (*setIt).second};  // Defined as a class element
+    int checkIndex{};  // Check 0,1,2; then 1,2,3; etc.
+
+    for (setIt = anglesFromStartSet.begin(); setIt != anglesFromStartSet.end(); /*nothing*/)
+    {
+        // Adds the next point to hullIndices
+        if (setIt == --anglesFromStartSet.end())
+        {
+            // Close the loop by re-including the starting point
+            hullIndices.push_back(startingPointIndex);
+            ++setIt;
+        } else
+        {
+            hullIndices.push_back( (*(++setIt)).second );
+        }
+
+        // If the added point has created a right turn, remove 2nd to last point from hullIndices
+        while ( isRightTurn(m_baseSet[hullIndices[checkIndex]],
+                            m_baseSet[hullIndices[checkIndex + 1]],
+                            m_baseSet[hullIndices[checkIndex + 2]]) )
+        {
+            hullIndices.erase(hullIndices.begin() + checkIndex + 1);
+            --checkIndex;
+        }
+        ++checkIndex;
+    }
+}
+
+
+void PointSets::drawSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet)
+{
+    if (givenSet.empty())
+    {
+        std::cout << "Your given set was empty, generate it first\n";
+    }
+    else
+    {
+        int maxY = m_baseImg.size().height;
+        for (auto line: givenSet)
+        {
+            cv::line(m_baseImg,
+                     cv::Point2i(line.first(0), maxY - line.first(1)),
+                     cv::Point2i(line.second(0), maxY - line.second(1)),
+                     cv::Scalar(125, 125, 125, 0), 2);
+        }
+    }
+}
+
+
+void PointSets::graphSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet)
+{
+    if (givenSet.empty())
+    {
+        std::cout << "The given set was empty, generate it first\n";
+    }
+    else
+    {
+        int numLines{static_cast<int>(givenSet.size())};
+        m_plotTools.plotLines(numLines,
+                              0, m_baseImg.size().width,
+                              0, m_baseImg.size().height,
+                              givenSet);
     }
 }
 
@@ -64,51 +126,13 @@ void PointSets::drawBaseSet()
 }
 
 
-void PointSets::drawSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet)
-{
-    if (givenSet.empty())
-    {
-        std::cout << "Your given set was empty, generate it first\n";
-    }
-    else
-    {
-        int maxY = m_baseImg.size().height;
-        for (auto line: givenSet)
-        {
-            cv::line(m_baseImg,
-                     cv::Point2f(line.first(0), maxY - line.first(1)),
-                     cv::Point2f(line.second(0), maxY - line.second(1)),
-                     cv::Scalar(125, 125, 125, 0), 2);
-        }
-    }
-}
-
-
-void PointSets::graphSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet)
-{
-    if (givenSet.empty())
-    {
-        std::cout << "The given set was empty, generate it first\n";
-    }
-    else
-    {
-        int numLines{static_cast<int>(givenSet.size())};
-        m_plotTools.plotLines(numLines,
-                              m_minPointX.first - 100, m_maxPointX.first + 100,
-                              m_minPointY.first - 100, m_maxPointY.first + 100,
-                              givenSet);
-    }
-}
-
-
 void PointSets::generateCompleteSet()
 {
-    int numPts = m_baseSet.size();
-    for (int i{0}; i < numPts - 1; ++i)
+    for (int i{0}; i < static_cast<int>(m_baseSet.size()) - 1; ++i)
     {
-        for (int j{i + 1}; j < numPts; ++j)
+        for (int j{i + 1}; j < static_cast<int>(m_baseSet.size()); ++j)
         {
-            std::pair<Eigen::Vector3d, Eigen::Vector3d> line{m_baseSet[i], m_baseSet[j]};
+            std::pair<Eigen::Vector3i, Eigen::Vector3i> line{m_baseSet[i], m_baseSet[j]};
             m_completeSet.push_back(line);
         }
     }
@@ -127,65 +151,15 @@ void PointSets::graphCompleteSet()
 }
 
 
-void PointSets::generateConvexHullIndices()
-{
-    // Done using Graham scan: https://en.wikipedia.org/wiki/Graham_scan
-    // Eigen examples: http://www.cc.gatech.edu/classes/AY2015/cs4496_spring/Eigen.html
-
-    int numPoints = m_baseSet.size();
-    int startingPointIndex = m_minPointY.second;
-    Eigen::Vector3d startingPoint = m_baseSet[startingPointIndex];
-    std::set< std::pair<double, int>, sortFirstElementDescending > anglesFromStartSet;
-    for (int i{}; i < numPoints; ++i)
-    {
-        if (i != startingPointIndex)
-        {
-            Eigen::Vector3d vec = m_baseSet[i] - startingPoint;
-            vec.normalize();
-            std::pair<double, int> xValue{vec(0), i};
-            anglesFromStartSet.insert(xValue);
-        }
-    }
-
-    // Initialize the convex hull with the starting point and the point closest to 0 deg from that
-    std::set< std::pair<double, int> >::iterator setIt = anglesFromStartSet.begin();
-    m_hullIndices = {startingPointIndex, (*setIt).second};  // Defined as a class element
-    int checkIndex{};  // Check 0,1,2; then 1,2,3; etc.
-
-    for (setIt = anglesFromStartSet.begin(); setIt != anglesFromStartSet.end(); /*nothing*/)
-    {
-        // Adds the next point to m_hullIndices
-        if (setIt == --anglesFromStartSet.end())
-        {
-            // Close the loop by re-including the starting point
-            m_hullIndices.push_back(startingPointIndex);
-            ++setIt;
-        } else
-        {
-            m_hullIndices.push_back( (*(++setIt)).second );
-        }
-
-        // If the added point has created a right turn, remove 2nd to last point from m_hullIndices
-        while ( isRightTurn(m_baseSet[m_hullIndices[checkIndex]],
-                            m_baseSet[m_hullIndices[checkIndex + 1]],
-                            m_baseSet[m_hullIndices[checkIndex + 2]]) )
-        {
-            m_hullIndices.erase(m_hullIndices.begin() + checkIndex + 1);
-            --checkIndex;
-        }
-        ++checkIndex;
-    }
-}
-
-
 void PointSets::generateConvexHull()
 {
-    generateConvexHullIndices();
-    int numLines{static_cast<int>(m_hullIndices.size() - 1)};  // One less line than points
+    std::vector<int> hullIndices;
+    generateConvexHullIndices(hullIndices);
+    int numLines{static_cast<int>(hullIndices.size() - 1)};  // One less line than points
     for (int i{}; i < numLines; ++i)
     {
-        std::pair<Eigen::Vector3d, Eigen::Vector3d> line{m_baseSet[m_hullIndices[i]],
-                                                         m_baseSet[m_hullIndices[i + 1]]};
+        std::pair<Eigen::Vector3i, Eigen::Vector3i> line{m_baseSet[hullIndices[i]],
+                                                         m_baseSet[hullIndices[i + 1]]};
         m_convexHull.push_back(line);
     }
 }
@@ -205,15 +179,28 @@ void PointSets::graphConvexHull()
 
 void PointSets::generateDelaunay()
 {
-    // TODO: MAKE THIS
+    m_dt = DTriangulation{m_baseSet};
 }
 
-// TODO: MAKE IT SO CIRCLES AREN'T DOUBLE PRINTED
-void PointSets::drawDelaunayCircumcircles(DelaunayTriangulation &dt)
+
+void PointSets::drawDelaunay()
 {
-    std::map<int, DelaunayPoint>::iterator mapIt = dt.m_pointMap.begin();
+    drawSet(m_dt.getLinesForDrawingOrGraphing());
+}
+
+
+void PointSets::graphDelaunay()
+{
+    graphSet(m_dt.getLinesForDrawingOrGraphing());
+}
+
+
+// TODO: MAKE IT SO CIRCLES AREN'T DOUBLE PRINTED
+void PointSets::drawDelaunayCircumcircles()
+{
+    std::map<int, DPoint>::iterator mapIt = m_dt.m_pointMap.begin();
     int maxY = m_baseImg.size().height;
-    for (auto mapIt = dt.m_pointMap.begin(); mapIt!=dt.m_pointMap.end(); ++mapIt)
+    for (auto mapIt = m_dt.m_pointMap.begin(); mapIt!=m_dt.m_pointMap.end(); ++mapIt)
     {
         for (auto vecIt = mapIt->second.m_connections.begin();
              vecIt != mapIt->second.m_connections.end();
@@ -227,10 +214,10 @@ void PointSets::drawDelaunayCircumcircles(DelaunayTriangulation &dt)
                 break;
 
             int point2 = *vecIt;
-            if ( dt.m_pointMap[point1].isConnected(point2) )
+            if ( m_dt.m_pointMap[point1].isConnected(point2) )
             {
-                DelaunayLine line{mapIt->second, dt.m_pointMap[point2]};
-                calculateCircle(dt.m_pointMap[point1], line, x, y, radius);
+                DLine line{mapIt->second, m_dt.m_pointMap[point2]};
+                calculateCircle(m_dt.m_pointMap[point1], line, x, y, radius);
                 cv::circle(m_baseImg, cv::Point2f(x, maxY - y),
                            radius, cv::Scalar(255, 255, 255, 0), 2);
             }
@@ -239,18 +226,19 @@ void PointSets::drawDelaunayCircumcircles(DelaunayTriangulation &dt)
 }
 
 
-void PointSets::showSetImage()
+void PointSets::showImage()
 {
     cv::imshow(m_windowName, m_baseImg);
+// TODO: MAKE IT ONLY DISAPPEAR ON ESC OR ENTER
     while (cv::waitKey(100) == -1) {}
 }
 
 
 // Takes the vector from a to b and from b to c, then checks whether a right turn occurred with cross
-bool isRightTurn(Eigen::Vector3d a, Eigen::Vector3d b, Eigen::Vector3d c)
+bool isRightTurn(Eigen::Vector3i a, Eigen::Vector3i b, Eigen::Vector3i c)
 {
-    Eigen::Vector3d ab = b - a;
-    Eigen::Vector3d bc = c - b;
-    Eigen::Vector3d abCrossbc = ab.cross(bc);
+    Eigen::Vector3i ab = b - a;
+    Eigen::Vector3i bc = c - b;
+    Eigen::Vector3i abCrossbc = ab.cross(bc);
     return (abCrossbc[2] < 0.0);
 }

@@ -1,11 +1,7 @@
-#include "delaunay_point.h"
-
-//double DelaunayPoint::angleToConnection(const int idxOfPt)
-//{
-//}
+#include "d_point.h"
 
 
-void DelaunayPoint::createEdge(const int idxOfPoint)
+void DPoint::createEdge(const int idxOfPoint)
 {
     std::vector<int>::iterator it;
     it = find(m_connections.begin(), m_connections.end(), idxOfPoint);
@@ -20,7 +16,7 @@ void DelaunayPoint::createEdge(const int idxOfPoint)
 }
 
 
-void DelaunayPoint::deleteEdge(const int idxToDelete)
+void DPoint::deleteEdge(const int idxToDelete)
 {
     std::vector<int>::iterator it;
     it = find(m_connections.begin(), m_connections.end(), idxToDelete);
@@ -35,7 +31,7 @@ void DelaunayPoint::deleteEdge(const int idxToDelete)
 }
 
 
-bool DelaunayPoint::isConnected(const int idx)
+bool DPoint::isConnected(const int idx)
 {
     std::vector<int>::iterator it;
     it = find(m_connections.begin(), m_connections.end(), idx);
@@ -43,7 +39,7 @@ bool DelaunayPoint::isConnected(const int idx)
 }
 
 
-DelaunayPoint& DelaunayPoint::operator= (const DelaunayPoint &dpSource)
+DPoint& DPoint::operator= (const DPoint &dpSource)
 {
     if (this == &dpSource)
         return *this;
@@ -55,10 +51,10 @@ DelaunayPoint& DelaunayPoint::operator= (const DelaunayPoint &dpSource)
 }
 
 
-std::ostream& operator<< (std::ostream &out, DelaunayPoint &dp)
+std::ostream& operator<< (std::ostream &out, DPoint &dp)
 {
-    out << "DelaunayPoint [" << dp.m_idx << "], at " <<
-           "(" << dp.m_xy.first << ", " << dp.m_xy.second   << "), connected to DelaunayPoints [";
+    out << "DPoint [" << dp.m_idx << "], at " <<
+           "(" << dp.m_xy.first << ", " << dp.m_xy.second   << "), connected to DPoints [";
     for (int i{}; i < static_cast<int>(dp.m_connections.size()); ++i)
     {
         std::cout << dp.m_connections[i];

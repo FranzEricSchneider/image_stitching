@@ -1,8 +1,8 @@
-#include "delaunay_triangulation.h"
+#include "d_triangulation.h"
 
 
 // Sorts the vector so the leftmost point is first in the set
-bool vector3dComparison(Eigen::Vector3d lhs, Eigen::Vector3d rhs)
+bool vector3iComparison(Eigen::Vector3i lhs, Eigen::Vector3i rhs)
 {
     if (lhs[0] == rhs[0])
         return lhs[1] < rhs[1];
@@ -10,9 +10,16 @@ bool vector3dComparison(Eigen::Vector3d lhs, Eigen::Vector3d rhs)
 }
 
 
-int DelaunayTriangulation::pointWithLowestY()
+DTriangulation& DTriangulation::operator= (const DTriangulation &dtSource)
 {
-    std::map<int, DelaunayPoint>::iterator it = m_pointMap.begin();
+    m_pointMap = dtSource.m_pointMap;
+    return *this;
+}
+
+
+int DTriangulation::pointWithLowestY()
+{
+    std::map<int, DPoint>::iterator it = m_pointMap.begin();
     int idx{it->first};
     int lowestYVal{it->second.m_xy.second};
 
@@ -29,9 +36,9 @@ int DelaunayTriangulation::pointWithLowestY()
 }
 
 
-int DelaunayTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx)
+int DTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx)
 {
-    std::map<int, DelaunayPoint>::iterator it = m_pointMap.begin();
+    std::map<int, DPoint>::iterator it = m_pointMap.begin();
     int idxToReturn{givenIdx};
     int lowestYVal{m_pointMap[givenIdx].m_xy.second};
 
@@ -51,57 +58,41 @@ int DelaunayTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx)
 }
 
 
-void DelaunayTriangulation::triangulate()
+void DTriangulation::triangulate()
 {
-
-    /*FOR DEBUGGING*/
-//    std::map<int, DelaunayPoint>::iterator mapIt = m_pointMap.begin();
-//    for (mapIt = m_pointMap.begin(); mapIt!=m_pointMap.end(); ++mapIt)
-//    {
-//        std::cout << "Map point: " << mapIt->first << " => (" << mapIt->second.m_xy.first << ", " << mapIt->second.m_xy.second << ")\n";
-//        std::cout << "\tconnections: ";
-//        for (auto connection: mapIt->second.m_connections)
-//        {
-//            std::cout << connection << ", ";
-//        }
-//        std::cout << "\n";
-//    }
-//    std::cout << "Point with lowest Y (idx): " << pointWithLowestY() << "\n";
-//    std::cout << "\n";
-
-    if (m_numPoints <= 3)
+    if (m_pointMap.size() <= 3)
     {
         completelyConnectSet();
     }
     else
     {
-        std::map<int, DelaunayPoint> leftMap;
-        std::map<int, DelaunayPoint> rightMap;
+        std::map<int, DPoint> leftMap;
+        std::map<int, DPoint> rightMap;
 
         int counter{};
         for (auto it = m_pointMap.begin(); it!=m_pointMap.end(); ++it)
         {
-            if ( counter < (m_numPoints / 2) )
-                leftMap.insert( std::pair<int, DelaunayPoint> (it->first, it->second) );
+            if ( counter < (static_cast<int>(m_pointMap.size()) / 2) )
+                leftMap.insert( std::pair<int, DPoint> (it->first, it->second) );
             else
-                rightMap.insert( std::pair<int, DelaunayPoint> (it->first, it->second) );
+                rightMap.insert( std::pair<int, DPoint> (it->first, it->second) );
             ++counter;
         }
 
-        mergeGroups( DelaunayTriangulation{leftMap},
-                     DelaunayTriangulation{rightMap} );
+        mergeGroups( DTriangulation{leftMap},
+                     DTriangulation{rightMap} );
     }
 }
 
 
-void DelaunayTriangulation::completelyConnectSet()
+void DTriangulation::completelyConnectSet()
 {
-    for (std::map<int, DelaunayPoint>::iterator outerIt = m_pointMap.begin();
+    for (std::map<int, DPoint>::iterator outerIt = m_pointMap.begin();
          outerIt != --m_pointMap.end();
          ++outerIt)
     {
         ++outerIt;
-        std::map<int, DelaunayPoint>::iterator innerIt{outerIt};
+        std::map<int, DPoint>::iterator innerIt{outerIt};
         --outerIt;
         for ( /*Already instantiated*/ ; innerIt != m_pointMap.end(); ++innerIt)
         {
@@ -113,23 +104,23 @@ void DelaunayTriangulation::completelyConnectSet()
 
 
 // TODO: REREAD THE SECTION ON REFERENCES AND FIND OUT IF AND HOW TO MAKE THESE REFERENCES
-void DelaunayTriangulation::mergeGroups( DelaunayTriangulation leftSide,
-                                         DelaunayTriangulation rightSide )
+void DTriangulation::mergeGroups(DTriangulation leftSide,
+                                 DTriangulation rightSide)
 {
     copyConnectionsToThisMap(leftSide);
     copyConnectionsToThisMap(rightSide);
-    DelaunayLine firstLine = findFirstLine(leftSide, rightSide);
+    DLine firstLine = findFirstLine(leftSide, rightSide);
     m_pointMap[firstLine.m_idx1].createEdge(firstLine.m_idx2);
     m_pointMap[firstLine.m_idx2].createEdge(firstLine.m_idx1);
 
     bool hasLeftCandidate{true};
     bool hasRightCandidate{true};
-    DelaunayLine baseLREdge = firstLine;
+    DLine baseLREdge = firstLine;
 
     while (hasLeftCandidate || hasRightCandidate)
     {
-        DelaunayPoint leftCandidate  = getCandidate(baseLREdge, leftSide,  true);
-        DelaunayPoint rightCandidate = getCandidate(baseLREdge, rightSide, false);
+        DPoint leftCandidate  = getCandidate(baseLREdge, leftSide,  true);
+        DPoint rightCandidate = getCandidate(baseLREdge, rightSide, false);
 
         hasLeftCandidate  = leftCandidate.m_idx  != -1;
         hasRightCandidate = rightCandidate.m_idx != -1;
@@ -146,20 +137,20 @@ void DelaunayTriangulation::mergeGroups( DelaunayTriangulation leftSide,
         {
             m_pointMap[leftCandidate.m_idx].createEdge(baseLREdge.getRightIdx());
             m_pointMap[baseLREdge.getRightIdx()].createEdge(leftCandidate.m_idx);
-            baseLREdge = DelaunayLine{leftCandidate, baseLREdge.getRightPoint()};
+            baseLREdge = DLine{leftCandidate, baseLREdge.getRightPoint()};
         } else if (hasRightCandidate)
         {
             m_pointMap[rightCandidate.m_idx].createEdge(baseLREdge.getLeftIdx());
             m_pointMap[baseLREdge.getLeftIdx()].createEdge(rightCandidate.m_idx);
-            baseLREdge = DelaunayLine{rightCandidate, baseLREdge.getLeftPoint()};
+            baseLREdge = DLine{rightCandidate, baseLREdge.getLeftPoint()};
         }
     }
 }
 
 
-void DelaunayTriangulation::copyConnectionsToThisMap(DelaunayTriangulation subDT)
+void DTriangulation::copyConnectionsToThisMap(DTriangulation subDT)
 {
-    for (std::map<int, DelaunayPoint>::iterator it = subDT.m_pointMap.begin();
+    for (std::map<int, DPoint>::iterator it = subDT.m_pointMap.begin();
          it != subDT.m_pointMap.end();
          ++it)
     {
@@ -168,13 +159,13 @@ void DelaunayTriangulation::copyConnectionsToThisMap(DelaunayTriangulation subDT
 }
 
 
-DelaunayLine DelaunayTriangulation::findFirstLine(DelaunayTriangulation &leftSide,
-                                                  DelaunayTriangulation &rightSide)
+DLine DTriangulation::findFirstLine(DTriangulation &leftSide,
+                                    DTriangulation &rightSide)
 {
-    std::vector<DelaunayLine> leftLines = leftSide.getLines();
-    std::vector<DelaunayLine> rightLines = rightSide.getLines();
+    std::vector<DLine> leftLines  = leftSide.getLines();
+    std::vector<DLine> rightLines = rightSide.getLines();
 
-    DelaunayLine firstLine;
+    DLine firstLine;
     bool found{false};
     int leftPoint{-1}, rightPoint{-1};
 
@@ -233,12 +224,12 @@ DelaunayLine DelaunayTriangulation::findFirstLine(DelaunayTriangulation &leftSid
 
 
 // TODO: TRY TO MAKE dt CONST
-DelaunayLine DelaunayTriangulation::getBaseEdge(const DelaunayPoint &point,
-                                                DelaunayTriangulation &dt,
+DLine DTriangulation::getBaseEdge(const DPoint &point,
+                                                DTriangulation &dt,
                                                 bool pointIsOnLeft)
 {
     std::set< std::pair<double, int>, sortFirstElementDescending > anglesFromPointSet;
-    std::map<int, DelaunayPoint>::iterator mapIt = dt.m_pointMap.begin();
+    std::map<int, DPoint>::iterator mapIt = dt.m_pointMap.begin();
     for (mapIt = dt.m_pointMap.begin(); mapIt!=dt.m_pointMap.end(); ++mapIt)
     {
         Eigen::Vector2d vec{mapIt->second.m_xy.first - point.m_xy.first,
@@ -255,12 +246,12 @@ DelaunayLine DelaunayTriangulation::getBaseEdge(const DelaunayPoint &point,
     }
 
     std::set< std::pair<double, int> >::iterator setIt = anglesFromPointSet.begin();
-    return DelaunayLine{ point, dt.m_pointMap[(*setIt).second] };
+    return DLine{ point, dt.m_pointMap[(*setIt).second] };
 }
 
 
-DelaunayPoint DelaunayTriangulation::getCandidate(const DelaunayLine &line,
-                                                  DelaunayTriangulation &dt,
+DPoint DTriangulation::getCandidate(const DLine &line,
+                                                  DTriangulation &dt,
                                                   bool isLeftCandidate)
 {
     std::set< std::pair<double, int>, sortFirstElementAscending > anglesFromLineSet;
@@ -274,7 +265,7 @@ DelaunayPoint DelaunayTriangulation::getCandidate(const DelaunayLine &line,
     for (setIt = anglesFromLineSet.begin(); setIt != anglesFromLineSet.end(); /*Nothing*/ )
     {
         if ( (*setIt).first > PI )
-            return DelaunayPoint{};  // Indicates no candidate was found
+            return DPoint{};  // Indicates no candidate was found
 
         int firstCandidateIdx = (*setIt).second;
         ++setIt;
@@ -294,12 +285,12 @@ DelaunayPoint DelaunayTriangulation::getCandidate(const DelaunayLine &line,
         }
     }
 
-    return DelaunayPoint{};  // Shouldn't ever get here, above cases should cover everything
+    return DPoint{};  // Shouldn't ever get here, above cases should cover everything
 }
 
 
-void DelaunayTriangulation::populateLeftCandidateSet(const DelaunayLine &line,
-                                                     DelaunayTriangulation &dt,
+void DTriangulation::populateLeftCandidateSet(const DLine &line,
+                                                     DTriangulation &dt,
                                                      std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
 {
     Eigen::Vector2i baseVector{line.getRightPoint().m_xy.first  - line.getLeftPoint().m_xy.first,
@@ -314,8 +305,8 @@ void DelaunayTriangulation::populateLeftCandidateSet(const DelaunayLine &line,
 }
 
 
-void DelaunayTriangulation::populateRightCandidateSet(const DelaunayLine &line,
-                                                      DelaunayTriangulation &dt,
+void DTriangulation::populateRightCandidateSet(const DLine &line,
+                                                      DTriangulation &dt,
                                                       std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
 {
     Eigen::Vector2i baseVector{line.getLeftPoint().m_xy.first  - line.getRightPoint().m_xy.first,
@@ -330,9 +321,9 @@ void DelaunayTriangulation::populateRightCandidateSet(const DelaunayLine &line,
 }
 
 
-bool DelaunayTriangulation::circleContainsPoint(const DelaunayPoint &edgePoint,
-                                                const DelaunayLine &edgeLine,
-                                                const DelaunayPoint &innerPoint)
+bool DTriangulation::circleContainsPoint(const DPoint &edgePoint,
+                                                const DLine &edgeLine,
+                                                const DPoint &innerPoint)
 {
     double xCenter, yCenter, radius;
     calculateCircle(edgePoint, edgeLine, xCenter, yCenter, radius);
@@ -342,7 +333,7 @@ bool DelaunayTriangulation::circleContainsPoint(const DelaunayPoint &edgePoint,
 }
 
 
-double DelaunayTriangulation::getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
+double DTriangulation::getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
 {
     double baseAngle = atan2(base[1], base[0]);
     double comparisonAngle = atan2(comparison[1], comparison[0]);
@@ -354,7 +345,7 @@ double DelaunayTriangulation::getCCWAngle(const Eigen::Vector2i &base, const Eig
 }
 
 
-double DelaunayTriangulation::getCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
+double DTriangulation::getCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
 {
     double baseAngle = atan2(base[1], base[0]);
     double comparisonAngle = atan2(comparison[1], comparison[0]);
@@ -367,36 +358,36 @@ double DelaunayTriangulation::getCWAngle(const Eigen::Vector2i &base, const Eige
 
 
 // TODO: REWORK THIS LATER TO GET RID OF DOUBLED LINES
-std::vector<DelaunayLine> DelaunayTriangulation::getLines()
+std::vector<DLine> DTriangulation::getLines()
 {
-    std::vector<DelaunayLine> lineVector;
-    for (std::map<int, DelaunayPoint>::iterator it = m_pointMap.begin();
+    std::vector<DLine> lineVector;
+    for (std::map<int, DPoint>::iterator it = m_pointMap.begin();
          it != m_pointMap.end();
          ++it)
     {
         for (int idx: it->second.m_connections)
         {
-            lineVector.push_back( DelaunayLine{it->second, m_pointMap[idx]} );
+            lineVector.push_back( DLine{it->second, m_pointMap[idx]} );
         }
     }
     return lineVector;
 }
 
 
-std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > DelaunayTriangulation::getLinesForDrawingOrGraphing()
+std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > DTriangulation::getLinesForDrawingOrGraphing()
 {
-    std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > lineVector;
+    std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > lineVector;
     for ( auto line: getLines() )
     {
-        lineVector.push_back( std::pair<Eigen::Vector3d, Eigen::Vector3d>
-                              ( Eigen::Vector3d(line.m_x1, line.m_y1, 0),
-                                Eigen::Vector3d(line.m_x2, line.m_y2, 0) ) );
+        lineVector.push_back( std::pair<Eigen::Vector3i, Eigen::Vector3i>
+                              ( Eigen::Vector3i(line.m_x1, line.m_y1, 0),
+                                Eigen::Vector3i(line.m_x2, line.m_y2, 0) ) );
     }
     return lineVector;
 }
 
 
-void calculateCircle(const DelaunayPoint &point, const DelaunayLine &line,
+void calculateCircle(const DPoint &point, const DLine &line,
                                             double &xCenter, double &yCenter, double &radius)
 {
     // From here: http://paulbourke.net/geometry/circlesphere/

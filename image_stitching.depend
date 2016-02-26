@@ -1,9 +1,8 @@
 # depslib dependency file v1.0
-1456436694 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
+1456450189 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/main.cpp
 	"april_analysis.h"
 	"point_sets.h"
 	"random_points.h"
-	"delaunay_line.h"
 
 1453765538 source:/home/eon-alone/projects/sandbox/image_stitching/main.cpp
 	<iostream>
@@ -1065,12 +1064,12 @@
 1455662003 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/simple_stitcher.cpp
 	"simple_stitcher.h"
 
-1456436732 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.h
+1456448970 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.h
 	<set>
 	<vector>
 	"AprilTags/TagDetector.h"
 	<Eigen/Geometry>
-	"delaunay_triangulation.h"
+	"d_triangulation.h"
 	"pair_comparison.h"
 	"plot_tools.h"
 
@@ -1078,7 +1077,7 @@
 	<math.h>
 	<ostream>
 
-1456436622 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.cpp
+1456448945 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/point_sets.cpp
 	"point_sets.h"
 
 1450742570 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/qcustomplot.h
@@ -3755,11 +3754,11 @@
 	<blitz/array.h>
 	<windows.h>
 
-1454192056 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/plot_tools.h
+1456448172 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/plot_tools.h
 	"gnuplot-iostream.h"
 	<Eigen/Geometry>
 
-1454876816 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/plot_tools.cpp
+1456448203 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/plot_tools.cpp
 	"plot_tools.h"
 
 1456436703 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/random_points.h
@@ -3778,7 +3777,7 @@
 1456433923 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/random_points.cpp
 	"random_points.h"
 
-1456433975 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_point.cpp
+1456438713 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_point.cpp
 	"delaunay_point.h"
 
 1456433418 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_point.h
@@ -3809,11 +3808,42 @@
 1456435973 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_line.cpp
 	"delaunay_line.h"
 
-1456435885 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_line.h
+1456438913 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/delaunay_line.h
 	<Eigen/Geometry>
 	<ostream>
-	"delaunay_point.h"
+	"d_point.h"
 	"simple_stitcher.h"
 
 1456367316 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/pair_comparison.h
+
+1456450589 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/d_triangulation.h
+	<algorithm>
+	<iostream>
+	<map>
+	<vector>
+	<Eigen/Geometry>
+	<vector>
+	"d_line.h"
+	"d_point.h"
+	"pair_comparison.h"
+
+1456450525 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/d_triangulation.cpp
+	"d_triangulation.h"
+
+1456439030 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/d_point.h
+	<algorithm>
+	<iostream>
+	<vector>
+
+1456438848 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/d_point.cpp
+	"d_point.h"
+
+1456450534 source:/home/eon-alone/projects/sandbox/image_stitching/image_stitching/d_line.cpp
+	"d_line.h"
+
+1456438993 /home/eon-alone/projects/sandbox/image_stitching/image_stitching/d_line.h
+	<Eigen/Geometry>
+	<ostream>
+	"d_point.h"
+	"simple_stitcher.h"
 

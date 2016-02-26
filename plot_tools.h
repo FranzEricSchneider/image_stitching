@@ -13,7 +13,7 @@ class PlotTools
     public:
         void plotLines(const int numLines, const double xmin, const double xmax,
                        const double ymin, const double ymax,
-                       const std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > &lines);
+                       const std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > &lines);
 };
 
 #endif // PLOT_TOOLS_H_INCLUDED

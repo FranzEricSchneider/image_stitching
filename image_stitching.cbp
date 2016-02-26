@@ -70,12 +70,12 @@
 		</Compiler>
 		<Unit filename="april_analysis.cpp" />
 		<Unit filename="april_analysis.h" />
-		<Unit filename="delaunay_line.cpp" />
-		<Unit filename="delaunay_line.h" />
-		<Unit filename="delaunay_point.cpp" />
-		<Unit filename="delaunay_point.h" />
-		<Unit filename="delaunay_triangulation.cpp" />
-		<Unit filename="delaunay_triangulation.h" />
+		<Unit filename="d_line.cpp" />
+		<Unit filename="d_line.h" />
+		<Unit filename="d_point.cpp" />
+		<Unit filename="d_point.h" />
+		<Unit filename="d_triangulation.cpp" />
+		<Unit filename="d_triangulation.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="pair_comparison.h" />
 		<Unit filename="plot_tools.cpp" />

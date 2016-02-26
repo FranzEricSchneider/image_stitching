@@ -1,15 +1,15 @@
-#ifndef DELAUNAY_LINE_H_INCLUDED
-#define DELAUNAY_LINE_H_INCLUDED
+#ifndef D_LINE_H_INCLUDED
+#define D_LINE_H_INCLUDED
 
 
 #include <Eigen/Geometry>
 #include <ostream>
 
-#include "delaunay_point.h"
+#include "d_point.h"
 #include "simple_stitcher.h"
 
 
-class DelaunayLine
+class DLine
 {
     private:
 
@@ -17,23 +17,23 @@ class DelaunayLine
 // TODO: CONSIDER MAKING IT LEFT AND RIGHT INSTEAD OF 1 AND 2
 // TODO: CONSIDER MAKING SOME STUFF PRIVATE
         int m_idx1{}, m_idx2{};
-        DelaunayPoint m_dp1{}, m_dp2{};
+        DPoint m_dp1{}, m_dp2{};
 
         // Make a line of the form (x2 - x1) / (y2 - y1), with defined x bounds
         int m_x1, m_x2, m_y1, m_y2;
 
-        DelaunayLine& operator= (const DelaunayLine &dlSource);
-        void copySourceLine(const DelaunayLine &dlSource);
+        DLine& operator= (const DLine &dlSource);
+        void copySourceLine(const DLine &dlSource);
 
-        DelaunayLine() { /*Empty constructor*/ }
+        DLine() { /*Empty constructor*/ }
 
-        DelaunayLine(const DelaunayLine &dlSource)
+        DLine(const DLine &dlSource)
         {
             // Copy constructor
             copySourceLine(dlSource);
         }
 
-        DelaunayLine(DelaunayPoint dp1, DelaunayPoint dp2):
+        DLine(DPoint dp1, DPoint dp2):
         m_idx1{dp1.m_idx}, m_idx2{dp2.m_idx}, m_dp1{dp1}, m_dp2{dp2}
         {
             // Deal with the vertical case first, simpler
@@ -57,12 +57,12 @@ class DelaunayLine
             }
         }
 
-        bool doesCrossLine(const DelaunayLine &otherLine);
+        bool doesCrossLine(const DLine &otherLine);
         int getLeftIdx() const;
         int getRightIdx() const;
-        DelaunayPoint getLeftPoint() const;
-        DelaunayPoint getRightPoint() const;
-        friend std::ostream& operator<< (std::ostream &out, DelaunayLine &dl);
+        DPoint getLeftPoint() const;
+        DPoint getRightPoint() const;
+        friend std::ostream& operator<< (std::ostream &out, DLine &dl);
 };
 
 
@@ -70,4 +70,4 @@ bool valueIsBetween(int testValue, int side1, int side2);
 bool onSegment(Eigen::Vector3d testPoint, Eigen::Vector3d side1, Eigen::Vector3d side2);
 
 
-#endif // DELAUNAY_LINE_H_INCLUDED
+#endif // D_LINE_H_INCLUDED

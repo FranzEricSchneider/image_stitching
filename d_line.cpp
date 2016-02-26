@@ -1,14 +1,14 @@
-#include "delaunay_line.h"
+#include "d_line.h"
 
 
-DelaunayLine& DelaunayLine::operator= (const DelaunayLine &dlSource)
+DLine& DLine::operator= (const DLine &dlSource)
 {
     copySourceLine(dlSource);
     return *this;
 }
 
 
-void DelaunayLine::copySourceLine(const DelaunayLine &dlSource)
+void DLine::copySourceLine(const DLine &dlSource)
 {
     m_idx1 = dlSource.m_idx1;
     m_idx2 = dlSource.m_idx2;
@@ -21,16 +21,22 @@ void DelaunayLine::copySourceLine(const DelaunayLine &dlSource)
 }
 
 
-bool DelaunayLine::doesCrossLine(const DelaunayLine &otherLine)
+bool DLine::doesCrossLine(const DLine &otherLine)
 {
     // Calculated as described here: https://www.quora.com/Given-four-Cartesian-coordinates-how-do-I-check-whether-these-two-segments-intersect-or-not-using-C-C++
-    Eigen::Vector3d AB{m_x2 - m_x1, m_y2 - m_y1, 0};
-    Eigen::Vector3d BC{otherLine.m_x1 - m_x2, otherLine.m_y1 - m_y2, 0};
-    Eigen::Vector3d BD{otherLine.m_x2 - m_x2, otherLine.m_y2 - m_y2, 0};
+    Eigen::Vector3d AB{static_cast<double>(m_x2 - m_x1),
+                       static_cast<double>(m_y2 - m_y1), 0};
+    Eigen::Vector3d BC{static_cast<double>(otherLine.m_x1 - m_x2),
+                       static_cast<double>(otherLine.m_y1 - m_y2), 0};
+    Eigen::Vector3d BD{static_cast<double>(otherLine.m_x2 - m_x2),
+                       static_cast<double>(otherLine.m_y2 - m_y2), 0};
 
-    Eigen::Vector3d CD{otherLine.m_x2 - otherLine.m_x1, otherLine.m_y2 - otherLine.m_y1, 0};
-    Eigen::Vector3d DA{m_x1 - otherLine.m_x2, m_y1 - otherLine.m_y2, 0};
-    Eigen::Vector3d DB{m_x2 - otherLine.m_x2, m_y2 - otherLine.m_y2, 0};
+    Eigen::Vector3d CD{static_cast<double>(otherLine.m_x2 - otherLine.m_x1),
+                       static_cast<double>(otherLine.m_y2 - otherLine.m_y1), 0};
+    Eigen::Vector3d DA{static_cast<double>(m_x1 - otherLine.m_x2),
+                       static_cast<double>(m_y1 - otherLine.m_y2), 0};
+    Eigen::Vector3d DB{static_cast<double>(m_x2 - otherLine.m_x2),
+                       static_cast<double>(m_y2 - otherLine.m_y2), 0};
 
     Eigen::Vector3d unitAB = AB / AB.norm();
     Eigen::Vector3d unitBC = BC / BC.norm();
@@ -45,10 +51,10 @@ bool DelaunayLine::doesCrossLine(const DelaunayLine &otherLine)
          (unitCD.cross(unitDA)[2] * unitCD.cross(unitDB)[2] < 0) )
         return true;
 
-    Eigen::Vector3d A{m_x1, m_y1, 0};
-    Eigen::Vector3d B{m_x2, m_y2, 0};
-    Eigen::Vector3d C{otherLine.m_x1, otherLine.m_y1, 0};
-    Eigen::Vector3d D{otherLine.m_x2, otherLine.m_y2, 0};
+    Eigen::Vector3d A{static_cast<double>(m_x1), static_cast<double>(m_y1), 0};
+    Eigen::Vector3d B{static_cast<double>(m_x2), static_cast<double>(m_y2), 0};
+    Eigen::Vector3d C{static_cast<double>(otherLine.m_x1), static_cast<double>(otherLine.m_y1), 0};
+    Eigen::Vector3d D{static_cast<double>(otherLine.m_x2), static_cast<double>(otherLine.m_y2), 0};
 
     if ( onSegment(C, A, B) || onSegment(D, A, B) || onSegment(A, C, D) || onSegment(B, C, D) )
         return true;
@@ -57,7 +63,7 @@ bool DelaunayLine::doesCrossLine(const DelaunayLine &otherLine)
 }
 
 
-int DelaunayLine::getLeftIdx() const
+int DLine::getLeftIdx() const
 {
     if (m_dp1.m_xy.first == m_dp2.m_xy.first)
         return (m_dp1.m_xy.second < m_dp2.m_xy.second)?m_idx1:m_idx2;
@@ -65,28 +71,28 @@ int DelaunayLine::getLeftIdx() const
 }
 
 
-int DelaunayLine::getRightIdx() const
+int DLine::getRightIdx() const
 {
     return (getLeftIdx() == m_idx1)?m_idx2:m_idx1;
 }
 
 
-DelaunayPoint DelaunayLine::getLeftPoint() const
+DPoint DLine::getLeftPoint() const
 {
     return (getLeftIdx() == m_idx1)?m_dp1:m_dp2;
 }
 
 
-DelaunayPoint DelaunayLine::getRightPoint() const
+DPoint DLine::getRightPoint() const
 {
     return (getLeftIdx() == m_idx1)?m_dp2:m_dp1;
 }
 
 
-std::ostream& operator<< (std::ostream &out, DelaunayLine &dl)
+std::ostream& operator<< (std::ostream &out, DLine &dl)
 {
     out << "Line from (" << dl.m_x1   << ", " << dl.m_y1   << ") to " <<
-                     "(" << dl.m_x2   << ", " << dl.m_y2   << "), with DelaunayPoints " <<
+                     "(" << dl.m_x2   << ", " << dl.m_y2   << "), with DPoints " <<
                      "[" << dl.m_idx1 << ", " << dl.m_idx2 << "]";
     return out;
 }

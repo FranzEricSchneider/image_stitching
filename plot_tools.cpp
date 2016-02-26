@@ -3,7 +3,7 @@
 
 void PlotTools::plotLines(const int numLines, const double xmin, const double xmax,
                           const double ymin, const double ymax,
-                          const std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > &lines)
+                          const std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > &lines)
 {
     m_gp << "set xrange [" << xmin << ":" << xmax << "]\n";
     m_gp << "set yrange [" << ymin << ":" << ymax << "]\n";
@@ -18,7 +18,7 @@ void PlotTools::plotLines(const int numLines, const double xmin, const double xm
     m_gp << plotString;
     for (int i{}; i < numLines; ++i)
     {
-        std::vector< std::pair<double, double> > line;
+        std::vector< std::pair<int, int> > line;
         line.push_back(std::make_pair(lines[i].first(0), lines[i].first(1)));
         line.push_back(std::make_pair(lines[i].second(0), lines[i].second(1)));
         m_gp.send1d(line);

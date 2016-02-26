@@ -8,7 +8,7 @@
 #include "AprilTags/TagDetector.h"
 #include <Eigen/Geometry>
 
-#include "delaunay_triangulation.h"
+#include "d_triangulation.h"
 #include "pair_comparison.h"
 #include "plot_tools.h"
 
@@ -16,19 +16,20 @@
 class PointSets
 {
 private:
-    std::vector<Eigen::Vector3d> m_baseSet;
-    std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > m_completeSet;
-    std::vector<int> m_hullIndices;
-    std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > m_convexHull;
+    std::vector<Eigen::Vector3i> m_baseSet;
+    std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > m_completeSet;
+    std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > m_convexHull;
+    DTriangulation m_dt;  // Delaunay triangulation of the points
     std::pair<double, int> m_minPointX; // Contains value and index in baseSet vector
     std::pair<double, int> m_minPointY; // Contains value and index in baseSet vector
-    std::pair<double, int> m_maxPointX; // Contains value and index in baseSet vector
-    std::pair<double, int> m_maxPointY; // Contains value and index in baseSet vector
     cv::Mat m_baseImg;
     std::string m_windowName{"Point Sets Image"};
     PlotTools m_plotTools;
-    void drawSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
-    void graphSet(std::vector< std::pair<Eigen::Vector3d, Eigen::Vector3d> > givenSet);
+
+    void findMinimumsInBaseset();
+    void generateConvexHullIndices(std::vector<int> &hullIndices);
+    void drawSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet);
+    void graphSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet);
 
 public:
 // TODO: MAKE AN EQUALS OPERATOR FOR dt SO THAT IT DOESN'T HAVE TO RUN EVERY TIME
@@ -44,35 +45,30 @@ public:
 
         for (auto point : aprilDetections)
         {
-            m_baseSet.push_back( Eigen::Vector3d{point.cxy.first, point.cxy.second, 0} );
+            m_baseSet.push_back( Eigen::Vector3i{static_cast<int>(point.cxy.first),
+                                                 static_cast<int>(point.cxy.second), 0} );
         }
-        generateMinMax(); // Generates the minmax values from the loaded baseSet
+        findMinimumsInBaseset(); // Generates the minmax values from the loaded baseSet
         cv::namedWindow(m_windowName, cv::WINDOW_NORMAL);
 //        cv::namedWindow(m_windowName, cv::WINDOW_FULLSCREEN);
-
-        DelaunayTriangulation dt{m_baseSet};
-        drawSet(dt.getLinesForDrawingOrGraphing());
-        drawDelaunayCircumcircles(dt);
     }
 
-    void print();
-    void generateMinMax();
     void drawBaseSet();
     void generateCompleteSet();
-    void graphCompleteSet();
     void drawCompleteSet();
-    void generateConvexHullIndices();
+    void graphCompleteSet();
     void generateConvexHull();
     void drawConvexHull();
     void graphConvexHull();
     void generateDelaunay();
-// TODO: MAKE dt A MEMBER VARIABLE SO IT DOESN'T NEED TO BE PASSED
-    void drawDelaunayCircumcircles(DelaunayTriangulation &dt);
-    void showSetImage();
+    void drawDelaunay();
+    void graphDelaunay();
+    void drawDelaunayCircumcircles();
+    void showImage();
 };
 
 
-bool isRightTurn(Eigen::Vector3d a, Eigen::Vector3d b, Eigen::Vector3d c);
+bool isRightTurn(Eigen::Vector3i a, Eigen::Vector3i b, Eigen::Vector3i c);
 
 
 #endif // POINT_SETS_H_INCLUDED
