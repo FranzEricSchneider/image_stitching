@@ -33,7 +33,7 @@ class RandomPoints
 
     public:
         vector<AprilTags::TagDetection> m_randomDetections;
-        cv::Mat1d m_img;
+        cv::Mat m_img;
 
         RandomPoints(): m_inFile(fileName)
         {

@@ -3,9 +3,8 @@
 
 void PointSets::findMinimumsInBaseset()
 {
-    // Sets the minmax value (first) to the first element, and sets the
-    //     corresponding index (second) to 0. Now each value will be compared
-    //     to the first element
+    // .first is the x/y value, which gets selected for the minimum
+    // .second is the m_baseSet index of that minimum point
     m_minPointX.first = m_baseSet[0](0);
     m_minPointY.first = m_baseSet[0](1);
     m_minPointX.second = 0;
@@ -34,6 +33,9 @@ void PointSets::generateConvexHullIndices(std::vector<int> &hullIndices)
 
     int startingPointIndex = m_minPointY.second;
     Eigen::Vector3i startingPoint = m_baseSet[startingPointIndex];
+
+    // Puts all baseSet points into a set and sorts so that the points closest to 0 radians
+    //   from the starting point are first in the set
     std::set< std::pair<double, int>, sortFirstElementDescending > anglesFromStartSet;
     for (int i{}; i < static_cast<int>(m_baseSet.size()); ++i)
     {
@@ -47,14 +49,14 @@ void PointSets::generateConvexHullIndices(std::vector<int> &hullIndices)
         }
     }
 
-    // Initialize the convex hull with the starting point and the point closest to 0 deg from that
+    // Initializes the convex hull with the starting point and the point closest to 0 rad from that
     std::set< std::pair<double, int> >::iterator setIt = anglesFromStartSet.begin();
-    hullIndices = {startingPointIndex, (*setIt).second};  // Defined as a class element
+    hullIndices = {startingPointIndex, (*setIt).second};
     int checkIndex{};  // Check 0,1,2; then 1,2,3; etc.
 
+    // Add each point in the set to hullIndices, then get rid of points that cause right turns
     for (setIt = anglesFromStartSet.begin(); setIt != anglesFromStartSet.end(); /*nothing*/)
     {
-        // Adds the next point to hullIndices
         if (setIt == --anglesFromStartSet.end())
         {
             // Close the loop by re-including the starting point
@@ -62,6 +64,7 @@ void PointSets::generateConvexHullIndices(std::vector<int> &hullIndices)
             ++setIt;
         } else
         {
+            // Adds the next point to hullIndices
             hullIndices.push_back( (*(++setIt)).second );
         }
 
@@ -78,7 +81,8 @@ void PointSets::generateConvexHullIndices(std::vector<int> &hullIndices)
 }
 
 
-void PointSets::drawSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet)
+void PointSets::drawSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet,
+                        int R, int G, int B)
 {
     if (givenSet.empty())
     {
@@ -92,10 +96,11 @@ void PointSets::drawSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i>
             cv::line(m_baseImg,
                      cv::Point2i(line.first(0), maxY - line.first(1)),
                      cv::Point2i(line.second(0), maxY - line.second(1)),
-                     cv::Scalar(125, 125, 125, 0), 2);
+                     cv::Scalar(B, G, R, 0), 2);
         }
     }
 }
+
 
 
 void PointSets::graphSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet)
@@ -141,7 +146,7 @@ void PointSets::generateCompleteSet()
 
 void PointSets::drawCompleteSet()
 {
-    drawSet(m_completeSet);
+    drawSet(m_completeSet, 100, 100, 100);
 }
 
 
@@ -167,7 +172,7 @@ void PointSets::generateConvexHull()
 
 void PointSets::drawConvexHull()
 {
-    drawSet(m_convexHull);
+    drawSet(m_convexHull, 0, 0, 255);
 }
 
 
@@ -185,7 +190,7 @@ void PointSets::generateDelaunay()
 
 void PointSets::drawDelaunay()
 {
-    drawSet(m_dt.getLinesForDrawingOrGraphing());
+    drawSet(m_dt.getLinesForDrawingOrGraphing(), 255, 0, 125);
 }
 
 
@@ -206,9 +211,7 @@ void PointSets::drawDelaunayCircumcircles()
              vecIt != mapIt->second.m_connections.end();
              /*Nothing*/)
         {
-            double x, y, radius;
             int point1 = *vecIt;
-
             ++vecIt;
             if (vecIt == mapIt->second.m_connections.end())
                 break;
@@ -216,10 +219,11 @@ void PointSets::drawDelaunayCircumcircles()
             int point2 = *vecIt;
             if ( m_dt.m_pointMap[point1].isConnected(point2) )
             {
+                double x, y, radius;
                 DLine line{mapIt->second, m_dt.m_pointMap[point2]};
                 calculateCircle(m_dt.m_pointMap[point1], line, x, y, radius);
                 cv::circle(m_baseImg, cv::Point2f(x, maxY - y),
-                           radius, cv::Scalar(255, 255, 255, 0), 2);
+                           radius, cv::Scalar(0, 255, 0, 0), 2);
             }
         }
     }

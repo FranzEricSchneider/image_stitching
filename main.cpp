@@ -10,7 +10,7 @@ int main()
 {
 
 /*
-CURRENTLY REFACTORING IN POINT_SETS.CPP
+CURRENTLY REFACTORING IN POINT_SETS.CPP  (point_sets.cpp, point_sets.h)
 TODO: MAKE A DELAUNAYTRIANGULATION FUNCTION THAT MAKES EDGES BETWEEN POINTS
 MAKE DELAUNAY WORK
 REFACTOR findFirstLine
@@ -25,16 +25,17 @@ CLEAN EVERYTHING AFTER DELAUNAY, MAKE NAMES AWESOME, COMMENT EVERYTHING
 //    RandomPoints random;
     PointSets ps{random.m_randomDetections, random.m_img};
 
-    ps.drawBaseSet();
-//    ps.generateCompleteSet();
-//    ps.drawCompleteSet();
-//    ps.graphCompleteSet();
-    ps.generateConvexHull();
-//    ps.drawConvexHull();
-    ps.graphConvexHull();
+    ps.generateCompleteSet();
+    ps.drawCompleteSet();
     ps.generateDelaunay();
+    ps.drawDelaunayCircumcircles();
     ps.drawDelaunay();
 //    ps.graphDelaunay();
+//    ps.graphCompleteSet();
+    ps.generateConvexHull();
+    ps.drawConvexHull();
+//    ps.graphConvexHull();
+    ps.drawBaseSet();
     ps.showImage();
     return 0;
 }

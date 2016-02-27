@@ -28,7 +28,8 @@ private:
 
     void findMinimumsInBaseset();
     void generateConvexHullIndices(std::vector<int> &hullIndices);
-    void drawSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet);
+    void drawSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet,
+                 int R = 255, int G = 255, int B = 255);
     void graphSet(std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > givenSet);
 
 public:
