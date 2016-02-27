@@ -21,14 +21,14 @@ int DTriangulation::pointWithLowestY()
 {
     std::map<int, DPoint>::iterator it = m_pointMap.begin();
     int idx{it->first};
-    int lowestYVal{it->second.m_xy.second};
+    int lowestYVal{it->second.m_y};
 
     for (it = m_pointMap.begin(); it!=m_pointMap.end(); ++it)
     {
-        if ( it->second.m_xy.second < lowestYVal )
+        if ( it->second.m_y < lowestYVal )
         {
             idx = it->first;
-            lowestYVal = it->second.m_xy.second;
+            lowestYVal = it->second.m_y;
         }
     }
 
@@ -40,14 +40,14 @@ int DTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx)
 {
     std::map<int, DPoint>::iterator it = m_pointMap.begin();
     int idxToReturn{givenIdx};
-    int lowestYVal{m_pointMap[givenIdx].m_xy.second};
+    int lowestYVal{m_pointMap[givenIdx].m_y};
 
     for (it = m_pointMap.begin(); it!=m_pointMap.end(); ++it)
     {
         int idxVal = it->first;
-        int yVal = it->second.m_xy.second;
-        if ( (idxVal != givenIdx && idxToReturn == givenIdx && yVal >= m_pointMap[givenIdx].m_xy.second) ||
-             (idxVal != givenIdx && yVal < lowestYVal       && yVal >= m_pointMap[givenIdx].m_xy.second) )
+        int yVal = it->second.m_y;
+        if ( (idxVal != givenIdx && idxToReturn == givenIdx && yVal >= m_pointMap[givenIdx].m_y) ||
+             (idxVal != givenIdx && yVal < lowestYVal       && yVal >= m_pointMap[givenIdx].m_y) )
         {
             idxToReturn = idxVal;
             lowestYVal = yVal;
@@ -110,8 +110,8 @@ void DTriangulation::mergeGroups(DTriangulation leftSide,
     copyConnectionsToThisMap(leftSide);
     copyConnectionsToThisMap(rightSide);
     DLine firstLine = findFirstLine(leftSide, rightSide);
-    m_pointMap[firstLine.m_idx1].createEdge(firstLine.m_idx2);
-    m_pointMap[firstLine.m_idx2].createEdge(firstLine.m_idx1);
+    m_pointMap[firstLine.getLeftIdx()]. createEdge(firstLine.getRightIdx());
+    m_pointMap[firstLine.getRightIdx()].createEdge(firstLine.getLeftIdx());
 
     bool hasLeftCandidate{true};
     bool hasRightCandidate{true};
@@ -180,8 +180,8 @@ DLine DTriangulation::findFirstLine(DTriangulation &leftSide,
         else
         {
             int originalValue;
-            if ( leftSide.m_pointMap[leftPoint].m_xy.second <
-                 rightSide.m_pointMap[rightPoint].m_xy.second )
+            if ( leftSide.m_pointMap[leftPoint].m_y <
+                 rightSide.m_pointMap[rightPoint].m_y )
             {
                 originalValue = leftPoint;
                 leftPoint = leftSide.pointWithLowestYAboveGivenIdx(leftPoint);
@@ -198,8 +198,8 @@ DLine DTriangulation::findFirstLine(DTriangulation &leftSide,
             }
         }
 
-        bool leftSideLower = leftSide.m_pointMap[leftPoint].m_xy.second <
-                             rightSide.m_pointMap[rightPoint].m_xy.second;
+        bool leftSideLower = leftSide.m_pointMap[leftPoint].m_y <
+                             rightSide.m_pointMap[rightPoint].m_y;
         if (leftSideLower)
             firstLine = getBaseEdge(leftSide.m_pointMap[leftPoint], rightSide, leftSideLower);
         else
@@ -232,8 +232,8 @@ DLine DTriangulation::getBaseEdge(const DPoint &point,
     std::map<int, DPoint>::iterator mapIt = dt.m_pointMap.begin();
     for (mapIt = dt.m_pointMap.begin(); mapIt!=dt.m_pointMap.end(); ++mapIt)
     {
-        Eigen::Vector2d vec{mapIt->second.m_xy.first - point.m_xy.first,
-                            mapIt->second.m_xy.second - point.m_xy.second};
+        Eigen::Vector2d vec{mapIt->second.m_x - point.m_x,
+                            mapIt->second.m_y - point.m_y};
         vec.normalize();
 
         // If point is on the right side, flip the x values so that largest X will
@@ -293,12 +293,12 @@ void DTriangulation::populateLeftCandidateSet(const DLine &line,
                                                      DTriangulation &dt,
                                                      std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
 {
-    Eigen::Vector2i baseVector{line.getRightPoint().m_xy.first  - line.getLeftPoint().m_xy.first,
-                               line.getRightPoint().m_xy.second - line.getLeftPoint().m_xy.second};
+    Eigen::Vector2i baseVector{line.getRightPoint().m_x  - line.getLeftPoint().m_x,
+                               line.getRightPoint().m_y - line.getLeftPoint().m_y};
     for (int connectionIdx: dt.m_pointMap[line.getLeftIdx()].m_connections)
     {
-        Eigen::Vector2i compareVector{dt.m_pointMap[connectionIdx].m_xy.first  - line.getLeftPoint().m_xy.first,
-                                      dt.m_pointMap[connectionIdx].m_xy.second - line.getLeftPoint().m_xy.second};
+        Eigen::Vector2i compareVector{dt.m_pointMap[connectionIdx].m_x  - line.getLeftPoint().m_x,
+                                      dt.m_pointMap[connectionIdx].m_y - line.getLeftPoint().m_y};
         double angle = getCCWAngle(baseVector, compareVector);
         anglesFromLineSet.insert( std::pair<double, int>(angle, connectionIdx) );
     }
@@ -309,12 +309,12 @@ void DTriangulation::populateRightCandidateSet(const DLine &line,
                                                       DTriangulation &dt,
                                                       std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
 {
-    Eigen::Vector2i baseVector{line.getLeftPoint().m_xy.first  - line.getRightPoint().m_xy.first,
-                               line.getLeftPoint().m_xy.second - line.getRightPoint().m_xy.second};
+    Eigen::Vector2i baseVector{line.getLeftPoint().m_x  - line.getRightPoint().m_x,
+                               line.getLeftPoint().m_y - line.getRightPoint().m_y};
     for (int connectionIdx: dt.m_pointMap[line.getRightIdx()].m_connections)
     {
-        Eigen::Vector2i compareVector{dt.m_pointMap[connectionIdx].m_xy.first  - line.getRightPoint().m_xy.first,
-                                      dt.m_pointMap[connectionIdx].m_xy.second - line.getRightPoint().m_xy.second};
+        Eigen::Vector2i compareVector{dt.m_pointMap[connectionIdx].m_x  - line.getRightPoint().m_x,
+                                      dt.m_pointMap[connectionIdx].m_y - line.getRightPoint().m_y};
         double angle = getCWAngle(baseVector, compareVector);
         anglesFromLineSet.insert( std::pair<double, int>(angle, connectionIdx) );
     }
@@ -327,8 +327,8 @@ bool DTriangulation::circleContainsPoint(const DPoint &edgePoint,
 {
     double xCenter, yCenter, radius;
     calculateCircle(edgePoint, edgeLine, xCenter, yCenter, radius);
-    double distToInnerPoint = sqrt( pow(xCenter - innerPoint.m_xy.first,  2) +
-                                    pow(yCenter - innerPoint.m_xy.second, 2) );
+    double distToInnerPoint = sqrt( pow(xCenter - innerPoint.m_x,  2) +
+                                    pow(yCenter - innerPoint.m_y, 2) );
     return distToInnerPoint <= radius;
 }
 
@@ -370,6 +370,10 @@ std::vector<DLine> DTriangulation::getLines()
             lineVector.push_back( DLine{it->second, m_pointMap[idx]} );
         }
     }
+    for (auto line: lineVector)
+    {
+        std::cout << line << "\n";
+    }
     return lineVector;
 }
 
@@ -380,24 +384,24 @@ std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > DTriangulation::getLi
     for ( auto line: getLines() )
     {
         lineVector.push_back( std::pair<Eigen::Vector3i, Eigen::Vector3i>
-                              ( Eigen::Vector3i(line.m_x1, line.m_y1, 0),
-                                Eigen::Vector3i(line.m_x2, line.m_y2, 0) ) );
+                              ( Eigen::Vector3i(line.m_xL, line.m_yL, 0),
+                                Eigen::Vector3i(line.m_xR, line.m_yR, 0) ) );
     }
     return lineVector;
 }
 
 
 void calculateCircle(const DPoint &point, const DLine &line,
-                                            double &xCenter, double &yCenter, double &radius)
+                     double &xCenter, double &yCenter, double &radius)
 {
     // From here: http://paulbourke.net/geometry/circlesphere/
     //   variable names also taken from this paper
-    double x1 = line.getLeftPoint().m_xy.first;
-    double y1 = line.getLeftPoint().m_xy.second;
-    double x2 = point.m_xy.first;
-    double y2 = point.m_xy.second;
-    double x3 = line.getRightPoint().m_xy.first;
-    double y3 = line.getRightPoint().m_xy.second;
+    double x1 = line.getLeftPoint().m_x;
+    double y1 = line.getLeftPoint().m_y;
+    double x2 = point.m_x;
+    double y2 = point.m_y;
+    double x3 = line.getRightPoint().m_x;
+    double y3 = line.getRightPoint().m_y;
     if (x1 == x2)
     {
         std::swap(x2, x3);

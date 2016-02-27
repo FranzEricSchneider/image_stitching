@@ -11,8 +11,8 @@ class PlotTools
         Gnuplot m_gp;
 
     public:
-        void plotLines(const int numLines, const double xmin, const double xmax,
-                       const double ymin, const double ymax,
+        void plotLines(const int numLines, const double xMin, const double xMax,
+                       const double yMin, const double yMax,
                        const std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > &lines);
 };
 

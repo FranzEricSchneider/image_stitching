@@ -12,15 +12,15 @@
 class DLine
 {
     private:
+        int m_idxL{}, m_idxR{};
+        DPoint m_dpL{}, m_dpR{};
 
     public:
 // TODO: CONSIDER MAKING IT LEFT AND RIGHT INSTEAD OF 1 AND 2
 // TODO: CONSIDER MAKING SOME STUFF PRIVATE
-        int m_idx1{}, m_idx2{};
-        DPoint m_dp1{}, m_dp2{};
 
-        // Make a line of the form (x2 - x1) / (y2 - y1), with defined x bounds
-        int m_x1, m_x2, m_y1, m_y2;
+        // Makes a line of the form (xR - xL) / (yR - yL)
+        int m_xL, m_xR, m_yL, m_yR;
 
         DLine& operator= (const DLine &dlSource);
         void copySourceLine(const DLine &dlSource);
@@ -33,31 +33,24 @@ class DLine
             copySourceLine(dlSource);
         }
 
-        DLine(DPoint dp1, DPoint dp2):
-        m_idx1{dp1.m_idx}, m_idx2{dp2.m_idx}, m_dp1{dp1}, m_dp2{dp2}
+        DLine(DPoint dp1, DPoint dp2)
         {
-            // Deal with the vertical case first, simpler
-            if (dp1.m_xy.first == dp2.m_xy.first)
+            if ( (dp1.m_x == dp2.m_x && dp1.m_y < dp2.m_y) || (dp1.m_x < dp2.m_x) )
             {
-                m_x1 = m_x2 = dp1.m_xy.first;
-                m_y1 = (dp1.m_xy.second < dp2.m_xy.second)?dp1.m_xy.second:dp2.m_xy.second;
-                m_y2 = (dp1.m_xy.second > dp2.m_xy.second)?dp1.m_xy.second:dp2.m_xy.second;
-            }
-            else
+                m_xL   = dp1.m_x;   m_xR   = dp2.m_x;
+                m_yL   = dp1.m_y;   m_yR   = dp2.m_y;
+                m_idxL = dp1.m_idx; m_idxR = dp2.m_idx;
+                m_dpL  = dp1;       m_dpR  = dp2;
+            } else
             {
-                if (dp1.m_xy.first < dp2.m_xy.first)
-                {
-                    m_x1 = dp1.m_xy.first;  m_y1 = dp1.m_xy.second;
-                    m_x2 = dp2.m_xy.first;  m_y2 = dp2.m_xy.second;
-                } else
-                {
-                    m_x2 = dp1.m_xy.first;  m_y2 = dp1.m_xy.second;
-                    m_x1 = dp2.m_xy.first;  m_y1 = dp2.m_xy.second;
-                }
+                m_xL   = dp2.m_x;   m_xR   = dp1.m_x;
+                m_yL   = dp2.m_y;   m_yR   = dp1.m_y;
+                m_idxL = dp2.m_idx; m_idxR = dp1.m_idx;
+                m_dpL  = dp2;       m_dpR  = dp1;
             }
         }
 
-        bool doesCrossLine(const DLine &otherLine);
+        bool doesCrossLine(const DLine &otherLine) const;
         int getLeftIdx() const;
         int getRightIdx() const;
         DPoint getLeftPoint() const;

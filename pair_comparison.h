@@ -3,6 +3,8 @@
 
 
 // Taken from here: http://www.cplusplus.com/reference/set/set/set/
+
+
 struct sortFirstElementAscending
 {
     bool operator() (std::pair<double, int> lhs, std::pair<double, int> rhs) const

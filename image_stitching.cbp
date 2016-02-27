@@ -86,7 +86,6 @@
 		<Unit filename="random_points.h" />
 		<Unit filename="simple_stitcher.cpp" />
 		<Unit filename="simple_stitcher.h" />
-		<Unit filename="vector2d.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

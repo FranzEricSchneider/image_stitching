@@ -1,7 +1,7 @@
 #include "random_points.h"
 
 
-void RandomPoints::generateRandomImage(int maxSize, int minSize)
+void RandomPoints::generateRandomImage(const int maxSize, const int minSize)
 {
     m_maxX = randomNumber(maxSize, minSize);
     m_maxY = randomNumber(maxSize, minSize);
@@ -9,15 +9,14 @@ void RandomPoints::generateRandomImage(int maxSize, int minSize)
 }
 
 
-void RandomPoints::generateBlankImage(int x, int y)
+void RandomPoints::generateBlankImage(const int maxX, const int maxY)
 {
-    // TODO: MAKE THIS GENERATE A COLOR IMAGE
     // From here: http://docs.opencv.org/2.4/doc/tutorials/core/mat_the_basic_image_container/mat_the_basic_image_container.html
-    m_img = cv::Mat(y, x, CV_8UC4, cv::Scalar(0, 0, 0, 255));
+    m_img = cv::Mat(maxY, maxX, CV_8UC4, cv::Scalar(0, 0, 0, 255));
 }
 
 
-void RandomPoints::generateRandomDetections(int number)
+void RandomPoints::generateRandomDetections(const int number)
 {
     for (int i{}; i < number; ++i)
     {
@@ -28,7 +27,7 @@ void RandomPoints::generateRandomDetections(int number)
 }
 
 
-void RandomPoints::generateDetection(int x, int y)
+void RandomPoints::generateDetection(const int x, const int y)
 {
     AprilTags::TagDetection detection{};
     detection.cxy.first = x;
@@ -64,7 +63,7 @@ void RandomPoints::pullRandomDetectionsFromFile()
 }
 
 
-int RandomPoints::randomNumber(int vMax, int vMin)
+int RandomPoints::randomNumber(const int vMax, const int vMin)
 {
     uint32_t maxVal{-1};
     static const double fraction = 1.0 / static_cast<double>(maxVal);

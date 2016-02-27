@@ -191,6 +191,7 @@ void PointSets::generateDelaunay()
 void PointSets::drawDelaunay()
 {
     drawSet(m_dt.getLinesForDrawingOrGraphing(), 255, 0, 125);
+
 }
 
 
@@ -233,8 +234,15 @@ void PointSets::drawDelaunayCircumcircles()
 void PointSets::showImage()
 {
     cv::imshow(m_windowName, m_baseImg);
-// TODO: MAKE IT ONLY DISAPPEAR ON ESC OR ENTER
-    while (cv::waitKey(100) == -1) {}
+
+    bool continueViewing{true};
+    while (continueViewing)
+    {
+        // Waits for ESC or Enter
+        int hitKey = cv::waitKey(100);
+        if (hitKey == 10 || hitKey == 27)
+            continueViewing = false;
+    }
 }
 
 

@@ -18,18 +18,19 @@ class RandomPoints
         int m_numberOfPoints;
         const int m_minX{}, m_minY{};  // set to 0
         int m_maxX, m_maxY;  // set randomly in generateRandomImage
-        void generateRandomImage(int maxSize = 2000, int minSize = 1800);
-        void generateBlankImage(int x, int y);
-        void generateRandomDetections(int number);
-        void generateDetection(int x, int y);
-        void writeRandomDetectionsToFile();
-        void pullRandomDetectionsFromFile();
-        int randomNumber(int vMax = 1000, int vMin = 0);
         std::random_device m_rd;
         std::mt19937 m_mersenne;
         const std::string fileName{"RandomPointsOutput.csv"};
         std::ofstream m_outFile;
         std::ifstream m_inFile;
+
+        void generateRandomImage(const int maxSize = 2000, const int minSize = 1800);
+        void generateBlankImage(const int maxX, const int maxY);
+        void generateRandomDetections(const int number);
+        void generateDetection(const int x, const int y);
+        void writeRandomDetectionsToFile();
+        void pullRandomDetectionsFromFile();
+        int randomNumber(const int vMax, const int vMin = 0);
 
     public:
         vector<AprilTags::TagDetection> m_randomDetections;

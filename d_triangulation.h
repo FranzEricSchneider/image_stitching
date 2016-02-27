@@ -40,6 +40,7 @@ class DTriangulation
         bool circleContainsPoint(const DPoint &edgePoint, const DLine &edgeLine, const DPoint &innerPoint);
         double getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison);
         double getCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison);
+        std::vector<DLine> getLines();
 
     public:
         std::map<int, DPoint> m_pointMap;
@@ -69,7 +70,6 @@ class DTriangulation
 
         int pointWithLowestY();
         int pointWithLowestYAboveGivenIdx(int idx);
-        std::vector<DLine> getLines();
         std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > getLinesForDrawingOrGraphing();
 };
 

@@ -10,33 +10,34 @@ DLine& DLine::operator= (const DLine &dlSource)
 
 void DLine::copySourceLine(const DLine &dlSource)
 {
-    m_idx1 = dlSource.m_idx1;
-    m_idx2 = dlSource.m_idx2;
-    m_dp1 = dlSource.m_dp1;
-    m_dp2 = dlSource.m_dp2;
-    m_x1 = dlSource.m_x1;
-    m_x2 = dlSource.m_x2;
-    m_y1 = dlSource.m_y1;
-    m_y2 = dlSource.m_y2;
+    m_idxL = dlSource.m_idxL;
+    m_idxR = dlSource.m_idxR;
+    m_dpL  = dlSource.m_dpL;
+    m_dpR  = dlSource.m_dpR;
+    m_xL   = dlSource.m_xL;
+    m_xR   = dlSource.m_xR;
+    m_xL   = dlSource.m_xL;
+    m_yR   = dlSource.m_yR;
 }
 
 
-bool DLine::doesCrossLine(const DLine &otherLine)
+bool DLine::doesCrossLine(const DLine &otherLine) const
 {
-    // Calculated as described here: https://www.quora.com/Given-four-Cartesian-coordinates-how-do-I-check-whether-these-two-segments-intersect-or-not-using-C-C++
-    Eigen::Vector3d AB{static_cast<double>(m_x2 - m_x1),
-                       static_cast<double>(m_y2 - m_y1), 0};
-    Eigen::Vector3d BC{static_cast<double>(otherLine.m_x1 - m_x2),
-                       static_cast<double>(otherLine.m_y1 - m_y2), 0};
-    Eigen::Vector3d BD{static_cast<double>(otherLine.m_x2 - m_x2),
-                       static_cast<double>(otherLine.m_y2 - m_y2), 0};
+    // Calculated as described here, uses same variable names
+    //   https://www.quora.com/Given-four-Cartesian-coordinates-how-do-I-check-whether-these-two-segments-intersect-or-not-using-C-C++
+    Eigen::Vector3d AB{static_cast<double>(m_xR - m_xL),
+                       static_cast<double>(m_yR - m_yL), 0};
+    Eigen::Vector3d BC{static_cast<double>(otherLine.m_xL - m_xR),
+                       static_cast<double>(otherLine.m_yL - m_yR), 0};
+    Eigen::Vector3d BD{static_cast<double>(otherLine.m_xR - m_xR),
+                       static_cast<double>(otherLine.m_yR - m_yR), 0};
 
-    Eigen::Vector3d CD{static_cast<double>(otherLine.m_x2 - otherLine.m_x1),
-                       static_cast<double>(otherLine.m_y2 - otherLine.m_y1), 0};
-    Eigen::Vector3d DA{static_cast<double>(m_x1 - otherLine.m_x2),
-                       static_cast<double>(m_y1 - otherLine.m_y2), 0};
-    Eigen::Vector3d DB{static_cast<double>(m_x2 - otherLine.m_x2),
-                       static_cast<double>(m_y2 - otherLine.m_y2), 0};
+    Eigen::Vector3d CD{static_cast<double>(otherLine.m_xR - otherLine.m_xL),
+                       static_cast<double>(otherLine.m_yR - otherLine.m_yL), 0};
+    Eigen::Vector3d DA{static_cast<double>(m_xL - otherLine.m_xR),
+                       static_cast<double>(m_yL - otherLine.m_yR), 0};
+    Eigen::Vector3d DB{static_cast<double>(m_xR - otherLine.m_xR),
+                       static_cast<double>(m_yR - otherLine.m_yR), 0};
 
     Eigen::Vector3d unitAB = AB / AB.norm();
     Eigen::Vector3d unitBC = BC / BC.norm();
@@ -51,10 +52,10 @@ bool DLine::doesCrossLine(const DLine &otherLine)
          (unitCD.cross(unitDA)[2] * unitCD.cross(unitDB)[2] < 0) )
         return true;
 
-    Eigen::Vector3d A{static_cast<double>(m_x1), static_cast<double>(m_y1), 0};
-    Eigen::Vector3d B{static_cast<double>(m_x2), static_cast<double>(m_y2), 0};
-    Eigen::Vector3d C{static_cast<double>(otherLine.m_x1), static_cast<double>(otherLine.m_y1), 0};
-    Eigen::Vector3d D{static_cast<double>(otherLine.m_x2), static_cast<double>(otherLine.m_y2), 0};
+    Eigen::Vector3d A{static_cast<double>(m_xL), static_cast<double>(m_yL), 0};
+    Eigen::Vector3d B{static_cast<double>(m_xR), static_cast<double>(m_yR), 0};
+    Eigen::Vector3d C{static_cast<double>(otherLine.m_xL), static_cast<double>(otherLine.m_yL), 0};
+    Eigen::Vector3d D{static_cast<double>(otherLine.m_xR), static_cast<double>(otherLine.m_yR), 0};
 
     if ( onSegment(C, A, B) || onSegment(D, A, B) || onSegment(A, C, D) || onSegment(B, C, D) )
         return true;
@@ -63,37 +64,23 @@ bool DLine::doesCrossLine(const DLine &otherLine)
 }
 
 
-int DLine::getLeftIdx() const
-{
-    if (m_dp1.m_xy.first == m_dp2.m_xy.first)
-        return (m_dp1.m_xy.second < m_dp2.m_xy.second)?m_idx1:m_idx2;
-    return (m_dp1.m_xy.first < m_dp2.m_xy.first)?m_idx1:m_idx2;
-}
+int DLine::getLeftIdx() const { return m_idxL; }
 
 
-int DLine::getRightIdx() const
-{
-    return (getLeftIdx() == m_idx1)?m_idx2:m_idx1;
-}
+int DLine::getRightIdx() const { return m_idxR; }
 
 
-DPoint DLine::getLeftPoint() const
-{
-    return (getLeftIdx() == m_idx1)?m_dp1:m_dp2;
-}
+DPoint DLine::getLeftPoint() const { return m_dpL; }
 
 
-DPoint DLine::getRightPoint() const
-{
-    return (getLeftIdx() == m_idx1)?m_dp2:m_dp1;
-}
+DPoint DLine::getRightPoint() const { return m_dpR; }
 
 
 std::ostream& operator<< (std::ostream &out, DLine &dl)
 {
-    out << "Line from (" << dl.m_x1   << ", " << dl.m_y1   << ") to " <<
-                     "(" << dl.m_x2   << ", " << dl.m_y2   << "), with DPoints " <<
-                     "[" << dl.m_idx1 << ", " << dl.m_idx2 << "]";
+    out << "Line from (" << dl.m_xL   << ", " << dl.m_xL   << ") to " <<
+                     "(" << dl.m_xR   << ", " << dl.m_yR   << "), with DPoints " <<
+                     "[" << dl.m_idxL << ", " << dl.m_idxR << "]";
     return out;
 }
 
@@ -109,9 +96,9 @@ bool valueIsBetween(int testValue, int side1, int side2)
 
 bool onSegment(Eigen::Vector3d testPoint, Eigen::Vector3d side1, Eigen::Vector3d side2)
 {
-    double lengthThroughTestPoint = (testPoint - side1).norm() +
-                                    (side2 - testPoint).norm();
     double segmentLength = (side2 - side1).norm();
+    double segmentLengthWithTestPoint = (testPoint - side1).norm() +
+                                    (side2 - testPoint).norm();
 
     // Doesn't count sharing an endpoint as being "on the segment"
     if ( almostEqual( (testPoint - side1).norm(), 0.0 ) ||
@@ -120,5 +107,5 @@ bool onSegment(Eigen::Vector3d testPoint, Eigen::Vector3d side1, Eigen::Vector3d
         return false;
     }
 
-    return ( almostEqual(lengthThroughTestPoint, segmentLength) );
+    return ( almostEqual(segmentLength, segmentLengthWithTestPoint) );
 }

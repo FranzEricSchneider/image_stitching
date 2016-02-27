@@ -12,15 +12,15 @@ class SimpleStitcher
 {
     cv::Stitcher stitcher;
     std::vector<cv::Mat> imgs;
-    cv::Mat pano;
+    cv::Mat panorama;
     std::string prefix{"imgs/"};
     int startNum;
     int stopNum;
     std::string suffix{".jpg"};
-    std::string panoName;
+    std::string panoramaName;
     double imageScalar;
 
-    int loadImages();
+    void loadImages();
 
 public:
     SimpleStitcher()
@@ -29,7 +29,7 @@ public:
         loadImages();
     }
 
-    int stitchImagesAndOutput();
+    void stitchImagesAndOutput();
 };
 
 bool almostEqual(double n1, double n2);

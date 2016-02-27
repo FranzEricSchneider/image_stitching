@@ -1,36 +1,22 @@
 #include "simple_stitcher.h"
 
 
-int SimpleStitcher::stitchImagesAndOutput()
-{
-    cv::Stitcher::Status status = stitcher.stitch(imgs, pano);
-    if (status != cv::Stitcher::OK)
-    {
-        std::cout << "Can't stitch images, error code = " << status << std::endl;
-        return -1;
-    }
-    cv::imwrite(panoName, pano);
-    std::cout << "Finished writing image!\n" << std::endl;
-    return 0;
-}
-
-
-int SimpleStitcher::loadImages()
+void SimpleStitcher::loadImages()
 {
     std::cout << "What is the prefix for the images? (imgs/'string'1.jpg): ";
     std::string addPrefix;
     std::getline(std::cin, addPrefix);
     prefix += addPrefix;
-    std::cout << "What image number should the pano START with? (imgs/a'int'.jpg): ";
+    std::cout << "What image number should the panorama START with? (imgs/a'int'.jpg): ";
     std::cin >> startNum;
-    std::cout << "What image number should the pano END with? (imgs/a'int'.jpg): ";
+    std::cout << "What image number should the panorama END with? (imgs/a'int'.jpg): ";
     std::cin >> stopNum;
     std::cout << "What should the images be scaled with? (double): ";
     std::cin >> imageScalar;
     std::cin.ignore(32767, '\n');
-    std::cout << "What should the output pano be called? ('string'.jpg): ";
-    std::getline(std::cin, panoName);
-    panoName += ".jpg";
+    std::cout << "What should the output panorama be called? ('string'.jpg): ";
+    std::getline(std::cin, panoramaName);
+    panoramaName += ".jpg";
 
     for (int i = startNum; i <= stopNum; ++i)
     {
@@ -39,7 +25,7 @@ int SimpleStitcher::loadImages()
         if (img.empty())
         {
             std::cout << "Can't read image '" << name << "'\n";
-            return -1;
+            return;
         }
         std::cout << "Got image '" << name << "'\n";
         if (almostEqual(imageScalar, 1.0))
@@ -56,7 +42,19 @@ int SimpleStitcher::loadImages()
             imgs.push_back(resizedImg);
         }
     }
-    return 0;
+}
+
+
+void SimpleStitcher::stitchImagesAndOutput()
+{
+    cv::Stitcher::Status status = stitcher.stitch(imgs, panorama);
+    if (status != cv::Stitcher::OK)
+    {
+        std::cout << "Can't stitch images, error code = " << status << std::endl;
+        return;
+    }
+    cv::imwrite(panoramaName, panorama);
+    std::cout << "Finished writing image!\n" << std::endl;
 }
 
 

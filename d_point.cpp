@@ -45,7 +45,8 @@ DPoint& DPoint::operator= (const DPoint &dpSource)
         return *this;
 
     m_idx = dpSource.m_idx;
-    m_xy = dpSource.m_xy;
+    m_x = dpSource.m_x;
+    m_y = dpSource.m_y;
     m_connections = dpSource.m_connections;
     return *this;
 }
@@ -54,7 +55,7 @@ DPoint& DPoint::operator= (const DPoint &dpSource)
 std::ostream& operator<< (std::ostream &out, DPoint &dp)
 {
     out << "DPoint [" << dp.m_idx << "], at " <<
-           "(" << dp.m_xy.first << ", " << dp.m_xy.second   << "), connected to DPoints [";
+           "(" << dp.m_x << ", " << dp.m_y   << "), connected to DPoints [";
     for (int i{}; i < static_cast<int>(dp.m_connections.size()); ++i)
     {
         std::cout << dp.m_connections[i];
