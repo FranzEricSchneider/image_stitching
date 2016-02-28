@@ -16,7 +16,7 @@ void DLine::copySourceLine(const DLine &dlSource)
     m_dpR  = dlSource.m_dpR;
     m_xL   = dlSource.m_xL;
     m_xR   = dlSource.m_xR;
-    m_xL   = dlSource.m_xL;
+    m_yL   = dlSource.m_yL;
     m_yR   = dlSource.m_yR;
 }
 
@@ -78,7 +78,7 @@ DPoint DLine::getRightPoint() const { return m_dpR; }
 
 std::ostream& operator<< (std::ostream &out, DLine &dl)
 {
-    out << "Line from (" << dl.m_xL   << ", " << dl.m_xL   << ") to " <<
+    out << "Line from (" << dl.m_xL   << ", " << dl.m_yL   << ") to " <<
                      "(" << dl.m_xR   << ", " << dl.m_yR   << "), with DPoints " <<
                      "[" << dl.m_idxL << ", " << dl.m_idxR << "]";
     return out;

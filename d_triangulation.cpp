@@ -370,10 +370,6 @@ std::vector<DLine> DTriangulation::getLines()
             lineVector.push_back( DLine{it->second, m_pointMap[idx]} );
         }
     }
-    for (auto line: lineVector)
-    {
-        std::cout << line << "\n";
-    }
     return lineVector;
 }
 
