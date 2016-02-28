@@ -52,10 +52,10 @@ bool DLine::doesCrossLine(const DLine &otherLine) const
          (unitCD.cross(unitDA)[2] * unitCD.cross(unitDB)[2] < 0) )
         return true;
 
-    Eigen::Vector3d A{static_cast<double>(m_xL), static_cast<double>(m_yL), 0};
-    Eigen::Vector3d B{static_cast<double>(m_xR), static_cast<double>(m_yR), 0};
-    Eigen::Vector3d C{static_cast<double>(otherLine.m_xL), static_cast<double>(otherLine.m_yL), 0};
-    Eigen::Vector3d D{static_cast<double>(otherLine.m_xR), static_cast<double>(otherLine.m_yR), 0};
+    Eigen::Vector2d A{static_cast<double>(m_xL),           static_cast<double>(m_yL)};
+    Eigen::Vector2d B{static_cast<double>(m_xR),           static_cast<double>(m_yR)};
+    Eigen::Vector2d C{static_cast<double>(otherLine.m_xL), static_cast<double>(otherLine.m_yL)};
+    Eigen::Vector2d D{static_cast<double>(otherLine.m_xR), static_cast<double>(otherLine.m_yR)};
 
     if ( onSegment(C, A, B) || onSegment(D, A, B) || onSegment(A, C, D) || onSegment(B, C, D) )
         return true;
@@ -94,11 +94,11 @@ bool valueIsBetween(int testValue, int side1, int side2)
 }
 
 
-bool onSegment(Eigen::Vector3d testPoint, Eigen::Vector3d side1, Eigen::Vector3d side2)
+bool onSegment(Eigen::Vector2d testPoint, Eigen::Vector2d side1, Eigen::Vector2d side2)
 {
     double segmentLength = (side2 - side1).norm();
     double segmentLengthWithTestPoint = (testPoint - side1).norm() +
-                                    (side2 - testPoint).norm();
+                                        (side2 - testPoint).norm();
 
     // Doesn't count sharing an endpoint as being "on the segment"
     if ( almostEqual( (testPoint - side1).norm(), 0.0 ) ||

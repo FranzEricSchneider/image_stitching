@@ -12,7 +12,7 @@ int main()
 /*
 CURRENTLY REFACTORING
     (point_sets, random_points, simple_stitcher, plot_tools, pair_comparison,
-     d_point, )
+     d_point, d_line)
 TODO: MAKE A DELAUNAYTRIANGULATION FUNCTION THAT MAKES EDGES BETWEEN POINTS
 MAKE DELAUNAY WORK
 REFACTOR findFirstLine

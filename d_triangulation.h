@@ -3,24 +3,22 @@
 
 
 #include <algorithm>
+#include <Eigen/Geometry>
 #include <iostream>
 #include <map>
 #include <vector>
 
-#include <Eigen/Geometry>
-#include <vector>
 
 #include "d_line.h"
 #include "d_point.h"
 #include "pair_comparison.h"
 
 
-// TODO: FIND THE RIGHT WAY TO DEFINE PI. Eigen? std?
 #define PI 3.141596
 
 
 // Sorts the vector so the leftmost point is first in the set
-bool vector3iComparison(Eigen::Vector3i lhs, Eigen::Vector3i rhs);
+bool vector3iComparison(const Eigen::Vector3i lhs, const Eigen::Vector3i rhs);
 
 
 class DTriangulation
@@ -29,9 +27,11 @@ class DTriangulation
         void triangulate();
         void completelyConnectSet();
         void mergeGroups(DTriangulation leftSide, DTriangulation rightSide);
-        void copyConnectionsToThisMap(DTriangulation subDT);
-        DLine findFirstLine(DTriangulation &leftSide, DTriangulation &rightSide);
-        DLine getBaseEdge(const DPoint &point, DTriangulation &dt, bool pointIsOnLeft);
+        void copyConnectionsToThisMap(const DTriangulation &subDT);
+        DLine findFirstLine(const DTriangulation &leftSide, const DTriangulation &rightSide);
+        int pointWithLowestY() const;
+        int pointWithLowestYAboveGivenIdx(int idx) const;
+        DLine getBaseEdge(const DPoint &point, const DTriangulation &dt, bool pointIsOnLeft);
         DPoint getCandidate(const DLine &line, DTriangulation &dt, bool isLeftCandidate);
         void populateLeftCandidateSet(const DLine &line, DTriangulation &dt,
                                       std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet);
@@ -40,7 +40,7 @@ class DTriangulation
         bool circleContainsPoint(const DPoint &edgePoint, const DLine &edgeLine, const DPoint &innerPoint);
         double getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison);
         double getCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison);
-        std::vector<DLine> getLines();
+        std::vector<DLine> getLines() const;
 
     public:
         std::map<int, DPoint> m_pointMap;
@@ -68,8 +68,6 @@ class DTriangulation
             triangulate();
         }
 
-        int pointWithLowestY();
-        int pointWithLowestYAboveGivenIdx(int idx);
         std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > getLinesForDrawingOrGraphing();
 };
 

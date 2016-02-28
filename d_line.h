@@ -16,7 +16,6 @@ class DLine
         DPoint m_dpL{}, m_dpR{};
 
     public:
-// TODO: CONSIDER MAKING IT LEFT AND RIGHT INSTEAD OF 1 AND 2
 // TODO: CONSIDER MAKING SOME STUFF PRIVATE
 
         // Makes a line of the form (xR - xL) / (yR - yL)
@@ -60,7 +59,7 @@ class DLine
 
 
 bool valueIsBetween(int testValue, int side1, int side2);
-bool onSegment(Eigen::Vector3d testPoint, Eigen::Vector3d side1, Eigen::Vector3d side2);
+bool onSegment(Eigen::Vector2d testPoint, Eigen::Vector2d side1, Eigen::Vector2d side2);
 
 
 #endif // D_LINE_H_INCLUDED

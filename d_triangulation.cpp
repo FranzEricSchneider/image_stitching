@@ -1,60 +1,12 @@
 #include "d_triangulation.h"
 
 
-// Sorts the vector so the leftmost point is first in the set
-bool vector3iComparison(Eigen::Vector3i lhs, Eigen::Vector3i rhs)
+// Sorts the vector so the left/bottom-most point is first in the set
+bool vector3iComparison(const Eigen::Vector3i lhs, const Eigen::Vector3i rhs)
 {
     if (lhs[0] == rhs[0])
         return lhs[1] < rhs[1];
     return lhs[0] < rhs[0];
-}
-
-
-DTriangulation& DTriangulation::operator= (const DTriangulation &dtSource)
-{
-    m_pointMap = dtSource.m_pointMap;
-    return *this;
-}
-
-
-int DTriangulation::pointWithLowestY()
-{
-    std::map<int, DPoint>::iterator it = m_pointMap.begin();
-    int idx{it->first};
-    int lowestYVal{it->second.m_y};
-
-    for (it = m_pointMap.begin(); it!=m_pointMap.end(); ++it)
-    {
-        if ( it->second.m_y < lowestYVal )
-        {
-            idx = it->first;
-            lowestYVal = it->second.m_y;
-        }
-    }
-
-    return idx;
-}
-
-
-int DTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx)
-{
-    std::map<int, DPoint>::iterator it = m_pointMap.begin();
-    int idxToReturn{givenIdx};
-    int lowestYVal{m_pointMap[givenIdx].m_y};
-
-    for (it = m_pointMap.begin(); it!=m_pointMap.end(); ++it)
-    {
-        int idxVal = it->first;
-        int yVal = it->second.m_y;
-        if ( (idxVal != givenIdx && idxToReturn == givenIdx && yVal >= m_pointMap[givenIdx].m_y) ||
-             (idxVal != givenIdx && yVal < lowestYVal       && yVal >= m_pointMap[givenIdx].m_y) )
-        {
-            idxToReturn = idxVal;
-            lowestYVal = yVal;
-        }
-    }
-
-    return idxToReturn;
 }
 
 
@@ -70,7 +22,9 @@ void DTriangulation::triangulate()
         std::map<int, DPoint> rightMap;
 
         int counter{};
-        for (auto it = m_pointMap.begin(); it!=m_pointMap.end(); ++it)
+        for (std::map<int, DPoint>::iterator it = m_pointMap.begin();
+             it!=m_pointMap.end();
+             ++it)
         {
             if ( counter < (static_cast<int>(m_pointMap.size()) / 2) )
                 leftMap.insert( std::pair<int, DPoint> (it->first, it->second) );
@@ -148,9 +102,9 @@ void DTriangulation::mergeGroups(DTriangulation leftSide,
 }
 
 
-void DTriangulation::copyConnectionsToThisMap(DTriangulation subDT)
+void DTriangulation::copyConnectionsToThisMap(const DTriangulation &subDT)
 {
-    for (std::map<int, DPoint>::iterator it = subDT.m_pointMap.begin();
+    for (std::map<int, DPoint>::const_iterator it = subDT.m_pointMap.begin();
          it != subDT.m_pointMap.end();
          ++it)
     {
@@ -159,8 +113,8 @@ void DTriangulation::copyConnectionsToThisMap(DTriangulation subDT)
 }
 
 
-DLine DTriangulation::findFirstLine(DTriangulation &leftSide,
-                                    DTriangulation &rightSide)
+DLine DTriangulation::findFirstLine(const DTriangulation &leftSide,
+                                    const DTriangulation &rightSide)
 {
     std::vector<DLine> leftLines  = leftSide.getLines();
     std::vector<DLine> rightLines = rightSide.getLines();
@@ -180,8 +134,8 @@ DLine DTriangulation::findFirstLine(DTriangulation &leftSide,
         else
         {
             int originalValue;
-            if ( leftSide.m_pointMap[leftPoint].m_y <
-                 rightSide.m_pointMap[rightPoint].m_y )
+            if ( leftSide.m_pointMap.at(leftPoint).m_y <
+                 rightSide.m_pointMap.at(rightPoint).m_y )
             {
                 originalValue = leftPoint;
                 leftPoint = leftSide.pointWithLowestYAboveGivenIdx(leftPoint);
@@ -198,12 +152,12 @@ DLine DTriangulation::findFirstLine(DTriangulation &leftSide,
             }
         }
 
-        bool leftSideLower = leftSide.m_pointMap[leftPoint].m_y <
-                             rightSide.m_pointMap[rightPoint].m_y;
+        bool leftSideLower = leftSide.m_pointMap.at(leftPoint).m_y <
+                             rightSide.m_pointMap.at(rightPoint).m_y;
         if (leftSideLower)
-            firstLine = getBaseEdge(leftSide.m_pointMap[leftPoint], rightSide, leftSideLower);
+            firstLine = getBaseEdge(leftSide.m_pointMap.at(leftPoint), rightSide, leftSideLower);
         else
-            firstLine = getBaseEdge(rightSide.m_pointMap[rightPoint], leftSide, leftSideLower);
+            firstLine = getBaseEdge(rightSide.m_pointMap.at(rightPoint), leftSide, leftSideLower);
 
         // Checks that the line is legit
         found = true;
@@ -223,14 +177,54 @@ DLine DTriangulation::findFirstLine(DTriangulation &leftSide,
 }
 
 
-// TODO: TRY TO MAKE dt CONST
+int DTriangulation::pointWithLowestY() const
+{
+    std::map<int, DPoint>::const_iterator it = m_pointMap.begin();
+    int idxToReturn{it->first};
+    int lowestYVal{it->second.m_y};
+
+    for (it = m_pointMap.begin(); it!=m_pointMap.end(); ++it)
+    {
+        if ( it->second.m_y < lowestYVal )
+        {
+            idxToReturn = it->first;
+            lowestYVal = it->second.m_y;
+        }
+    }
+
+    return idxToReturn;
+}
+
+
+int DTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx) const
+{
+    std::map<int, DPoint>::const_iterator it = m_pointMap.begin();
+    int idxToReturn{givenIdx};
+    int lowestYVal{m_pointMap.at(givenIdx).m_y};
+
+    for (it = m_pointMap.begin(); it!=m_pointMap.end(); ++it)
+    {
+        int idxVal = it->first;
+        int yVal = it->second.m_y;
+        if ( (idxVal != givenIdx && idxToReturn == givenIdx && yVal >= m_pointMap.at(givenIdx).m_y) ||
+             (idxVal != givenIdx && yVal < lowestYVal       && yVal >= m_pointMap.at(givenIdx).m_y) )
+        {
+            idxToReturn = idxVal;
+            lowestYVal = yVal;
+        }
+    }
+
+    return idxToReturn;
+}
+
+
 DLine DTriangulation::getBaseEdge(const DPoint &point,
-                                                DTriangulation &dt,
-                                                bool pointIsOnLeft)
+                                  const DTriangulation &dt,
+                                  bool pointIsOnLeft)
 {
     std::set< std::pair<double, int>, sortFirstElementDescending > anglesFromPointSet;
-    std::map<int, DPoint>::iterator mapIt = dt.m_pointMap.begin();
-    for (mapIt = dt.m_pointMap.begin(); mapIt!=dt.m_pointMap.end(); ++mapIt)
+    std::map<int, DPoint>::const_iterator mapIt = dt.m_pointMap.begin();
+    for ( /*Already initialized*/ ; mapIt!=dt.m_pointMap.end(); ++mapIt)
     {
         Eigen::Vector2d vec{mapIt->second.m_x - point.m_x,
                             mapIt->second.m_y - point.m_y};
@@ -246,13 +240,14 @@ DLine DTriangulation::getBaseEdge(const DPoint &point,
     }
 
     std::set< std::pair<double, int> >::iterator setIt = anglesFromPointSet.begin();
-    return DLine{ point, dt.m_pointMap[(*setIt).second] };
+    return DLine{ point, dt.m_pointMap.at((*setIt).second) };
 }
 
 
+// TODO: CAN dt BE MADE CONST?
 DPoint DTriangulation::getCandidate(const DLine &line,
-                                                  DTriangulation &dt,
-                                                  bool isLeftCandidate)
+                                    DTriangulation &dt,
+                                    bool isLeftCandidate)
 {
     std::set< std::pair<double, int>, sortFirstElementAscending > anglesFromLineSet;
     if (isLeftCandidate)
@@ -358,19 +353,26 @@ double DTriangulation::getCWAngle(const Eigen::Vector2i &base, const Eigen::Vect
 
 
 // TODO: REWORK THIS LATER TO GET RID OF DOUBLED LINES
-std::vector<DLine> DTriangulation::getLines()
+std::vector<DLine> DTriangulation::getLines() const
 {
     std::vector<DLine> lineVector;
-    for (std::map<int, DPoint>::iterator it = m_pointMap.begin();
+    for (std::map<int, DPoint>::const_iterator it = m_pointMap.begin();
          it != m_pointMap.end();
          ++it)
     {
         for (int idx: it->second.m_connections)
         {
-            lineVector.push_back( DLine{it->second, m_pointMap[idx]} );
+            lineVector.push_back( DLine{it->second, m_pointMap.at(idx)} );
         }
     }
     return lineVector;
+}
+
+
+DTriangulation& DTriangulation::operator= (const DTriangulation &dtSource)
+{
+    m_pointMap = dtSource.m_pointMap;
+    return *this;
 }
 
 
