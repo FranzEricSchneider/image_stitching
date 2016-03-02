@@ -1,7 +1,7 @@
 #include "d_triangulation.h"
 
 
-// Sorts the vector so the left/bottom-most point is first in the set
+/* Sorts the vector so the left/bottom-most point is first in the set */
 bool vector3iComparison(const Eigen::Vector3i lhs, const Eigen::Vector3i rhs)
 {
     if (lhs[0] == rhs[0])
@@ -10,6 +10,11 @@ bool vector3iComparison(const Eigen::Vector3i lhs, const Eigen::Vector3i rhs)
 }
 
 
+/*
+If the set has three points or less, they become completely connected and the
+function returns. Otherwise the set is split in two and mergeGroups is called
+on the two smaller Delaunay Triangulation sets
+*/
 void DTriangulation::triangulate()
 {
     if (m_pointMap.size() <= 3)
@@ -39,6 +44,10 @@ void DTriangulation::triangulate()
 }
 
 
+/*
+Edges are created between all available points. Two points will become a line, three
+points will become a triangle
+*/
 void DTriangulation::completelyConnectSet()
 {
     for (std::map<int, DPoint>::iterator outerIt = m_pointMap.begin();
@@ -50,13 +59,18 @@ void DTriangulation::completelyConnectSet()
         --outerIt;
         for ( /*Already instantiated*/ ; innerIt != m_pointMap.end(); ++innerIt)
         {
-            outerIt->second.createEdge(innerIt->first);
-            innerIt->second.createEdge(outerIt->first);
+            createEdgeInMap(outerIt->first, innerIt->first);
         }
     }
 }
 
 
+/*
+As laid out in the paper, mergeGroups takes two sets of points, looks for a base line
+(the bottom/outermost line between the left and right sets) then follows the merge algorithm
+between the two sets. The merge continues drawing triangles between the groups until no
+more legal triangles are available
+*/
 // TODO: REREAD THE SECTION ON REFERENCES AND FIND OUT IF AND HOW TO MAKE THESE REFERENCES
 void DTriangulation::mergeGroups(DTriangulation leftSide,
                                  DTriangulation rightSide)
@@ -64,8 +78,7 @@ void DTriangulation::mergeGroups(DTriangulation leftSide,
     copyConnectionsToThisMap(leftSide);
     copyConnectionsToThisMap(rightSide);
     DLine firstLine = findFirstLine(leftSide, rightSide);
-    m_pointMap[firstLine.getLeftIdx()]. createEdge(firstLine.getRightIdx());
-    m_pointMap[firstLine.getRightIdx()].createEdge(firstLine.getLeftIdx());
+    createEdgeInMap(firstLine.getLeftIdx(), firstLine.getRightIdx());
 
     bool hasLeftCandidate{true};
     bool hasRightCandidate{true};
@@ -89,19 +102,22 @@ void DTriangulation::mergeGroups(DTriangulation leftSide,
 
         if (hasLeftCandidate)
         {
-            m_pointMap[leftCandidate.m_idx].createEdge(baseLREdge.getRightIdx());
-            m_pointMap[baseLREdge.getRightIdx()].createEdge(leftCandidate.m_idx);
+            createEdgeInMap(leftCandidate.m_idx, baseLREdge.getRightIdx());
             baseLREdge = DLine{leftCandidate, baseLREdge.getRightPoint()};
         } else if (hasRightCandidate)
         {
-            m_pointMap[rightCandidate.m_idx].createEdge(baseLREdge.getLeftIdx());
-            m_pointMap[baseLREdge.getLeftIdx()].createEdge(rightCandidate.m_idx);
+            createEdgeInMap(rightCandidate.m_idx, baseLREdge.getLeftIdx());
             baseLREdge = DLine{rightCandidate, baseLREdge.getLeftPoint()};
         }
     }
 }
 
 
+/*
+Takes a different Delaunay Triangulation and copies its points into the m_pointMap
+of this object. This is done so that smaller Delaunay Triangulations can be merged
+back into a single Triangulation
+*/
 void DTriangulation::copyConnectionsToThisMap(const DTriangulation &subDT)
 {
     for (std::map<int, DPoint>::const_iterator it = subDT.m_pointMap.begin();
@@ -113,6 +129,14 @@ void DTriangulation::copyConnectionsToThisMap(const DTriangulation &subDT)
 }
 
 
+/*
+Finds the bottom/outermost line between left and right sets to act as the
+base edge for mergeGroups. This is done by
+  1) Taking the lowest point between the two groups
+  2) Finding outermost line between that point, all points in other group
+  3) Checking that this outmost line didn't cross any existing lines
+  4) If it crossed a line, take the next highest point
+*/
 DLine DTriangulation::findFirstLine(const DTriangulation &leftSide,
                                     const DTriangulation &rightSide)
 {
@@ -152,6 +176,7 @@ DLine DTriangulation::findFirstLine(const DTriangulation &leftSide,
             }
         }
 
+        // Gets the outermost line between the lowest point and the other side
         bool leftSideLower = leftSide.m_pointMap.at(leftPoint).m_y <
                              rightSide.m_pointMap.at(rightPoint).m_y;
         if (leftSideLower)
@@ -159,7 +184,7 @@ DLine DTriangulation::findFirstLine(const DTriangulation &leftSide,
         else
             firstLine = getBaseEdge(rightSide.m_pointMap.at(rightPoint), leftSide, leftSideLower);
 
-        // Checks that the line is legit
+        // Checks that the found line doesn't cross any existing lines
         found = true;
         for (auto line: leftSide.getLines())
         {
@@ -177,6 +202,7 @@ DLine DTriangulation::findFirstLine(const DTriangulation &leftSide,
 }
 
 
+/* Returns index of point with the lowest Y value */
 int DTriangulation::pointWithLowestY() const
 {
     std::map<int, DPoint>::const_iterator it = m_pointMap.begin();
@@ -196,6 +222,10 @@ int DTriangulation::pointWithLowestY() const
 }
 
 
+/*
+Returns index of point with the lowest Y value which is above the Y value
+of the given index
+*/
 int DTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx) const
 {
     std::map<int, DPoint>::const_iterator it = m_pointMap.begin();
@@ -218,13 +248,19 @@ int DTriangulation::pointWithLowestYAboveGivenIdx(int givenIdx) const
 }
 
 
+/*
+Finds the outermost line between point and dt by making a set that sorts the
+point indices by the x value of a normalized vector between point and each point
+in dt. The normalized vectors with the largest x value are those closest to level
+*/
 DLine DTriangulation::getBaseEdge(const DPoint &point,
                                   const DTriangulation &dt,
                                   bool pointIsOnLeft)
 {
     std::set< std::pair<double, int>, sortFirstElementDescending > anglesFromPointSet;
-    std::map<int, DPoint>::const_iterator mapIt = dt.m_pointMap.begin();
-    for ( /*Already initialized*/ ; mapIt!=dt.m_pointMap.end(); ++mapIt)
+    for ( std::map<int, DPoint>::const_iterator mapIt = dt.m_pointMap.begin();
+          mapIt!=dt.m_pointMap.end();
+          ++mapIt )
     {
         Eigen::Vector2d vec{mapIt->second.m_x - point.m_x,
                             mapIt->second.m_y - point.m_y};
@@ -235,8 +271,7 @@ DLine DTriangulation::getBaseEdge(const DPoint &point,
         if (!pointIsOnLeft)
             vec[0] *= -1;
 
-        std::pair<double, int> xValue{vec[0], mapIt->first};
-        anglesFromPointSet.insert(xValue);
+        anglesFromPointSet.insert( std::pair<double, int>(vec[0], mapIt->first) );
     }
 
     std::set< std::pair<double, int> >::iterator setIt = anglesFromPointSet.begin();
@@ -244,7 +279,11 @@ DLine DTriangulation::getBaseEdge(const DPoint &point,
 }
 
 
-// TODO: CAN dt BE MADE CONST?
+/*
+As laid out in the paper, candidates are found that
+  1) Are less the 180 degrees off from the given base edge (line)
+  2) Do not contain the next candidate in their circumcircle
+*/
 DPoint DTriangulation::getCandidate(const DLine &line,
                                     DTriangulation &dt,
                                     bool isLeftCandidate)
@@ -256,8 +295,10 @@ DPoint DTriangulation::getCandidate(const DLine &line,
         populateRightCandidateSet(line, dt, anglesFromLineSet);
 
     int coreIdx = isLeftCandidate?line.getLeftIdx():line.getRightIdx();
-    std::set< std::pair<double, int> >::iterator setIt = anglesFromLineSet.begin();
-    for (setIt = anglesFromLineSet.begin(); setIt != anglesFromLineSet.end(); /*Nothing*/ )
+
+    for ( std::set< std::pair<double, int> >::iterator setIt = anglesFromLineSet.begin();
+          setIt != anglesFromLineSet.end();
+          /*Nothing*/ )
     {
         if ( (*setIt).first > PI )
             return DPoint{};  // Indicates no candidate was found
@@ -265,15 +306,13 @@ DPoint DTriangulation::getCandidate(const DLine &line,
         int firstCandidateIdx = (*setIt).second;
         ++setIt;
         if (setIt == anglesFromLineSet.end())
-            return dt.m_pointMap[firstCandidateIdx];  // Last viable point's automatically valid
+            return dt.m_pointMap[firstCandidateIdx];  // Last viable point is automatically valid
 
         int secondCandidateIdx = (*setIt).second;
         if ( circleContainsPoint(dt.m_pointMap[firstCandidateIdx], line, dt.m_pointMap[secondCandidateIdx]) )
         {
-            m_pointMap[firstCandidateIdx].deleteEdge(coreIdx);
-            m_pointMap[coreIdx].deleteEdge(firstCandidateIdx);
-            dt.m_pointMap[firstCandidateIdx].deleteEdge(coreIdx);
-            dt.m_pointMap[coreIdx].deleteEdge(firstCandidateIdx);
+            deleteEdgeInMap(firstCandidateIdx, coreIdx);
+            dt.deleteEdgeInMap(firstCandidateIdx, coreIdx);
         } else
         {
             return dt.m_pointMap[firstCandidateIdx];
@@ -284,12 +323,16 @@ DPoint DTriangulation::getCandidate(const DLine &line,
 }
 
 
+/*
+Both the left and right candidate sets are made so that the point indices are sorted such
+that the point which is the least angle from the base line is first
+*/
 void DTriangulation::populateLeftCandidateSet(const DLine &line,
-                                                     DTriangulation &dt,
-                                                     std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
+                                              DTriangulation &dt,
+                                              std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
 {
-    Eigen::Vector2i baseVector{line.getRightPoint().m_x  - line.getLeftPoint().m_x,
-                               line.getRightPoint().m_y - line.getLeftPoint().m_y};
+    Eigen::Vector2i baseVector{ line.getRightPoint().m_x - line.getLeftPoint().m_x,
+                                line.getRightPoint().m_y - line.getLeftPoint().m_y };
     for (int connectionIdx: dt.m_pointMap[line.getLeftIdx()].m_connections)
     {
         Eigen::Vector2i compareVector{dt.m_pointMap[connectionIdx].m_x  - line.getLeftPoint().m_x,
@@ -300,12 +343,16 @@ void DTriangulation::populateLeftCandidateSet(const DLine &line,
 }
 
 
+/*
+Both the left and right candidate sets are made so that the point indices are sorted such
+that the point which is the least angle from the base line is first
+*/
 void DTriangulation::populateRightCandidateSet(const DLine &line,
-                                                      DTriangulation &dt,
-                                                      std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
+                                               DTriangulation &dt,
+                                               std::set< std::pair<double, int>, sortFirstElementAscending > &anglesFromLineSet)
 {
-    Eigen::Vector2i baseVector{line.getLeftPoint().m_x  - line.getRightPoint().m_x,
-                               line.getLeftPoint().m_y - line.getRightPoint().m_y};
+    Eigen::Vector2i baseVector{ line.getLeftPoint().m_x - line.getRightPoint().m_x,
+                                line.getLeftPoint().m_y - line.getRightPoint().m_y };
     for (int connectionIdx: dt.m_pointMap[line.getRightIdx()].m_connections)
     {
         Eigen::Vector2i compareVector{dt.m_pointMap[connectionIdx].m_x  - line.getRightPoint().m_x,
@@ -316,18 +363,20 @@ void DTriangulation::populateRightCandidateSet(const DLine &line,
 }
 
 
+/* Checks whether a point is in/out of a circle defined by a line and a point */
 bool DTriangulation::circleContainsPoint(const DPoint &edgePoint,
-                                                const DLine &edgeLine,
-                                                const DPoint &innerPoint)
+                                         const DLine  &edgeLine,
+                                         const DPoint &innerPoint)
 {
     double xCenter, yCenter, radius;
     calculateCircle(edgePoint, edgeLine, xCenter, yCenter, radius);
-    double distToInnerPoint = sqrt( pow(xCenter - innerPoint.m_x,  2) +
+    double distToInnerPoint = sqrt( pow(xCenter - innerPoint.m_x, 2) +
                                     pow(yCenter - innerPoint.m_y, 2) );
     return distToInnerPoint <= radius;
 }
 
 
+/* Gets angle from base DLine to comparison DLine, going CCW */
 double DTriangulation::getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
 {
     double baseAngle = atan2(base[1], base[0]);
@@ -340,6 +389,7 @@ double DTriangulation::getCCWAngle(const Eigen::Vector2i &base, const Eigen::Vec
 }
 
 
+/* Gets angle from base DLine to comparison DLine, going CW */
 double DTriangulation::getCWAngle(const Eigen::Vector2i &base, const Eigen::Vector2i &comparison)
 {
     double baseAngle = atan2(base[1], base[0]);
@@ -352,6 +402,7 @@ double DTriangulation::getCWAngle(const Eigen::Vector2i &base, const Eigen::Vect
 }
 
 
+/* Returns a vector of all DLines in this m_pointMap */
 // TODO: REWORK THIS LATER TO GET RID OF DOUBLED LINES
 std::vector<DLine> DTriangulation::getLines() const
 {
@@ -376,6 +427,21 @@ DTriangulation& DTriangulation::operator= (const DTriangulation &dtSource)
 }
 
 
+void DTriangulation::createEdgeInMap(const int idx1,const int idx2)
+{
+    m_pointMap.at(idx1).createEdge(idx2);
+    m_pointMap.at(idx2).createEdge(idx1);
+}
+
+
+void DTriangulation::deleteEdgeInMap(const int idx1,const int idx2)
+{
+    m_pointMap.at(idx1).deleteEdge(idx2);
+    m_pointMap.at(idx2).deleteEdge(idx1);
+}
+
+
+/* Returns lines in the correct format for drawing/graphing the Delaunay Triangulation lines */
 std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > DTriangulation::getLinesForDrawingOrGraphing()
 {
     std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > lineVector;
@@ -389,6 +455,7 @@ std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > DTriangulation::getLi
 }
 
 
+/* Uses the passed references to calculate the center and radius of a circle */
 void calculateCircle(const DPoint &point, const DLine &line,
                      double &xCenter, double &yCenter, double &radius)
 {

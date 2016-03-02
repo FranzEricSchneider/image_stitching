@@ -21,6 +21,7 @@
 bool vector3iComparison(const Eigen::Vector3i lhs, const Eigen::Vector3i rhs);
 
 
+// Delaunay Triangulation done as laid out here: http://www.geom.uiuc.edu/~samuelp/del_project.html
 class DTriangulation
 {
     private:
@@ -68,6 +69,8 @@ class DTriangulation
             triangulate();
         }
 
+        void createEdgeInMap(const int idx1,const int idx2);
+        void deleteEdgeInMap(const int idx1,const int idx2);
         std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > getLinesForDrawingOrGraphing();
 };
 

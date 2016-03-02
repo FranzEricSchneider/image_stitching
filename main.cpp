@@ -12,9 +12,7 @@ int main()
 /*
 CURRENTLY REFACTORING
     (point_sets, random_points, simple_stitcher, plot_tools, pair_comparison,
-     d_point, d_line)
-TODO: MAKE A DELAUNAYTRIANGULATION FUNCTION THAT MAKES EDGES BETWEEN POINTS
-MAKE DELAUNAY WORK
+     d_point, d_line, d_triangulation)
 REFACTOR findFirstLine
 CLEAN EVERYTHING AFTER DELAUNAY, MAKE NAMES AWESOME, COMMENT EVERYTHING
 */
@@ -23,12 +21,12 @@ CLEAN EVERYTHING AFTER DELAUNAY, MAKE NAMES AWESOME, COMMENT EVERYTHING
 //    AprilAnalysis april;
 //    april.processImage();
 //    PointSets ps{april.m_detections, april.m_img};
-    RandomPoints random(4);
+    RandomPoints random(30);
 //    RandomPoints random;
     PointSets ps{random.m_randomDetections, random.m_img};
 
     ps.generateCompleteSet();
-    ps.drawCompleteSet();
+//    ps.drawCompleteSet();
 //    ps.graphCompleteSet();
     ps.generateDelaunay();
     ps.drawDelaunayCircumcircles();
