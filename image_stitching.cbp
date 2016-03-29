@@ -68,6 +68,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="a_star.cpp" />
+		<Unit filename="a_star.h" />
 		<Unit filename="april_analysis.cpp" />
 		<Unit filename="april_analysis.h" />
 		<Unit filename="d_line.cpp" />

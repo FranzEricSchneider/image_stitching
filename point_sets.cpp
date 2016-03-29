@@ -231,6 +231,35 @@ void PointSets::drawDelaunayCircumcircles()
 }
 
 
+void PointSets::generateAStar()
+{
+    if (m_convexHull.empty())
+    {
+        std::cout << "Please generate convex hull before doing AStar\n";
+    }
+    else if (m_dt.getLinesForDrawingOrGraphing().empty())
+    {
+        std::cout << "Please generate delaunay triangulation before doing AStar\n";
+    }
+    else
+    {
+        m_as = AStar{m_convexHull, m_dt};
+    }
+}
+
+
+void PointSets::drawAStar()
+{
+    drawSet(m_as.m_finalPath, 0, 255, 100);
+}
+
+
+void PointSets::graphAStar()
+{
+    graphSet(m_as.m_finalPath);
+}
+
+
 void PointSets::showImage()
 {
     cv::imshow(m_windowName, m_baseImg);

@@ -48,7 +48,7 @@ class DTriangulation
 
         DTriangulation& operator= (const DTriangulation &dtSource);
 
-        DTriangulation() { /*Empty constructsor*/ }
+        DTriangulation() { /*Empty constructor*/ }
 
         DTriangulation(std::map<int, DPoint> pointMap):
         m_pointMap{pointMap}

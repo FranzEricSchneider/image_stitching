@@ -8,6 +8,7 @@
 #include "AprilTags/TagDetector.h"
 #include <Eigen/Geometry>
 
+#include "a_star.h"
 #include "d_triangulation.h"
 #include "pair_comparison.h"
 #include "plot_tools.h"
@@ -20,6 +21,7 @@ private:
     std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > m_completeSet;
     std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > m_convexHull;
     DTriangulation m_dt;  // Delaunay triangulation of the points
+    AStar m_as;
     std::pair<double, int> m_minPointX; // Contains value and index in baseSet vector
     std::pair<double, int> m_minPointY; // Contains value and index in baseSet vector
     cv::Mat m_baseImg;
@@ -65,6 +67,9 @@ public:
     void drawDelaunay();
     void graphDelaunay();
     void drawDelaunayCircumcircles();
+    void generateAStar();
+    void drawAStar();
+    void graphAStar();
     void showImage();
 };
 
