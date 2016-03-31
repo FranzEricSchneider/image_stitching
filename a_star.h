@@ -9,21 +9,23 @@
 #include "d_point.h"
 
 
+// https://en.wikipedia.org/wiki/A*_search_algorithm#Pseudocode
 class AStar
 {
     private:
         std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > m_convexHull{};
         DTriangulation m_dt{};
-        std::map<int, int> m_distanceCostMap;  // Stores the distance cost to each node as <idx, score>. Idx matches m_dt
-        std::map<int, int> m_totalCostMap;  // Stores the distance + heuristic cost to each node as <idx, score>
-//        std::map<int, int> cameFromMap;  // I don't know yet what is supposed to go here
+        std::map<int, double> m_distCostMap;  // Stores the dist cost to each node as <idx, score>. Idx matches m_dt
+        std::map<int, double> m_totalCostMap;  // Stores the dist + heuristic cost to each node as <idx, score>
+        std::map<int, int> m_cameFromMap;  // Stores most efficient last step to idx1 (key), which is idx2 (val)
         int m_startIdx{}, m_endIdx{};
         std::set<int> m_closedSet;
         std::set<int> m_openSet;
 
         void generateStartEndPoints();
         void generateStartingCostMap();
-        int heuristicCost(int start);
+        double heuristicCost(int start);
+        double distBetweenIdxPts(int idx1, int idx2);
         int getLowestCostOpenIdx();
         void generateFinalPath();
         void moveIdxFromOpentoClosedSet(int idx);
@@ -43,10 +45,7 @@ class AStar
             generateStartEndPoints();
             generateStartingCostMap();
             m_openSet.insert(m_startIdx);  // Start investigating the start idx
-
-            m_finalPath.push_back( std::pair<Eigen::Vector3i, Eigen::Vector3i>
-                                 ( m_convexHull.at(m_startIdx).first,
-                                   m_convexHull.at(m_endIdx).first ) );
+            generateAStarPath();
         }
 
         void generateAStarPath();

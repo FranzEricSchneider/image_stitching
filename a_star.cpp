@@ -26,28 +26,37 @@ void AStar::generateStartingCostMap()
         if (it->first == m_startIdx)
         {
             // The starting idx has a cost of zero
-            m_distanceCostMap.insert( std::pair<int, int> (m_startIdx, 0) );
-            m_totalCostMap.insert( std::pair<int, int> (m_startIdx, heuristicCost(m_startIdx)) );
+            m_distCostMap.insert( std::pair<int, double> (m_startIdx, 0.0) );
+            m_totalCostMap.insert( std::pair<int, double> (m_startIdx, heuristicCost(m_startIdx)) );
         }
         else
         {
             // Every other idx starts off with a cost of infinity
-            m_distanceCostMap.insert( std::pair<int, int> (it->first, static_cast<int>(maxVal)) );
-            m_totalCostMap.insert( std::pair<int, int> (it->first, static_cast<int>(maxVal)) );
+            m_distCostMap.insert( std::pair<int, double> (it->first, static_cast<double>(maxVal)) );
+            m_totalCostMap.insert( std::pair<int, double> (it->first, static_cast<double>(maxVal)) );
         }
     }
 }
 
 
-int AStar::heuristicCost(int locationIdx)
+double AStar::heuristicCost(int locationIdx)
 {
     // In order to ba a consistent heuristic, the heuristic must be less than the straight-line cost
     // https://en.wikipedia.org/wiki/Consistent_heuristic
+
     DPoint startPt = m_dt.m_pointMap.at(m_startIdx);
     DPoint endPt = m_dt.m_pointMap.at(m_endIdx);
-    double dist = sqrt( pow(endPt.m_x - startPt.m_x, 2) + pow(endPt.m_y - startPt.m_y, 2) );
+    double dist = distBetweenIdxPts(m_startIdx, m_endIdx);
     if (dist > 1) --dist;
-    return static_cast<int>(dist);
+    return dist;
+}
+
+
+double AStar::distBetweenIdxPts(int idx1, int idx2)
+{
+    DPoint pt1 = m_dt.m_pointMap.at(idx1);
+    DPoint pt2 = m_dt.m_pointMap.at(idx2);
+    return sqrt( pow(pt2.m_x - pt1.m_x, 2) + pow(pt2.m_y - pt1.m_y, 2) );;
 }
 
 
@@ -55,12 +64,12 @@ int AStar::getLowestCostOpenIdx()
 {
     std::set<int>::const_iterator it = m_openSet.begin();
     int idx = *it;
-    int lowestCost = m_totalCostMap.at(idx);
+    double lowestCost = m_totalCostMap.at(idx);
     for ( /*Already initialized*/;
           it != m_openSet.end();
           ++it )
     {
-        if (*it < lowestCost)
+        if (m_totalCostMap.at(*it) < lowestCost)
         {
             idx = *it;
             lowestCost = m_totalCostMap.at(idx);
@@ -72,7 +81,27 @@ int AStar::getLowestCostOpenIdx()
 
 void AStar::generateFinalPath()
 {
-    // Write a thing that generates m_finalPath to m_endIdx
+    std::cout << "Made it to generateFinalPath!\n";
+
+    // Wipes path if non-zero
+    if (static_cast<int>(m_finalPath.size()) > 0)
+    {
+        std::vector< std::pair<Eigen::Vector3i, Eigen::Vector3i> > newPath{};
+        m_finalPath = newPath;
+    }
+
+    int currentIdx = m_endIdx;
+    while (currentIdx != m_startIdx)
+    {
+        int previousIdx = m_cameFromMap.at(currentIdx);
+        DPoint dest{ m_dt.m_pointMap.at(currentIdx) };
+        Eigen::Vector3i destEigen{dest.m_x, dest.m_y, 0};
+        DPoint src{ m_dt.m_pointMap.at(previousIdx) };
+        Eigen::Vector3i srcEigen{src.m_x, src.m_y, 0};
+        m_finalPath.push_back( std::pair<Eigen::Vector3i, Eigen::Vector3i>(destEigen, srcEigen) );
+
+        currentIdx = previousIdx;
+    }
 }
 
 
@@ -85,8 +114,8 @@ void AStar::moveIdxFromOpentoClosedSet(int idx)
 
 bool AStar::isIdxInSet(int idx, std::set<int> givenSet)
 {
-    std::set<int>::const_iterator it = givenSet.find(idx);
-    return (it == givenSet.end());
+    auto it = givenSet.find(idx);
+    return (it != givenSet.end());
 }
 
 
@@ -101,6 +130,7 @@ AStar& AStar::operator= (const AStar &asSource)
 }
 
 
+/* WORKING HERE -- AStar is finding an empty path, use the debug tools! */
 void AStar::generateAStarPath()
 {
     while (m_openSet.size() > 0)
@@ -116,12 +146,24 @@ void AStar::generateAStarPath()
 
         for (auto neighborIdx: currentPt.m_connections)
         {
-            if ( isIdxInSet(neighborIdx) )
-            {
-                /* WORKING HERE */;
-            }
+            if ( isIdxInSet(neighborIdx, m_closedSet) )
+                continue;  // If the neighbor is in the closed set it has already been processed
+
+            int tentativeDistScore = m_distCostMap.at(currentIdx) +
+                                     distBetweenIdxPts(currentIdx, neighborIdx);
+
+            if ( !isIdxInSet(neighborIdx, m_openSet) )
+                m_openSet.insert(neighborIdx);
+            else if ( tentativeDistScore >= m_distCostMap.at(neighborIdx) )
+                continue; // tentative path is not better than current path
+
+            // At this point the neighbor is in the open set and we know the best path to it
+            m_cameFromMap[neighborIdx]  = currentIdx;  // This syntax overrides current value or adds new key
+            m_distCostMap[neighborIdx]  = tentativeDistScore;
+            m_totalCostMap[neighborIdx] = tentativeDistScore + heuristicCost(neighborIdx);
         }
     }
+    std::cout << "AStar failed to find a path!\n";
 }
 
 
