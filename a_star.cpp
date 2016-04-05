@@ -5,9 +5,29 @@
 void AStar::generateStartEndPoints()
 {
     int numOuterPoints = static_cast<int>(m_convexHull.size());
-    int halfOuterPoints = (numOuterPoints - 1) / 2;
-    m_startIdx = randomNumber(halfOuterPoints);
-    m_endIdx = m_startIdx + halfOuterPoints;
+    std::cout << "numOuterPoints: " << numOuterPoints << "\n";
+    int halfOuterPoints = numOuterPoints / 2;
+    m_startIdxConvex = randomNumber(halfOuterPoints);
+    m_endIdxConvex = m_startIdxConvex + halfOuterPoints;
+    m_startIdx = findPointIdxInConvexHull(m_startIdxConvex);
+    m_endIdx = findPointIdxInConvexHull(m_endIdxConvex);
+}
+
+
+int AStar::findPointIdxInConvexHull(int convexIdx)
+{
+    Eigen::Vector3i convexPt = m_convexHull.at(convexIdx).first;
+    for (std::map<int, DPoint>::iterator it = m_dt.m_pointMap.begin();
+         it != m_dt.m_pointMap.end();
+         ++it)
+    {
+        if ( almostEqual(convexPt[0], it->second.m_x ) &&
+             almostEqual(convexPt[1], it->second.m_y ) )
+        {
+            return it->first;
+        }
+    }
+    return 0;
 }
 
 
@@ -121,11 +141,17 @@ bool AStar::isIdxInSet(int idx, std::set<int> givenSet)
 
 AStar& AStar::operator= (const AStar &asSource)
 {
-    m_convexHull = asSource.m_convexHull;
-    m_dt         = asSource.m_dt;
-    m_startIdx   = asSource.m_startIdx;
-    m_endIdx     = asSource.m_endIdx;
-    m_finalPath  = asSource.m_finalPath;
+    m_convexHull   = asSource.m_convexHull;
+    m_dt           = asSource.m_dt;
+    m_distCostMap  = asSource.m_distCostMap;
+    m_totalCostMap = asSource.m_totalCostMap;
+    m_cameFromMap  = asSource.m_cameFromMap;
+    m_startIdx     = asSource.m_startIdx;
+    m_endIdx       = asSource.m_endIdx;
+    m_closedSet    = asSource.m_closedSet;
+    m_openSet      = asSource.m_openSet;
+    m_finalPath    = asSource.m_finalPath;
+    m_debugPath    = asSource.m_debugPath;
     return *this;
 }
 
@@ -164,6 +190,7 @@ void AStar::generateAStarPath()
         }
     }
     std::cout << "AStar failed to find a path!\n";
+    return;
 }
 
 

@@ -21,7 +21,7 @@ CLEAN EVERYTHING AFTER DELAUNAY, MAKE NAMES AWESOME, COMMENT EVERYTHING
 //    AprilAnalysis april;
 //    april.processImage();
 //    PointSets ps{april.m_ŝdetections, april.m_img};
-    RandomPoints random(30);
+    RandomPoints random(50);
 //    RandomPoints random;
     PointSets ps{random.m_randomDetections, random.m_img};
 
@@ -38,6 +38,7 @@ CLEAN EVERYTHING AFTER DELAUNAY, MAKE NAMES AWESOME, COMMENT EVERYTHING
     ps.drawBaseSet();
     ps.generateAStar();
     ps.drawAStar();
+//    ps.graphAStar();
     ps.showImage();
     return 0;
 }

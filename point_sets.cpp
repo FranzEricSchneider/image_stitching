@@ -244,6 +244,7 @@ void PointSets::generateAStar()
     else
     {
         m_as = AStar{m_convexHull, m_dt};
+        m_as.generateAStarPath();
     }
 }
 
