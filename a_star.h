@@ -52,8 +52,6 @@ class AStar
             m_debugPath.push_back( std::pair<Eigen::Vector3i, Eigen::Vector3i>
                                    ( m_convexHull.at(m_startIdxConvex).first,
                                      m_convexHull.at(m_endIdxConvex).first ) );
-            std::cout << "m_startIdx: " << m_startIdx << "\tm_endIdx: " << m_endIdx << "\n";
-            std::cout << "m_startIdxConvex: " << m_startIdxConvex << "\tm_endIdxConvex: " << m_endIdxConvex << "\n";
         }
 
         void generateAStarPath();

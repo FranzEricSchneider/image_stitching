@@ -5,7 +5,6 @@
 void AStar::generateStartEndPoints()
 {
     int numOuterPoints = static_cast<int>(m_convexHull.size());
-    std::cout << "numOuterPoints: " << numOuterPoints << "\n";
     int halfOuterPoints = numOuterPoints / 2;
     m_startIdxConvex = randomNumber(halfOuterPoints);
     m_endIdxConvex = m_startIdxConvex + halfOuterPoints;
@@ -64,9 +63,7 @@ double AStar::heuristicCost(int locationIdx)
     // In order to ba a consistent heuristic, the heuristic must be less than the straight-line cost
     // https://en.wikipedia.org/wiki/Consistent_heuristic
 
-    DPoint startPt = m_dt.m_pointMap.at(m_startIdx);
-    DPoint endPt = m_dt.m_pointMap.at(m_endIdx);
-    double dist = distBetweenIdxPts(m_startIdx, m_endIdx);
+    double dist = distBetweenIdxPts(locationIdx, m_endIdx);
     if (dist > 1) --dist;
     return dist;
 }
@@ -101,8 +98,6 @@ int AStar::getLowestCostOpenIdx()
 
 void AStar::generateFinalPath()
 {
-    std::cout << "Made it to generateFinalPath!\n";
-
     // Wipes path if non-zero
     if (static_cast<int>(m_finalPath.size()) > 0)
     {
@@ -159,6 +154,7 @@ AStar& AStar::operator= (const AStar &asSource)
 /* WORKING HERE -- AStar is finding an empty path, use the debug tools! */
 void AStar::generateAStarPath()
 {
+    static int cycles = 0;
     while (m_openSet.size() > 0)
     {
         int currentIdx = getLowestCostOpenIdx();
@@ -166,12 +162,14 @@ void AStar::generateAStarPath()
         if (currentIdx == m_endIdx)
         {
             generateFinalPath();
+            std::cout << "cycles: " << cycles << "\n";
             return;
         }
         moveIdxFromOpentoClosedSet(currentIdx);
 
         for (auto neighborIdx: currentPt.m_connections)
         {
+            ++cycles;
             if ( isIdxInSet(neighborIdx, m_closedSet) )
                 continue;  // If the neighbor is in the closed set it has already been processed
 
